@@ -1,0 +1,4 @@
+Flask==1.1.1
+Flask-Cors==3.0.8
+pipenv==2018.11.26
+Werkzeug==0.16.0
