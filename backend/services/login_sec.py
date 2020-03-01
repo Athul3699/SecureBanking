@@ -10,21 +10,18 @@ app.config['SECRET_KEY'] = '$$group10'
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
-
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
+        token = request.args.get('token')
 
         if not token:
-            return jsonify({'message' : 'Token is missing!'}), 401
+            return jsonify({'message' : 'Token is missing!'}), 403
 
         try: 
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = User.query.filter_by(public_id=data['public_id']).first()
+            date = jwt.decode(token, app.config['SECRET_KEY'])
+            
         except:
             return jsonify({'message' : 'Token is invalid!'}), 401
 
-        return f(current_user, *args, **kwargs)
+        return f(*args, **kwargs)
 
     return decorated
      
