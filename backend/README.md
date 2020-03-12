@@ -18,6 +18,18 @@ for windows users
 `set FLASK_APP=driver.py`
 `flask run`
 
+## To setup database
+1) Install postgres on local machine 
+2) Create a database named 'securebank'
+3) Commands to create schema
+ 
+     a) `cd backend/model`
+      
+     b) `python3 manage.py db init` [Only for the first time]
+     
+     c) `python3 manage.py db migrate`
+
+     d) `python3 manage.py db upgrade`
 # useful documentation
 
 Flask - https://flask.palletsprojects.com/en/1.1.x/
