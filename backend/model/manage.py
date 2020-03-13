@@ -39,8 +39,6 @@ class Authorizedrole(db.Model):
     approve_customer_request_by_merchant = db.Column(db.Boolean, default=False, nullable=False)
     decline_customer_request_by_merchant = db.Column(db.Boolean, default=False, nullable=False)
     technical_account_access = db.Column(db.Boolean, default=False, nullable=False)
-    modify_employee_account = db.Column(db.Boolean, default=False, nullable=False)
-    view_customer_request = db.Column(db.Boolean, default=False, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
 

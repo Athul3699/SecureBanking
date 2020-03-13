@@ -9,9 +9,8 @@ def get_customer_accounts(user_id):
     return accounts
 
 def get_profile_information(user_id):
-    info =  User.query.get(user_id)
-    if info is None:
-        return []
-    else:
-        # Put masking logic for SSN and mobile number here
-        return [info.__dict__]
+    profiles_qs =  User.query.filter_by(id=user_id)
+    profiles = []
+    for record in profiles_qs:
+        profiles.append(record.__dict__)
+    return profiles
