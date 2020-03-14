@@ -1,9 +1,18 @@
 import React, { Component } from "react";
+import Select from 'react-select';
 import "./App.css";
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
+
+const userType = [
+  { label: "Individual", value: 1 },
+  { label: "Merchant", value: 2 },
+  { label: "Tier1", value: 3 },
+  { label: "Tier2", value: 4 },
+  { label: "Tier3", value: 5 },
+];
 
 const formValid = ({ formErrors, ...rest }) => {
   let valid = true;
@@ -33,6 +42,7 @@ class App extends Component {
       contactNumber: null,
       address1: null,
       address2: null,
+      userType: null,
       formErrors: {
         firstName: "",
         lastName: "",
@@ -49,21 +59,30 @@ class App extends Component {
     e.preventDefault();
 
     if (formValid(this.state)) {
-      console.log(`
-        --SUBMITTING--
-        First Name: ${this.state.firstName}
-        Last Name: ${this.state.lastName}
-        Email: ${this.state.email}
-        Contact Number: ${this.state.contactNumber}
-        Address1: ${this.state.address1}
-        Address2: ${this.state.address2}
-        Password: ${this.state.password}
+      var accountDetails = {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        email: this.state.email,
+        contactNumber: this.state.contactNumber,
+        address1: this.state.address1,
+        address2: this.state.address2,
+        password: this.state.password,
+        userType: this.state.userType
+      };
+      console.log(accountDetails);
 
-      `);
+      //Call the backend api....
+
     } else {
       console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
+      alert("Please fill all the fields");
     }
   };
+
+  handleChange1 = e => {
+    console.log(e);
+    this.setState({ userType: e.value });
+  }
 
   handleChange = e => {
     e.preventDefault();
@@ -86,7 +105,7 @@ class App extends Component {
         break;
       case "contactNumber":
         formErrors.contactNumber =
-          value.length < 10 ? "Enter Valid Number" : "";
+          value.length < 10 || isNaN(value)? "Enter Valid Number" : "";
         break;
       case "address1":
         formErrors.address1 = value.length < 4 ? "Enter valid address" : "";
@@ -120,7 +139,6 @@ class App extends Component {
                 placeholder="First Name"
                 type="text"
                 name="firstName"
-                noValidate
                 onChange={this.handleChange}
               />
               {formErrors.firstName.length > 0 && (
@@ -134,7 +152,6 @@ class App extends Component {
                 placeholder="Last Name"
                 type="text"
                 name="lastName"
-                noValidate
                 onChange={this.handleChange}
               />
               {formErrors.lastName.length > 0 && (
@@ -148,7 +165,6 @@ class App extends Component {
                 placeholder="Email"
                 type="email"
                 name="email"
-                noValidate
                 onChange={this.handleChange}
               />
               {formErrors.email.length > 0 && (
@@ -156,48 +172,60 @@ class App extends Component {
               )}
             </div>
 
-            <div className="email">
+            <div className="contactNumber">
               <label htmlFor="contactNumber">Contact Number</label>
               <input
-                className={formErrors.email.length > 0 ? "error" : null}
+                className={formErrors.contactNumber.length > 0 ? "error" : null}
                 placeholder="123-456-7890"
                 type="text"
                 name="contactNumber"
-                noValidate
                 onChange={this.handleChange}
               />
-              {formErrors.email.length > 0 && (
-                <span className="errorMessage">{formErrors.email}</span>
+              {formErrors.contactNumber.length > 0 && (
+                <span className="errorMessage">{formErrors.contactNumber}</span>
               )}
             </div>
 
-            <div className="email">
+            <div className="userType">
+            <label htmlFor="userType">User Type</label>
+            <div className="container">
+            <div className="row">
+              <div className="col-md-4"></div>
+              <div className="col-md-4">
+                <Select options={ userType } 
+                onChange={this.handleChange1}
+                />
+              </div>
+              <div className="col-md-4"></div>
+            </div>
+            </div>
+            </div>
+
+            <div className="address1">
               <label htmlFor="address1">Address1</label>
               <input
-                className={formErrors.email.length > 0 ? "error" : null}
+                className={formErrors.address1.length > 0 ? "error" : null}
                 placeholder="Street No, Apt, City"
                 type="text"
                 name="address1"
-                noValidate
                 onChange={this.handleChange}
               />
-              {formErrors.email.length > 0 && (
-                <span className="errorMessage">{formErrors.email}</span>
+              {formErrors.address1.length > 0 && (
+                <span className="errorMessage">{formErrors.address1}</span>
               )}
             </div>
 
-            <div className="email">
+            <div className="address2">
               <label htmlFor="address2">Address2</label>
               <input
-                className={formErrors.email.length > 0 ? "error" : null}
+                className={formErrors.address2.length > 0 ? "error" : null}
                 placeholder="State, Country, Zip"
                 type="text"
                 name="address2"
-                noValidate
                 onChange={this.handleChange}
               />
-              {formErrors.email.length > 0 && (
-                <span className="errorMessage">{formErrors.email}</span>
+              {formErrors.address2.length > 0 && (
+                <span className="errorMessage">{formErrors.address2}</span>
               )}
             </div>
 
@@ -208,7 +236,6 @@ class App extends Component {
                 placeholder="Password"
                 type="password"
                 name="password"
-                noValidate
                 onChange={this.handleChange}
               />
               {formErrors.password.length > 0 && (

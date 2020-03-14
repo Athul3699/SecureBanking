@@ -63,30 +63,40 @@ input.error {
   display: relative;
 }
 
-.firstName {
-  margin-right: 1%;
-}
-
-.lastName {
+.firstName,
+.lastName,
+.contactNumber,
+.address1,
+.address2,
+.userType,
+.password{
   margin-left: 1%;
 }
 
 .firstName,
 .lastName,
 .email,
-.password {
+.password,
+.contactNumber,
+.address1,
+.address2,
+.userType {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 }
 
 .firstName,
-.lastName {
+.lastName,
+.userType {
   width: 49%;
 }
 
 .email,
-.password {
+.password,
+.contactNumber,
+.address1,
+.address2 {
   width: 100%;
 }
 
