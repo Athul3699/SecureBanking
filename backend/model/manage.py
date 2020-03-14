@@ -46,17 +46,20 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String, default='')
     last_name = db.Column(db.String, default='')
-    user_name = db.Column(db.String, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     date_of_birth = db.Column(db.DateTime, nullable=False)
     ssn = db.Column(db.String, nullable=False)
-    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    address1 = db.Column(db.String, default='')
+    address2 = db.Column(db.String, default='')
+    contact = db.Column(db.String, nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('authorizedrole.id'), nullable=False)
+    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
 
 class Bankaccount(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    number = db.Column(db.String, nullable=False)
+    number = db.Column(db.String, nullable=False, unique=True)
     type = db.Column(db.String, nullable=False)
     routing_number = db.Column(db.String, nullable=False)
     balance = db.Column(db.Numeric, default=0, nullable=False)
@@ -108,3 +111,4 @@ class Appointment(db.Model):
 
 if __name__ == '__main__':
     manager.run()
+
