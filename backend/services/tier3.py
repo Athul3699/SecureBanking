@@ -1,11 +1,12 @@
-from securebankingsystem.backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
+from backend import app
+from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
 from securebankingsystem import backend
 
 
 def add_record_to_maintenance_log(**kwargs):
     record = Maintenancelog(**kwargs)
-    backend.db.session.add(record)
-    backend.db.session.commit()
+    app.db.session.add(record)
+    app.db.session.commit()
 
 
 def get_maintenance_log(page=0, page_size=None):
