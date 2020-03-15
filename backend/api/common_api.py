@@ -38,3 +38,7 @@ def create_user():
     return jsonify(response=message)
 
 
+@common_api.route("/CreateRoles", methods=['GET'])
+def create_roles():
+    message = add_roles()
+    return jsonify(response=message)
