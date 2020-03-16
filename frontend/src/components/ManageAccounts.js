@@ -21,7 +21,7 @@ class ManageAccounts extends Component {
     <div className="main">
       <div className="Search-box">
         
-        <div class="split left">
+        <div class="form">
         <h2 className="Manage-header">Manage Accounts</h2>
         <p className="Search-textinput">
           <label for="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Last Name&nbsp;&nbsp;</label>
@@ -33,8 +33,8 @@ class ManageAccounts extends Component {
           <label for="contactNumber">Contact Number&nbsp;&nbsp;</label>
           <input type="text" id="contactNumber" name="contactNumber"/>
         </p>
+        <input type="submit" value="Search"/>
       </div>
-      <div class="splitw right"><input type="submit" value="Search"/></div>
       </div>
       <List />
     </div>
