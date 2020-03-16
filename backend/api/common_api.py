@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from backend import app
-from backend.services.common import *
+from backend.services.common import add_user_account
 import datetime
 common_api = Blueprint('common_api', __name__)
 
@@ -22,19 +22,28 @@ def profile(user_id):
 @common_api.route("/CreateUser", methods=['POST'])
 def create_user():
     app.logger.info("[api-CreateUser]")
-    user_params = dict()
-    user_params['first_name'] = request.form['first_name']
-    user_params['last_name'] = request.form['last_name']
-    user_params['email'] = request.form['email']
-    user_params['password'] = request.form['password']
-    user_params['date_of_birth'] = datetime.datetime.utcnow() # request.form['date_of_birth'] TODO: Send dob as a timestamp from frontend
-    user_params['ssn'] = request.form['ssn']
-    user_params['address1'] = request.form['address1']
-    user_params['address2'] = request.form['address2']
-    user_params['contact'] = request.form['contact']
+    user_params = request.json
+    # user_params['first_name'] = user_params['first_name']
+    # user_params['last_name'] = user_params['last_name']
+    # user_params['email'] = user_params['email']
+    # user_params['password'] = user_params['password']
+    user_params['date_of_birth'] = datetime.datetime.utcnow() # user_params['date_of_birth'] TODO: Send dob as a timestamp from frontend
+    # user_params['ssn'] = user_params['ssn']
+    # user_params['address1'] = user_params['address1']
+    # user_params['address2'] = user_params['address2']
+    # user_params['contact'] = user_params['contact']
     user_params['role_id'] = 1 # TODO change it after constants are added to the branch
     message = add_user_account(**user_params)
     return jsonify(response=message)
+
+""" reference for getting json body args """
+@common_api.route("/testparams", methods=['POST'])
+def test_params():
+    app.logger.info("[api-CreateUser]")
+    user_params = request.json
+    print(user_params)
+
+    return jsonify({'message': user_params['first_name']})
 
 
 @common_api.route("/CreateRoles", methods=['GET'])

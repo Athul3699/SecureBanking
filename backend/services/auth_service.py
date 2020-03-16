@@ -2,7 +2,7 @@ from backend import app
 from flask import Flask, jsonify, request, make_response
 import jwt
 import datetime
-from backend.services.common import get_user_account
+from backend.services.common import *
 from backend.services.security_util import token_required, encrypt, check_decrypt
 from functools import wraps
 
@@ -19,7 +19,7 @@ def login_user(email, password):
     user = get_user_account(email=email)
 
     if not user:
-        return "UNAUTHORIZED", None
+        return "User doesn't exist", None
 
     pwd_hashed = encrypt("password")
     email_hashed = encrypt("username")

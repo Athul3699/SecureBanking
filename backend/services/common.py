@@ -59,7 +59,6 @@ def add_user_account(**kwargs):
 def add_roles():
     result = "success"
 
-    # import pdb; pdb.set_trace()
     if app.db.session.query(Authorizedrole).count()==5:
         return result
     else:

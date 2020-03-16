@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Select from 'react-select';
 import "./RegisterAccountPage.css";
+import { API_URL } from '../constants/references'
+import { postRequest } from '../util/api'
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -55,8 +57,7 @@ class App extends Component {
     };
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = () => {
 
     if (formValid(this.state)) {
       var accountDetails = {
@@ -71,7 +72,11 @@ class App extends Component {
       };
       console.log(accountDetails);
 
-      //Call the backend api....
+      postRequest(`${API_URL}/api/v1/common/createuser`, accountDetails)
+      .then((data) => {
+        console.log(data)
+        // redirect to login page for simplicity
+      })
 
     } else {
       console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
@@ -131,7 +136,7 @@ class App extends Component {
       <div className="wrapper">
         <div className="form-wrapper">
           <h1>Create Account</h1>
-          <form onSubmit={this.handleSubmit} noValidate>
+          <form noValidate>
             <div className="firstName">
               <label htmlFor="firstName">First Name</label>
               <input
@@ -243,7 +248,7 @@ class App extends Component {
               )}
             </div>
             <div className="createAccount">
-              <button type="submit">Create Account</button>
+              <button onClick={this.handleSubmit}>Create Account</button>
               <small>Already Have an Account?</small>
             </div>
           </form>

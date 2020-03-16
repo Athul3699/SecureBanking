@@ -17,13 +17,15 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 logger.addHandler(file_handler)
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["DOWNLOAD_FOLDER"] = DOWNLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///securebank'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #Secret key for token authentication
 app.config['SECRET_KEY'] = '$$group10'
+
+logging.getLogger('flask_cors').level = logging.DEBUG
 
 db = SQLAlchemy(app)
 
