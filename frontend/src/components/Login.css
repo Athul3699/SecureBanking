@@ -1,0 +1,76 @@
+.Login {
+  text-align: center;
+  background-color: #282c34;
+}
+
+
+
+.Login-header {
+  
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.Prompt-box {
+  background-color: #EDEFF5;
+  width: 50%;
+  height: 60%;
+  min-width: 450px;
+  min-height: 350px;
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  border-radius: 5px;
+  border: 3px solid #ACB6C2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 8%;
+}
+.Prompt-header{
+  font-weight: bold;
+  color: black;
+  font-size: 18em;
+  
+}
+.Prompt-textinput {
+  color: black;
+  display: inline-block;
+  font-size: 10em;
+  margin-bottom: 1%;
+  margin-top: 1%;
+
+}
+input[type=text], select {
+  width: 25em;
+  padding: 3%;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 10em;
+  background-color: #4CAF50;
+  color: white;
+  padding: 1.5%;
+  margin: 2vmin;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12em;
+}
+
+.Login-link {
+  color: #61dafb;
+  display: inline-block;
+  font-size: 8em;
+  margin-top: 0.5vmin;
+}
+

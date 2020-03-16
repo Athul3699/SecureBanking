@@ -1,0 +1,85 @@
+body {
+  font-family: "Lato", sans-serif;
+}
+.main {
+  position: fixed;
+  background-color: #282c34;
+  width: 75%;
+  height: 100%;
+  right: 0;
+  top: 5%;
+}
+.Search-box {
+  background-color: rgb(214, 217, 226);
+  width: 70vw;
+  height: 32%;
+  min-width: 200px;
+  max-height: 250px;
+  position: absolute;
+  border-radius: 5px;
+  border: 3px solid #ACB6C2;
+  right: 2vw;
+  left: 2vw;
+  color: white;
+  font-size: 7%;
+}
+.Manage-header{
+  font-weight: bold;
+  color: black;
+  font-size: 4.5vh;
+  margin-bottom: 2.5vh;
+  margin-top: 2vh;
+}
+.split{
+height: 100%;
+width: 70%;
+position: absolute;
+z-index: 1;
+top: 0;
+overflow-x: hidden;
+text-align: left;
+padding-left: 3vw;
+
+}
+.splitw{
+  height: 35%;
+  width: 30%;
+  position: absolute;
+  z-index: 1;
+  bottom:0;
+  overflow-x: hidden;
+  text-align: right;
+  padding-right: 3vw;
+  }
+.left {
+  left: 0;  
+}
+.right {
+  right: 0;  
+}
+.Search-textinput {
+  color: black;
+  display: inline-block;
+  font-size: 2.5vh;
+  margin-bottom:0.5vh;
+}
+input[type=text], select {
+  width: 30vw;
+  height: 2.5vh;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 13vw;
+  height: 5vh;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 3vmin;
+
+}
