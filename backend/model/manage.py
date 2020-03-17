@@ -1,8 +1,10 @@
+from constants import *
 from flask_sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 import datetime
+from sqlalchemy.types import JSON
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///securebank'
@@ -60,6 +62,10 @@ class User(db.Model):
     contact = db.Column(db.String, nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('authorizedrole.id'), nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    edit_status = db.Column(db.Integer, default=APPROVED)
+    edit_data = db.Column(JSON, default={})
+    edit_mode = db.Column(db.Boolean, default=False)
+
 
 
 class Bankaccount(db.Model):
