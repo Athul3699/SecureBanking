@@ -65,6 +65,7 @@ class User(db.Model):
     edit_status = db.Column(db.Integer, default=APPROVED)
     edit_data = db.Column(JSON, default={})
     edit_mode = db.Column(db.Boolean, default=False)
+    is_active = db.Column(db.Boolean, default=True)
 
 
 
@@ -76,6 +77,7 @@ class Bankaccount(db.Model):
     balance = db.Column(db.Numeric, default=0, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
 
 
 class Maintenancelog(db.Model):
