@@ -31,12 +31,25 @@ def update_customer_bank_account(account_number, **kwargs):
         result = "error"
     return result
 
+
 def get_user_account(**kwargs):
     profiles_qs = User.query.filter_by(**kwargs)
     profiles = []
     for record in profiles_qs:
         profiles.append(record.__dict__)
     return profiles
+
+def update_user_account(id, **kwargs):
+    result = "success"
+    try:
+        keys = kwargs.keys()
+        user = User.query.filter_by(id=id).first()
+        for key in keys:
+            exec("user.{0} = kwargs['{0}']".format(key))
+        app.db.session.commit()
+    except:
+        result = "error"
+    return result
 
 
 def add_user_account(**kwargs):

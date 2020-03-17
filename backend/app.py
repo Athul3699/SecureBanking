@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from backend.api.common_api import common_api
 from backend.api.driver import driver_api
 from backend.api.auth_controller import auth_api
+from backend.api.user_controller import user_api
+
 import datetime
 import logging
 
@@ -32,6 +34,7 @@ db = SQLAlchemy(app)
 app.register_blueprint(common_api, url_prefix='/api/v1/common')
 app.register_blueprint(driver_api)
 app.register_blueprint(auth_api, url_prefix='/api/v1/auth')
+app.register_blueprint(user_api, url_prefix='/api/v1/user')
 
 if __name__ == "__main__":
     db.init_app(app)

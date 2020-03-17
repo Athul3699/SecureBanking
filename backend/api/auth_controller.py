@@ -14,5 +14,3 @@ def login():
     password = args['password']
     
     return auth_service.login_user(email=email, password=password)
-
-    # return jsonify({"status": status, "token": token })
