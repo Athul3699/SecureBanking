@@ -13,6 +13,6 @@ def login():
     email = args['email']
     password = args['password']
     
-    status, token = auth_service.login_user(email=email, password=password)
+    return auth_service.login_user(email=email, password=password)
 
-    return jsonify({"status": status, "token": token })
+    # return jsonify({"status": status, "token": token })

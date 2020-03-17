@@ -1,5 +1,6 @@
 from backend import app
 from flask import Flask, jsonify, request, make_response
+from flask import current_app
 import jwt
 import datetime
 from backend.services.common import *
@@ -18,17 +19,18 @@ for key in user:
 def login_user(email, password):
     user = get_user_account(email=email)
 
-    if not user:
+    import pdb; pdb.set_trace()
+    if len(user) == 0:
         return "User doesn't exist", None
 
-    pwd_hashed = encrypt("password")
-    email_hashed = encrypt("username")
+    pwd_hashed = encrypt(password)
+    email_hashed = encrypt(email)
 
 
     global flag_dict
     if check_decrypt(email_hashed, email):
         if check_decrypt(pwd_hashed, password):
-            token = jwt.encode({'user': email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(seconds=40)}, app.config['SECRET_KEY'])
+            token = jwt.encode({'user': email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(seconds=40)}, current_app.config['SECRET_KEY'])
             return jsonify({'token' : token.decode('UTF-8')})
 
         else:

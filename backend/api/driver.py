@@ -14,4 +14,3 @@ def home():
 def test_api():
     app.logger.info("[api-v1-testapi]")
     return "API Running Successfully!"
-

@@ -1,6 +1,7 @@
 from backend import app
 from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
 from backend.services.security_util import encrypt
+from backend.services.constants import *
 
 # from backend.services.constants import *
 
@@ -30,7 +31,6 @@ def update_customer_bank_account(account_number, **kwargs):
         result = "error"
     return result
 
-
 def get_user_account(**kwargs):
     profiles_qs = User.query.filter_by(**kwargs)
     profiles = []
@@ -40,13 +40,8 @@ def get_user_account(**kwargs):
 
 
 def add_user_account(**kwargs):
-    user = get_user_account(email=kwargs['email'])
+    user = get_user_account(**kwargs)
     if user == None or len(user) == 0:
-        password_hashed = encrypt(kwargs['password'])
-        email_hashed = encrypt(kwargs['email'])
-        kwargs['email'] = email_hashed
-        kwargs['password'] = password_hashed
-
         account = User(**kwargs)
 
         app.db.session.add(account)
@@ -64,7 +59,7 @@ def add_roles():
     else:
         try:
             individual_obj = Authorizedrole(
-                role_name='INDIVIDUAL',
+                role_name=INDIVIDUAL,
                 view_customer_account=True,
                 initiate_modification_personal_account=True,
                 view_customer_request=True,
@@ -78,7 +73,7 @@ def add_roles():
             app.db.session.add(individual_obj)
 
             merchant_obj = Authorizedrole(
-                role_name='MERCHANT',
+                role_name=MERCHANT,
                 view_customer_request=True,
                 view_merchant_account=True,
                 approve_customer_request_by_merchant=True,
@@ -92,7 +87,7 @@ def add_roles():
             app.db.session.add(merchant_obj)
 
             tier1_obj = Authorizedrole(
-                role_name='TIER1',
+                role_name=TIER1,
                 view_all_customer_accounts=True,
                 view_customer_request=True,
                 approve_customer_request_noncritical=True,
@@ -102,7 +97,7 @@ def add_roles():
             app.db.session.add(tier1_obj)
 
             tier2_obj = Authorizedrole(
-                role_name='TIER2',
+                role_name=TIER2,
                 view_all_customer_accounts=True,
                 create_customer_account=True,
                 delete_customer_account=True,
@@ -115,7 +110,7 @@ def add_roles():
             app.db.session.add(tier2_obj)
 
             tier3_obj = Authorizedrole(
-                role_name='TIER3',
+                role_name=TIER3,
                 view_employee_account=True,
                 create_employee_account=True,
                 delete_employee_account =True,

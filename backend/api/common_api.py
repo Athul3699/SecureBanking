@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from backend import app
-from backend.services.common import add_user_account
+from backend.services.common import *
 import datetime
 common_api = Blueprint('common_api', __name__)
 
@@ -23,15 +23,15 @@ def profile(user_id):
 def create_user():
     app.logger.info("[api-CreateUser]")
     user_params = request.json
-    # user_params['first_name'] = user_params['first_name']
-    # user_params['last_name'] = user_params['last_name']
-    # user_params['email'] = user_params['email']
-    # user_params['password'] = user_params['password']
+    user_params['first_name'] = user_params['first_name']
+    user_params['last_name'] = user_params['last_name']
+    user_params['email'] = user_params['email']
+    user_params['password'] = user_params['password']
     user_params['date_of_birth'] = datetime.datetime.utcnow() # user_params['date_of_birth'] TODO: Send dob as a timestamp from frontend
-    # user_params['ssn'] = user_params['ssn']
-    # user_params['address1'] = user_params['address1']
-    # user_params['address2'] = user_params['address2']
-    # user_params['contact'] = user_params['contact']
+    user_params['ssn'] = user_params['ssn']
+    user_params['address1'] = user_params['address1']
+    user_params['address2'] = user_params['address2']
+    user_params['contact'] = user_params['contact']
     user_params['role_id'] = 1 # TODO change it after constants are added to the branch
     message = add_user_account(**user_params)
     return jsonify(response=message)
