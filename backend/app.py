@@ -6,6 +6,7 @@ from backend.api.driver import driver_api
 from backend.api.auth_controller import auth_api
 from backend.api.user_controller import user_api
 from backend.api.admin_controller import admin_api
+from backend.api.appointment_controller import appointment_api
 
 import datetime
 import logging
@@ -39,6 +40,7 @@ app.register_blueprint(driver_api)
 app.register_blueprint(auth_api, url_prefix=f'{COMMON_PREFIX}/auth')
 app.register_blueprint(user_api, url_prefix=f'{COMMON_PREFIX}/user')
 app.register_blueprint(admin_api, url_prefix=f'{COMMON_PREFIX}/admin')
+app.register_blueprint(appointment_api, url_prefix=f'{COMMON_PREFIX}/appointment')
 
 if __name__ == "__main__":
     db.init_app(app)
