@@ -37,16 +37,23 @@ def get_user_account(**kwargs):
     profiles = []
     for record in profiles_qs:
         profiles.append(record.__dict__)
-    return profiles
+    
+    if (len(profiles) > 0):
+        return profiles[0]
+
+    return None
 
 def update_user_account(id, **kwargs):
-    result = "success"
+    result = "error"
     try:
         keys = kwargs.keys()
-        user = User.query.filter_by(id=id).first()
+        user = app.db.session.query(User).filter_by(id=id).first()
+
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
         app.db.session.commit()
+
+        result = get_user_account(id=id)
     except:
         result = "error"
     return result
@@ -62,6 +69,30 @@ def add_user_account(**kwargs):
         return "Registered!"
     else:
         return "User already exists"
+
+def update_employee_account(id, **kwargs):
+    result = "error"
+    try:
+        user = app.db.session.query(User).filter_by(id=id).first()
+
+        edit_data = {}
+        if (kwargs['edit_status'] == 2):
+            # import pdb; pdb.set_trace()
+            edit_data = dict.copy(user.edit_data)
+            user.edit_data = {}
+            for key in edit_data.keys():
+                exec("user.{0} = edit_data['{0}']".format(key))
+        else:
+            keys = kwargs.keys()
+            for key in keys:
+                exec("user.{0} = kwargs['{0}']".format(key))
+        
+        app.db.session.commit()
+
+        result = get_user_account(id=id)
+    except:
+        result = "error"
+    return result
 
 
 def add_roles():
