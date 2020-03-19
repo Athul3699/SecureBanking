@@ -8,8 +8,14 @@ from backend.services.constants import *
 def get_customer_bank_accounts(**kwargs):
     accounts_qs = Bankaccount.query.filter_by(**kwargs)
     accounts = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
     for record in accounts_qs:
-        accounts.append(record.__dict__)
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        accounts.append(record_dict)
+
     return accounts
 
 
@@ -35,9 +41,14 @@ def update_customer_bank_account(account_number, **kwargs):
 def get_user_account(**kwargs):
     profiles_qs = User.query.filter_by(**kwargs)
     profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
     for record in profiles_qs:
-        profiles.append(record.__dict__)
-    
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        profiles.append(record_dict)
+
     if (len(profiles) > 0):
         return profiles[0]
 
@@ -62,10 +73,14 @@ def update_user_account(id, **kwargs):
 def add_user_account(**kwargs):
     user = get_user_account(**kwargs)
     if user == None or len(user) == 0:
-        account = User(**kwargs)
+        try:
+            account = User(**kwargs)
+            app.db.session.add(account)
+            app.db.session.commit()
+        except Exception as e:
+            print(e)
+            return "error"
 
-        app.db.session.add(account)
-        app.db.session.commit()
         return "Registered!"
     else:
         return "User already exists"

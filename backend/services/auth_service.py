@@ -17,15 +17,17 @@ for key in user:
     flag_dict[key]['expires_at'] = datetime.datetime.min
 
 def login_user(email, password):
+    if email is None or password is None:
+        return "No credentials", None
+
     user = get_user_account(email=email)
 
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     if len(user) == 0:
         return "User doesn't exist", None
 
     pwd_hashed = encrypt(password)
     email_hashed = encrypt(email)
-
 
     global flag_dict
     if check_decrypt(email_hashed, email):

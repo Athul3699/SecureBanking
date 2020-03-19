@@ -1,6 +1,5 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services import user_service
 from ..services.common import *
 from ..services.constants import *
 
@@ -11,9 +10,9 @@ def initiate_modify_user():
     app.logger.info("[api-initiate-modify-user]")
     args = request.json
 
-    id = args['id']    
+    id = args['id']
     response = update_user_account(id=id, edit_mode=True, edit_data=args['edit_data'], edit_status=SUBMITTED)
-    return jsonify({"response": str(response) })
+    return jsonify(response=response)
 
 @user_api.route("/GetUser", methods=['GET'])
 def get_user():
@@ -22,4 +21,4 @@ def get_user():
 
     id = args['id']    
     response = get_user_account(id=id)
-    return jsonify({"response": str(response) })
+    return jsonify(response=response)

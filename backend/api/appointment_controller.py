@@ -1,6 +1,5 @@
 from flask import jsonify, Blueprint, request
 from backend import app
-from ..services import user_service
 from ..services.appointment_service import schedule_appointment
 
 appointment_api = Blueprint('appointment_api', __name__)
@@ -13,5 +12,5 @@ response = User(id=id)
 def schedule_appointment():
     app.logger.info("[api-schedule-appointment]")
     args = request.json
-    response = schedule_appointment()
-    return jsonify({"response": str(response) })
+    response = schedule_appointment(args)
+    return jsonify(response=response)
