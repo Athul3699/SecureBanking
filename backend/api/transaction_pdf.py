@@ -4,40 +4,45 @@ import csv
 import pandas as pd
 import psycopg2
 
+#For Windows
+#config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 
-config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 app= Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Pratima@77@localhost/postgres'
 
 mydict = {}
 
+#Function to view the transactions in pdf format
 @app.route('/view')
 def pdf_view():
     (pd.DataFrame.from_dict(data=mydict, orient='index').to_csv('dict.csv', header=False))
 
     with open('dict.csv') as f:
-        pdf = pdfkit.from_file(f, False, configuration=config)
+        pdf = pdfkit.from_file(f, False)
+        #pdf = pdfkit.from_file(f, False, configuration=config)) #For Windows
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers['Content-Disposition'] = 'inline; filename= transaction.pdf'  # For viewing
+    response.headers['Content-Disposition'] = 'inline; filename= transaction.pdf'  
 
     return response
 
 
+#Function to download the transactions in pdf format
 @app.route('/download')
 def pdf_download():
     (pd.DataFrame.from_dict(data=mydict, orient='index').to_csv('dict.csv', header=False))
 
     with open('dict.csv') as f:
-        pdf = pdfkit.from_file(f, False, configuration=config)
+        pdf = pdfkit.from_file(f, False)
+        #pdf = pdfkit.from_file(f, False, configuration=config) #For Windows
 
     response = make_response(pdf)
     response.headers['Content-Type'] = 'application/pdf'
-    response.headers[
-        'Content-Disposition'] = 'attachment; filename= transaction.pdf'  # For downloading the pdf to local computer
+    response.headers['Content-Disposition'] = 'attachment; filename= transaction.pdf'  
 
     return response
+
 
 class db:
     def __init__(self):
@@ -47,6 +52,8 @@ class db:
                     database="postgres",
                     user = "postgres",
                     password = "Pratima@77")
+
+    #Function to fetch all users
     def get_users(self):
         res = []
         cur = self.con.cursor() #cursor
@@ -57,6 +64,7 @@ class db:
         cur.close() #close the cursor
         return res
 
+    #Function to fetch transactions of all users
     def get_transactions(self):
         res = []
         cur = self.con.cursor() #cursor
@@ -66,7 +74,8 @@ class db:
             res.append(r[0])
         cur.close() #close the cursor
         return res
-
+ 
+    #Function to fetch transactions of one user based on user id
     def get_one_transaction(self, user_id):
         cur = self.con.cursor()
         cur.execute("select transactions from data where user_id =" + str(user_id))
