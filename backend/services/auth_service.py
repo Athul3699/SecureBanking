@@ -38,11 +38,11 @@ def login_user(email, password):
         else:
             cur_time= datetime.datetime.utcnow()
             if flag_dict[email]['flag_count']==0:
-                expire_time = cur_time + datetime.timedelta(seconds=40)
+                expire_time = cur_time + datetime.timedelta(hours=5)
                 flag_dict[email]['expires_at']= expire_time
         
-            if datetime.datetime.utcnow() < flag_dict[email]['exp']:
-                while flag_dict[email]['flag_count']<3:
+            if datetime.datetime.utcnow() < flag_dict[email]['expires_at']:
+                while flag_dict[email]['flag_count']<4:
                     flag_dict[email]['flag_count'] +=1
                     return make_response(jsonify({'message' : 'Incorrect password'}), 401, {'WWW-Authenticate': 'Basic realm= "Login Required"'})
                 else:
