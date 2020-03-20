@@ -44,7 +44,7 @@ def login():
                     expire_time= cur_time+datetime.timedelta(seconds=40)
                     flag_dict[auth.username]['expires_at']= expire_time
            
-                if datetime.datetime.utcnow() < flag_dict[auth.username]['exp']:
+                if datetime.datetime.utcnow() < flag_dict[auth.username]['expires_at']:
                     while flag_dict[auth.username]['flag_count']<3:
                         flag_dict[auth.username]['flag_count'] +=1
                         return make_response(jsonify({'message' : 'Incorrect password'}), 401, {'WWW-Authenticate': 'Basic realm= "Login Required"'})
