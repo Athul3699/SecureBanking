@@ -39,6 +39,7 @@ def update_customer_bank_account(account_number, **kwargs):
 
 
 def get_user_account(**kwargs):
+    kwargs['is_active'] = True
     profiles_qs = User.query.filter_by(**kwargs)
     profiles = []
 
@@ -75,6 +76,7 @@ def add_user_account(**kwargs):
     if user == None or len(user) == 0:
         try:
             account = User(**kwargs)
+            
             app.db.session.add(account)
             app.db.session.commit()
         except Exception as e:

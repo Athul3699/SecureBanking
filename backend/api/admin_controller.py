@@ -65,6 +65,6 @@ def get_user():
     app.logger.info("[api-get-user]")
     args = request.json
 
-    id = args['id']    
+    id = args['id']
     response = get_user_account(id=id)
     return jsonify(response=response)

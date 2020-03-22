@@ -9,18 +9,26 @@ class Login extends Component {
     super(props)
 
     this.state = {
-      email: 'a@a.com',
-      password: 'a',
+      email: '',
+      password: '',
     }
   }
 
   onSignInButtonClick = () => {
-    postRequest(`${API_URL}/api/v1/auth/login_user`, { "email" : this.state.email, "password": this.state.password })
+    postRequest(`${API_URL}/api/v1/auth/LoginUser`, { "email": this.state.email, "password": this.state.password })
     .then((data) => {
       console.log(data)
       window.localStorage.setItem('API_TOKEN', data["token"])
     })
     .catch((error) => console.log(error))
+  }
+
+  onEmailChange = (e) => {
+    this.setState({ email: e.target.value })
+  }
+
+  onPasswordChange = (e) => {
+    this.setState({ password: e.target.value })
   }
 
   render() {
@@ -32,11 +40,11 @@ class Login extends Component {
           <h2 className="Prompt-header">Secure Account Log In <i class="material-icons"> lock</i></h2>
           <p className="Prompt-textinput">
             <label for="userID">&nbsp;&nbsp;&nbsp;User ID&nbsp;&nbsp;</label>
-            <input type="text" id="userID" name="userID"/>
+            <input type="text" id="userID" name="userID" onChange={this.onEmailChange}/>
           </p>
           <p className="Prompt-textinput">
             <label for="password">Password&nbsp;&nbsp;</label>
-            <input type="text" id="password" name="password"/>
+            <input type="text" id="password" name="password" onChange={this.onPasswordChange}/>
           </p>
             
             

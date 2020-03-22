@@ -35,12 +35,12 @@ logging.getLogger('flask_cors').level = logging.DEBUG
 
 db = SQLAlchemy(app)
 
-app.register_blueprint(common_api, url_prefix=f'{COMMON_PREFIX}/common')
+app.register_blueprint(common_api, url_prefix=COMMON_PREFIX + '/common')
 app.register_blueprint(driver_api)
-app.register_blueprint(auth_api, url_prefix=f'{COMMON_PREFIX}/auth')
-app.register_blueprint(user_api, url_prefix=f'{COMMON_PREFIX}/user')
-app.register_blueprint(admin_api, url_prefix=f'{COMMON_PREFIX}/admin')
-app.register_blueprint(appointment_api, url_prefix=f'{COMMON_PREFIX}/appointment')
+app.register_blueprint(auth_api, url_prefix=COMMON_PREFIX + '/auth')
+app.register_blueprint(user_api, url_prefix=COMMON_PREFIX + '/user')
+app.register_blueprint(admin_api, url_prefix=COMMON_PREFIX + '/admin')
+app.register_blueprint(appointment_api, url_prefix=COMMON_PREFIX + '/appointment')
 
 if __name__ == "__main__":
     db.init_app(app)
