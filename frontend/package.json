@@ -7,12 +7,16 @@
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
     "@trendmicro/react-sidenav": "^0.5.0",
+    "and": "0.0.3",
     "bootstrap": "^4.4.1",
     "react": "^16.13.0",
+    "react-datepicker": "^2.14.1",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
-    "react-select": "^3.0.8"
+    "react-select": "^3.0.8",
+    "reactjs-popup": "^1.5.0",
+    "start": "^5.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { slide as Menu } from 'react-burger-menu';
 import {
     BrowserRouter as Router,
     Switch,
