@@ -15,6 +15,7 @@ import ManageRequests from './ManageRequests';
 import "./LandingPage.css";
 import Scheduler from './Scheduler';
 import UpdateContact from './UpdateContact';
+import BankingStatements from "./BankingStatements"
   class LandingPage extends Component {
 
     render() {
@@ -38,6 +39,7 @@ import UpdateContact from './UpdateContact';
               <Route exact path="/manageRequests" component={ManageRequests}/>
               <Route exact path="/updateInfo" component={UpdateContact}/>
               <Route exact path="/schedule" component={Scheduler}/>
+              <Route exact path="/bankingStatements" component={BankingStatements}/>
               <Route exact path="/help" component={Scheduler}/>
             </div>
           </div>
