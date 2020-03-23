@@ -1,0 +1,84 @@
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.mng {
+  position: relative;
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  top:20%;
+}
+.Search-box {
+  background-color: rgb(214, 217, 226);
+  margin-right: 3vw;
+  margin-left: 3vw;
+  width: 92vw;
+  height: 30vh;
+  min-width: 200px;
+  max-height: 250px;
+  min-height: 60px;
+  border-radius: 5px;
+  border: 3px solid #ACB6C2;
+
+  
+  color: white;
+  font-size: small;
+  
+}
+.Manage-header{
+  font-weight: bold;
+  color: black;
+  font-size: 2em;
+  margin-bottom: 0.3em;
+  margin-top: 1em;
+  margin-right: 1em;
+}
+.form{
+height: 100%;
+z-index: 1;
+
+overflow-x: hidden;
+text-align: center;
+padding-left: 5vw;
+
+}
+
+.Search-textinput {
+
+  position: relative;
+  color: black;
+  display: inline-block;
+  font-size: 0.5em;
+  margin-bottom:0.3em;
+  left:0;
+
+}
+input[type=text], select {
+
+  width: 25vw;
+  height: 0.5em;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 2em;
+}
+.mng-submit{
+margin-top:15vh;
+margin-left:5vw;
+right:0;
+}
+input[type=submit] {
+  width: 7vw;
+  min-width: 100px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  text-align: center;
+
+
+}

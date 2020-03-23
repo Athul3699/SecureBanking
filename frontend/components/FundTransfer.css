@@ -1,0 +1,92 @@
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.fd {  
+  margin-right: 3vw;
+  margin-left: 3vw;
+  width: 92vw;
+  min-width: 200px;
+  height: 800px;  
+  min-height: 500px;
+  top: 0;  
+  left: 0;  
+  right: 0;  
+  bottom: 0;  
+  position: absolute;
+  color: #000;
+  background-color: rgb(224, 218, 218);  
+  border-radius: 5px;
+  border: 3px solid #ACB6C2;
+  font-size: small;
+
+}  
+.Transfer-header{
+  font-weight: bold;
+  color: black;
+  font-size: 2em;
+  margin-left: 3vw;
+  margin-top: 1em;
+
+
+}
+.fd-inner {  
+  left: 25%;  
+  right: 20%;  
+  top: 5%;  
+  bottom: 5%;  
+  margin-top: 3%;  
+  border-radius: 20px;  
+  text-align: left;
+
+}
+.fd-input{
+  width: 60vw;
+  margin-left: 3vw;
+}
+.fd-select{
+  width: 50vw;
+  margin-left: 3vw;
+  margin-bottom: 1vw;
+}
+.fd-textarea{
+  width: 50vw;
+  margin-left: 3vw;
+  margin-top: 2vw;
+}
+textarea {
+
+width: 100%;
+height: 20%;
+border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=text], select {
+padding: 20px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.fd-button{
+  width: 100%;
+  text-align: right;
+  margin-right:10vw;
+  margin-top: 2vw;
+}
+
+input[type=submit] {
+
+  background-color: #4CAF50;
+  color: white;
+
+  margin: 2vmin;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  text-align: center;
+
+}
