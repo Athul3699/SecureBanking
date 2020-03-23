@@ -63,6 +63,10 @@ def update_user_account(id, **kwargs):
 
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
+
+        if kwargs["password"] is not None:
+            user.password = encrypt(kwargs["password"])
+
         app.db.session.commit()
 
         result = get_user_account(id=id)
@@ -83,9 +87,9 @@ def add_user_account(**kwargs):
             print(e)
             return "error"
 
-        return "Registered!"
+        return { "status": "success", "data": { "message": "Registered!" }}
     else:
-        return "User already exists"
+        return { "status": "failure", "errorMessage": "User already exists" }
 
 def update_employee_account(id, **kwargs):
     result = "error"
@@ -99,6 +103,8 @@ def update_employee_account(id, **kwargs):
             user.edit_data = {}
             for key in edit_data.keys():
                 exec("user.{0} = edit_data['{0}']".format(key))
+        elif (kwargs['edit_status'] == 3):
+            user.edit_status = 3
         else:
             keys = kwargs.keys()
             for key in keys:

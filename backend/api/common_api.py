@@ -23,9 +23,11 @@ def profile(user_id):
 def create_user():
     app.logger.info("[api-CreateUser]")
     user_params = request.json
-    user_params['date_of_birth'] = datetime.datetime.fromtimestamp(user_params['date_of_birth'] / 1e3)
-    if ('role_id' not in user_params) or (user_params['role_id'] == None):
-        user_params['role_id'] =  INDIVIDUAL
+    user_params['date_of_birth'] = datetime.datetime.now() # datetime.datetime.fromtimestamp(user_params['date_of_birth'] / 1e3)
+    user_params['ssn'] = 123456789
+    user_params['role_id'] =  INDIVIDUAL
+    # if ('role_id' not in user_params) or (user_params['role_id'] == None):
+    #     user_params['role_id'] =  INDIVIDUAL
     message = add_user_account(**user_params)
     return jsonify(response=message)
 

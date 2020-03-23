@@ -1,5 +1,7 @@
 import React from 'react';  
 import './Popup.css';  
+import { postRequest } from '../util/api';
+import { API_URL } from '../constants/references';
 
 class Popup extends React.Component {  
   constructor(props) {
@@ -13,19 +15,32 @@ class Popup extends React.Component {
   displayMessage(message) {
     console.log(message)
   }
+
+  handleApprove = () => {
+    postRequest(`${API_URL}/api/v1/admin/ManageRequest`, { edit_status: 2 })
+    .then(() => alert('Approved!'))
+    .then(() => console.error('Something went wrong...'))
+  }
+
+  handleDecline = () => {
+    postRequest(`${API_URL}/api/v1/admin/ManageRequest`, { edit_status: 3 })
+    .then(() => alert('Declined!'))
+    .then(() => console.error('Something went wrong...'))
+  }
+
   render() {  
     var obj = JSON.parse(this.props.text);
     let dispMA_del="";
     let dispMA_edt="";
     if(this.props.page==="dispMA"){
-      dispMA_del = <button className="button">Delete</button> ;
-      dispMA_edt = <button className="button">Edit</button>  ;
+      dispMA_del = <button onClick={this.handleDelete} className="button">Delete</button> ;
+      dispMA_edt = <button onClick={this.handleEdit} className="button">Edit</button>  ;
     }
     let dispMR_app="";
     let dispMR_dec="";
     if(this.props.page==="dispMR"){
-      dispMR_app = <button className="button">Approve</button> ;
-      dispMR_dec = <button className="button">Decline</button>  ;
+      dispMR_app = <button onClick={this.handleApprove} className="button">Approve</button> ;
+      dispMR_dec = <button onClick={this.handleDecline} className="button">Decline</button>  ;
     }
     
 

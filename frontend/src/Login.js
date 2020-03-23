@@ -18,7 +18,7 @@ class Login extends Component {
     postRequest(`${API_URL}/api/v1/auth/LoginUser`, { "email": this.state.email, "password": this.state.password })
     .then((data) => {
       console.log(data)
-      window.localStorage.setItem('API_TOKEN', data["token"])
+      window.localStorage.setItem('API_TOKEN', data["data"]["token"])
     })
     .catch((error) => console.log(error))
   }

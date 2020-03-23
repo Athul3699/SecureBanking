@@ -49,7 +49,7 @@ def manage_employee_request():
     app.logger.info("[api-manage-employee-request]")
     args = request.json
 
-    id = args['id']
+    id = 5 # args['id']
     edit_status = args['edit_status']
 
     response = update_employee_account(id=id, edit_mode=False, edit_status=edit_status)
