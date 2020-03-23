@@ -54,25 +54,6 @@ class App extends Component {
         address1: "",
         address2: ""
       }
-
-      // this.state = {
-      //   firstName: "R",
-      //   lastName: "T",
-      //   email: "r@r.com",
-      //   password: "1234567",
-      //   contactNumber: 1234567890,
-      //   address1: "123456789",
-      //   address2: "12345678",
-      //   userType: 1,
-      //   formErrors: {
-      //     firstName: "",
-      //     lastName: "",
-      //     email: "",
-      //     password: "",
-      //     contactNumber: "",
-      //     address1: "",
-      //     address2: ""
-      //   }
     };
   }
 

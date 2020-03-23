@@ -11,6 +11,8 @@ const options = [
   { value: 'savings', label: 'Savings' }
 ];
 
+  
+
 class FundTransfer extends Component {
   constructor(props) {
     super(props);
@@ -38,51 +40,44 @@ class FundTransfer extends Component {
   }
   render() {
   return ( 
-    <div className='main'>  
-      <div className='fd'>  
-      <h2 className="Transfer-header">Fund Transfer</h2>
-      <form className='fd-inner' onSubmit={this.handleSubmit}>
-      <br/>
-          <label>From Account Type&nbsp;&nbsp;</label>
+    <div className='fd'>  
+    <div className="Transfer-header">Fund Transfer</div>
+      <div className='fd-inner'>  
+      
+      <form onSubmit={this.handleSubmit}>
+      <span className="fd-select">
+        <label>From Account Type&nbsp;&nbsp;</label> 
           <Select 
           name="accType"
           options={options} 
           placeholder={this.state.selectedValuePlaceholder}
-          onChange={({value, label}) => this.setState({accType: value, selectedValuePlaceholder :
-label})}
-/>
-         
-          <br/>
-          <label>Payee's Account&nbsp;&nbsp;</label><br/>
+          onChange={({value, label}) => this.setState({accType: value, selectedValuePlaceholder :label})}/>
+
+        </span>
+        <span className="fd-input">
+          <label>Payee's Account&nbsp;&nbsp;</label>
           <input type="text" name="payeeAcc" value={this.state.payeeAcc} onChange={this.handleChange} /><br/><br/>
-          <label>Transfer Amount&nbsp;&nbsp;</label><br/>
+        </span>
+        <span className="fd-input">
+          <label>Transfer Amount&nbsp;&nbsp;</label>
           <input type="text" name="transAmount" value={this.state.transAmount} onChange={this.handleChange}/><br/><br/>
-          <label>Transfer Date&nbsp;&nbsp;</label><br/>
-          
+        </span>
+        <span className="fd-input"><label>Transfer Date&nbsp;&nbsp;</label>
           <DatePicker
-      selected={this.state.startDate}
-      onChange={date => {
-        this.setState({
-          startDate: date
-        })}}
-      minDate={new Date()}
-    /><br/><br/>
-          <label>Description&nbsp;&nbsp;</label><br/>
-          <textarea name="transDesc" value={this.state.transDesc} onChange={this.handleChange} /><br/>
-          <br/>
-          <input type="submit" value="Transfer" />
-
-          
+            selected={this.state.startDate}
+            onChange={date => {this.setState({startDate: date})}}
+            minDate={new Date()}
+          />
+        </span>
+        <span className="fd-textarea">
+          <label>Description&nbsp;&nbsp;</label>
+          <textarea style={{ resize: "none", height: "100px" }} name="transDesc" value={this.state.transDesc} onChange={this.handleChange} />
+        </span>
+<div className="fd-button"><span><input type="submit" value="Transfer" /></span>
+        <span><button className="button" onClick={this.props.closePopup}>Go Back</button>  
+</span></div>
+     
         </form>
-        
-         
-          
-
-
-
-
-
-
 </div>  
 </div>  
   );

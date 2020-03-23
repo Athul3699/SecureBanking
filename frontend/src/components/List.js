@@ -16,17 +16,15 @@ class List extends Component {
 
     }
  }
-
  displayMessage(message) {
   console.log(message)
 }
-
  togglePopup(param) {  
   this.setState({  
        showPopup: !this.state.showPopup,
        detail:param
   });  
-  this.displayMessage('dd');
+
    }
 
     renderTableHeader() {

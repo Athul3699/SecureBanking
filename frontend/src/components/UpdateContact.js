@@ -1,8 +1,5 @@
 import React from "react";
 import Popup from "reactjs-popup";
-import { postRequest } from "../util/api"
-import { API_URL } from "../constants/references";
-
 class UpdateContact extends React.Component {
   constructor(props) {
     super(props);
@@ -29,22 +26,20 @@ class UpdateContact extends React.Component {
   }
 
   handleSubmitContact(event) {
-    postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, { edit_data: { contact: this.state.contactNumber }})
-    .then(() => alert("The new contact has been sent for approval: " + this.state.contactNumber))
-    .catch(() => console.error("Failure..."))
+    alert(
+      "The new contact has been sent for approval: " + this.state.contactNumber
+    );
+    event.preventDefault();
   }
 
   handleSubmitAddress(event) {
     alert("New Address has been sent for approval: " + this.state.address);
-    postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, { edit_data: { address1: this.state.address } })
-    .then(() => alert("New Address has been sent for approval: " + this.state.address))
-    .catch(() => console.error("Failure..."))
+    event.preventDefault();
   }
 
   handleSubmitPassword(event) {
-    postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, { edit_data: { password: this.state.password } })
-    .then(() => alert("Password change request submitted!"))
-    .catch(() => console.error("Failure..."))
+    alert("Password change is successful!");
+    event.preventDefault();
   }
 
   render() {
@@ -93,7 +88,7 @@ class UpdateContact extends React.Component {
                 backgroundColor: "snow"
               }}
             >
-              <div>
+              <form onSubmit={this.handleSubmitContact}>
                 <label style={{ fontWeight: "bold" }}>
                   Contact Number:
                   <input
@@ -110,7 +105,6 @@ class UpdateContact extends React.Component {
 
                 <button
                   className="btn"
-                  onClick={this.handleSubmitContact}
                   style={{
                     borderStyle: "solid",
                     backgroundColor: "green"
@@ -118,7 +112,7 @@ class UpdateContact extends React.Component {
                 >
                   Update Contact
                 </button>
-              </div>
+              </form>
             </div>
           </Popup>
         </div>
@@ -154,7 +148,8 @@ class UpdateContact extends React.Component {
                 paddingTop: "50px"
               }}
             >
-              <div
+              <form
+                onSubmit={this.handleSubmitAddress}
                 style={{ paddingTop: "50px" }}
               >
                 <label style={{ fontWeight: "bold" }}>
@@ -169,7 +164,6 @@ class UpdateContact extends React.Component {
 
                 <button
                   className="btn"
-                  onClick={this.handleSubmitAddress}
                   style={{
                     borderStyle: "solid",
                     backgroundColor: "green"
@@ -177,7 +171,7 @@ class UpdateContact extends React.Component {
                 >
                   Update Address
                 </button>
-              </div>
+              </form>
             </div>
           </Popup>
         </div>
@@ -213,7 +207,8 @@ class UpdateContact extends React.Component {
                 paddingTop: "50px"
               }}
             >
-              <div
+              <form
+                onSubmit={this.handleSubmitPassword}
                 style={{ paddingTop: "50px" }}
               >
                 <label style={{ fontWeight: "bold" }}>
@@ -231,7 +226,6 @@ class UpdateContact extends React.Component {
 
                 <button
                   className="btn"
-                  onClick={this.handleSubmitPassword}
                   style={{
                     borderStyle: "solid",
                     backgroundColor: "green"
@@ -239,7 +233,7 @@ class UpdateContact extends React.Component {
                 >
                   Update Password
                 </button>
-              </div>
+              </form>
             </div>
           </Popup>
         </div>
