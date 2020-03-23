@@ -1,6 +1,5 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services import user_service
 from ..services.common import get_user_account, update_user_account, add_user_account, update_employee_account
 from ..services.constants import *
 import datetime
@@ -38,7 +37,7 @@ def employee_account_actions():
     elif (request.method == 'DELETE'):
         response = update_user_account(id=args['id'], is_active=False)
         
-    return jsonify({"response": str(response) })
+    return jsonify(response=response)
 
 
 """
@@ -54,7 +53,7 @@ def manage_employee_request():
     edit_status = args['edit_status']
 
     response = update_employee_account(id=id, edit_mode=False, edit_status=edit_status)
-    return jsonify({"response": str(response) })
+    return jsonify(response=response)
 
 
 """
@@ -66,6 +65,6 @@ def get_user():
     app.logger.info("[api-get-user]")
     args = request.json
 
-    id = args['id']    
+    id = args['id']
     response = get_user_account(id=id)
-    return jsonify({"response": str(response) })
+    return jsonify(response=response)

@@ -18,7 +18,7 @@ def check_decrypt(hash_credential, input_auth):
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token= request.args.get('token')
+        token = request.args.get('token')
 
         if not token:
             return jsonify({'message' : 'Missing: token'}), 403
