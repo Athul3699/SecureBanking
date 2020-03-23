@@ -65,38 +65,16 @@ input.error {
 
 .firstName,
 .lastName,
-.contactNumber,
-.address1,
-.address2,
 .userType,
-.password{
-  margin-left: 1%;
-}
-
-.firstName,
-.lastName,
-.email,
-.password,
-.contactNumber,
-.address1,
-.address2,
-.userType {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.firstName,
-.lastName,
-.userType {
-  width: 49%;
-}
-
 .email,
 .password,
 .contactNumber,
 .address1,
 .address2 {
+  margin-left: 1%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
   width: 100%;
 }
 

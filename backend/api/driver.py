@@ -1,35 +1,16 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS, cross_origin
+# from securebankingsystem import backend
+from flask import Blueprint
+from backend import app
 
-import datetime
-import logging
-import os
+driver_api = Blueprint('driver_api', __name__)
 
-DOWNLOAD_FOLDER = "../logs/"
-UPLOAD_FOLDER = "../data/"
 
-LOG_FILE = "logger" + str(datetime.datetime.now()) + ".log"
-
-app = Flask(__name__)
-cors = CORS(app)
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["DOWNLOAD_FOLDER"] = DOWNLOAD_FOLDER
-file_handler = logging.FileHandler(DOWNLOAD_FOLDER + "logger.log")
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(file_handler)
-
-@app.route("/")
+@driver_api.route("/")
 def home():
     app.logger.info("[api-home]")
     return "Home"
 
-
-@app.route("/api/v1/testapi")
+@driver_api.route("/api/v1/testapi")
 def test_api():
     app.logger.info("[api-v1-testapi]")
     return "API Running Successfully!"
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

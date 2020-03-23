@@ -30,6 +30,8 @@ for windows users
      c) `python3 manage.py db migrate`
 
      d) `python3 manage.py db upgrade`
+     
+     e) call this api once after creating database : `api/v1/common/CreateRoles`
 # useful documentation
 
 Flask - https://flask.palletsprojects.com/en/1.1.x/
