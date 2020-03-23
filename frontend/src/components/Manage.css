@@ -2,7 +2,7 @@ body {
   font-family: "Lato", sans-serif;
 }
 .main {
-  position: fixed;
+  position: relative;
   background-color: #282c34;
   width: 75%;
   height: 100%;
@@ -42,19 +42,21 @@ padding-left: 3vw;
 }
 
 .Search-textinput {
+  position: relative;
   color: black;
   display: inline-block;
   font-size: 0.5em;
   margin-bottom:0.3em;
-  
 }
 input[type=text], select {
+  position: relative;
   width: 30vw;
   height: 0.5em;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  margin-top: 2em;
 }
 
 input[type=submit] {
@@ -67,8 +69,9 @@ input[type=submit] {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.5em;
-  position: absolute;
+
   text-align: center;
   padding-top: 0.8%;
   margin-left: 3vw;
+  bottom:0;
 }

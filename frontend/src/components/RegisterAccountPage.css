@@ -72,29 +72,9 @@ input.error {
 .address1,
 .address2 {
   margin-left: 1%;
-}
-
-.firstName,
-.lastName,
-.email,
-.password,
-.userType,
-.contactNumber,
-.address1,
-.address2 {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
-}
-
-.firstName,
-.lastName,
-.email,
-.password,
-.userType,
-.contactNumber,
-.address1,
-.address2 {
   width: 100%;
 }
 
