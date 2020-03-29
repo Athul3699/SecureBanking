@@ -31,12 +31,16 @@ function formatNumber(value) {
 const { TextArea } = Input
 const { Option } = Select
 
-class CreateBankAccount extends Component {
+class TransferFunds extends Component {
     constructor(props) {
         super(props)
         this.state = {
             accountType: 'debit',
-            balance:1000,        
+            componentSize: 'small',
+            accounts: [{ number: 1234 }],
+            destinationAccount: '',
+            accountSource: '',
+
         }
     }
 
@@ -44,16 +48,32 @@ class CreateBankAccount extends Component {
       // getRequest(`${API_URL}/user/GetBankAccounts`)
     }
 
+    setComponentSize = () => {
+        this.setState({ componentSize: 'small' })
+    }
+
     handleAccountTypeChange = (e) => {
-      if(e.target.value==='fund_transfer') {
         this.setState({ accountType: e.target.value })
-      } else {
-        this.setState({ accountType: e.target.value })
-      }
+    }
+
+    handleAccountSourceChange = (value) => {
+        this.setState({ accountSource: value })
+    }
+
+    handleAmountChange = (value) => {
+      this.setState({ amount: value })
+    }
+
+    handleDescriptionChange = (e) => {
+      this.setState({ description: e.target.value })
+    }
+
+    handleDestinationAccountChange = (e) => {
+      this.setState({ destinationAccount: e.target.value })
     }
 
     onButtonClick = () => {
-      postRequest(`${API_URL}/api/v1/bank_account/BankAccount`, this.state)
+      postRequest(`${API_URL}/common/CreateAccount`, this.state)
       .then(() => {
 
       })
@@ -63,6 +83,7 @@ class CreateBankAccount extends Component {
     }
 
     render() {
+
         return (
 
             <div className="create-form-container">
@@ -76,12 +97,41 @@ class CreateBankAccount extends Component {
                 <br />
                 <br />
 
-                Opening balance:<br />
+                Account:<br />
+                <Select
+                  style={{ width: 200 }} onChange={this.handleAccountSourceChange}>
+                  {this.state.accounts.map( (account, i) => <Option key={i} value={i}> { account.number} </Option>)}
+                </Select>
+
+                <br />
+                <br />
+
+                Payee Account Number:<br />
+                <Input
+                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                  onChange={this.handleDestinationAccountChange}
+                />
+
+                <br />
+                <br />
+
+                Amount:<br />
                 <InputNumber
                   defaultValue={1000}
                   formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   parser={value => value.replace(/\$\s?|(,*)/g, '')}
                   onChange={this.handleAmountChange}
+                />
+
+                <br />
+                <br />
+
+                Description:
+                <TextArea
+                  rows={4}
+                  value={this.state.description}
+                  allowClear
+                  onChange={this.handleDescriptionChange}
                 />
 
                 <br />
@@ -99,4 +149,4 @@ class CreateBankAccount extends Component {
     }
 }
 
-export default CreateBankAccount
+export default TransferFunds

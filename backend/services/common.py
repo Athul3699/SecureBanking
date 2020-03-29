@@ -16,13 +16,15 @@ def get_customer_bank_accounts(**kwargs):
         record_dict.pop("_sa_instance_state")
         accounts.append(record_dict)
 
-    return accounts
+    return { "status": "success", "data": { "data": accounts }}
 
 
 def add_customer_bank_account(**kwargs):
     account = Bankaccount(**kwargs)
     app.db.session.add(account)
     app.db.session.commit()
+
+    return {"status": "success", "data": { "message": "success" }}
 
 
 def update_customer_bank_account(account_number, **kwargs):
@@ -35,7 +37,7 @@ def update_customer_bank_account(account_number, **kwargs):
         app.db.session.commit()
     except:
         result = "error"
-    return result
+    return { "status": "success", "data": { "data": result }}
 
 
 def get_user_account(**kwargs):

@@ -13,7 +13,7 @@ const options = [
 
   
 
-class FundTransfer extends Component {
+class TransferFunds extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -84,4 +84,4 @@ class FundTransfer extends Component {
   }
 }
 
-export default FundTransfer;
+export default TransferFunds;
