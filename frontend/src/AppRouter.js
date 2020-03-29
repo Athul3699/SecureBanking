@@ -10,6 +10,7 @@ import {
 import RegisterAccountPage from "./components/RegisterAccountPage";
 import Login from "./Login";
 import LandingPage from "./components/LandingPage";
+import CreateAccount from "./components/CreateBankAccount";
 
 class AppRouter extends Component {
   state = {};
@@ -25,6 +26,9 @@ class AppRouter extends Component {
           </Route>
           <Route path="/landingPage">
             <LandingPage></LandingPage>
+          </Route>
+          <Route path="/createaccount">
+            <CreateAccount />
           </Route>
         </Switch>
       </Router>
