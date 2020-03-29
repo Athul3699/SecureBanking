@@ -50,8 +50,21 @@ def create_transaction():
 @transaction_api.route("/InitiateMoneyTransfer", methods=['POST'])
 def initiate_money_transfer():
     app.logger.info("[api-InitiateMoneyTransfer]")
-    trasaction_params = request.json
-    trasaction_params["is_critical"] = isCritical(user_id, trasaction_params[amount])
+    trasaction_params = {}
+    trasaction_params["type"] = request.json["transferType"]
+    trasaction_params["from_account"] = 2#request.json["accountSource"]
+    trasaction_params["amount"] = request.json["amount"]
+    trasaction_params["initiated_by"] = 1 #get_user_id_from_token()
+    if trasaction_params["type"]=="transfer":
+        trasaction_params["to_account"] = request.json["destinationAccount"]
+    trasaction_params["status"] = "Submitted"
+    #trasaction_params["is_critical"] = False #isCritical(user_id, trasaction_params[amount])
+    trasaction_params["awaiting_action_from_auth_level"] = "Tier2" #if trasaction_params["is_critical"] else "Tier1"
+    trasaction_params["last_approved_by"] = 1
+    trasaction_params["last_approved_time"] = datetime.datetime.utcnow()
+    trasaction_params["otp_needed"] = True
+    trasaction_params["otp_sent_time"] = datetime.datetime.utcnow()
+    trasaction_params["otp_valid_till"] = datetime.datetime.utcnow()
     # get email or phone number or account number as parameter
     #perform checks on params and format them
     message = add_transaction(**trasaction_params)

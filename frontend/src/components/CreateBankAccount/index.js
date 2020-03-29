@@ -35,12 +35,13 @@ class CreateAccount extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            accountType: 'debit',
+            transferType: 'debit',
             componentSize: 'small',
             accounts: [{ number: 1234 }],
             destinationAccount: '',
+            amount:1000,
             accountSource: '',
-
+            showDestinationAccount:false
         }
     }
 
@@ -52,8 +53,12 @@ class CreateAccount extends Component {
         this.setState({ componentSize: 'small' })
     }
 
-    handleAccountTypeChange = (e) => {
-        this.setState({ accountType: e.target.value })
+    handletransferTypeChange = (e) => {
+      if(e.target.value==='fund_transfer') {
+        this.setState({ transferType: e.target.value, showDestinationAccount: true})
+      } else {
+        this.setState({ transferType: e.target.value, showDestinationAccount: false})
+      }
     }
 
     handleAccountSourceChange = (value) => {
@@ -73,7 +78,7 @@ class CreateAccount extends Component {
     }
 
     onButtonClick = () => {
-      postRequest(`${API_URL}/common/CreateAccount`, this.state)
+      postRequest(`${API_URL}/api/v1/transaction/InitiateMoneyTransfer`, this.state)
       .then(() => {
 
       })
@@ -83,12 +88,11 @@ class CreateAccount extends Component {
     }
 
     render() {
-
         return (
 
             <div className="create-form-container">
-                Account Type:<br />
-                <Radio.Group onChange={this.handleAccountTypeChange} value={this.state.accountType}>
+                Transaction Type:<br />
+                <Radio.Group onChange={this.handletransferTypeChange} value={this.state.transferType}>
                    <Radio value={"debit"}>Debit</Radio>
                     <Radio value={"credit"}>Credit</Radio>
                     <Radio value={"fund_transfer"}>Fund Transfer</Radio>
@@ -105,15 +109,17 @@ class CreateAccount extends Component {
 
                 <br />
                 <br />
-
-                Payee Account Number:<br />
+                { this.state.showDestinationAccount &&
+                <div>Payee Account Number:<br />
                 <Input
+                  style={{ width: 200,marginTop:0 }}
                   parser={value => value.replace(/\$\s?|(,*)/g, '')}
                   onChange={this.handleDestinationAccountChange}
                 />
-
                 <br />
                 <br />
+                </div>
+                }
 
                 Amount:<br />
                 <InputNumber
@@ -126,8 +132,9 @@ class CreateAccount extends Component {
                 <br />
                 <br />
 
-                Description:
+                Description:<br />
                 <TextArea
+                  style={{ width: 400 }}
                   rows={4}
                   value={this.state.description}
                   allowClear
