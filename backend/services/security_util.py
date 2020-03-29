@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, make_response
 import jwt
 import datetime
 from functools import wraps
+from backend import app
 
 #Function to hash the credential after adding a salt of length=6.
 def encrypt(credential):
@@ -13,6 +14,12 @@ def encrypt(credential):
 def check_decrypt(hash_credential, input_auth):
     check_flag= check_password_hash(hash_credential, input_auth)
     return check_flag
+
+
+def decode_email(token):
+    decoded = jwt.decode(token, app.config['SECRET_KEY'])
+    return decoded["user"]
+
 
 #Function to ensure token is valid
 def token_required(f):
