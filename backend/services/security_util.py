@@ -17,7 +17,7 @@ def check_decrypt(hash_credential, input_auth):
 
 
 def decode_email(token):
-    decoded = jwt.decode(token, app.config['SECRET_KEY'])
+    decoded = jwt.decode(token, '$$group10')
     return decoded["user"]
 
 

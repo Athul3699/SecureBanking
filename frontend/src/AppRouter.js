@@ -12,6 +12,7 @@ import Login from "./Login";
 import LandingPage from "./components/LandingPage";
 import CreateBankAccount from "./components/CreateBankAccount";
 import TransferFunds from "./components/TransferFunds";
+import CreateUserAccount from "./components/CreateUserAccount";
 
 class AppRouter extends Component {
   state = {};
@@ -21,6 +22,9 @@ class AppRouter extends Component {
         <Switch>
           <Route exact path="/">
             <Login></Login>
+          </Route>
+          <Route path="/createuseraccount">
+            <CreateUserAccount />
           </Route>
           <Route exact path="/register">
             <RegisterAccountPage></RegisterAccountPage>

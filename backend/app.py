@@ -8,6 +8,7 @@ from backend.api.user_controller import user_api
 from backend.api.admin_controller import admin_api
 from backend.api.appointment_controller import appointment_api
 from backend.api.transaction_api import transaction_api
+from backend.api.bank_account_controller import bank_account_api
 import datetime
 import logging
 
@@ -42,6 +43,8 @@ app.register_blueprint(user_api, url_prefix=COMMON_PREFIX + '/user')
 app.register_blueprint(admin_api, url_prefix=COMMON_PREFIX + '/admin')
 app.register_blueprint(appointment_api, url_prefix=COMMON_PREFIX + '/appointment')
 app.register_blueprint(transaction_api, url_prefix=COMMON_PREFIX+'/transaction')
+app.register_blueprint(bank_account_api, url_prefix=COMMON_PREFIX+'/bank_account')
+
 
 if __name__ == "__main__":
     db.init_app(app)

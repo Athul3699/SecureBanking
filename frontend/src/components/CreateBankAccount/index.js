@@ -40,26 +40,12 @@ class CreateBankAccount extends Component {
         }
     }
 
+    onButtonClick = () => {
+      // route to appropriate page
+    }
+
     componentDidMount() {
       // getRequest(`${API_URL}/user/GetBankAccounts`)
-    }
-
-    handleAccountTypeChange = (e) => {
-      if(e.target.value==='fund_transfer') {
-        this.setState({ accountType: e.target.value })
-      } else {
-        this.setState({ accountType: e.target.value })
-      }
-    }
-
-    onButtonClick = () => {
-      postRequest(`${API_URL}/api/v1/bank_account/BankAccount`, this.state)
-      .then(() => {
-
-      })
-      .catch(() => {
-
-      })
     }
 
     render() {
