@@ -13,6 +13,9 @@ import LandingPage from "./components/LandingPage";
 import CreateBankAccount from "./components/CreateBankAccount";
 import TransferFunds from "./components/TransferFunds";
 import CreateUserAccount from "./components/CreateUserAccount";
+import CreateEmployeeAccountTier1 from "./components/CreateEmployeeAccountTier1";
+import CreateEmployeeAccountTier2 from "./components/CreateEmployeeAccountTier2";
+
 
 class AppRouter extends Component {
   state = {};
@@ -35,6 +38,15 @@ class AppRouter extends Component {
           <Route path="/createbankaccount">
             <CreateBankAccount />
           </Route>
+
+          <Route path="/createt1employeeaccount">
+            <CreateEmployeeAccountTier1 />
+          </Route>
+
+          <Route path="/createt2employeeaccount">
+            <CreateEmployeeAccountTier2 />
+          </Route>
+
           <Route path="/transferfunds">
             <TransferFunds />
           </Route>

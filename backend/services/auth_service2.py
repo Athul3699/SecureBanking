@@ -26,7 +26,17 @@ def register_user(**data):
             data['ssn'] = ssn_hash
             data['date_of_birth'] = datetime.datetime.strptime(data['date_of_birth'], '%Y/%M/%d')
 
-            auth_token = user.encode_auth_token(str(user.email))
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1200),
+                'email': data['email']
+            }
+            
+            auth_token = jwt.encode(
+                payload,
+                "justatest",
+                algorithm='HS256'
+            )
+            
             data['activeJWT'] = auth_token
 
             # create a user object
@@ -61,7 +71,7 @@ def login_user(**data):
                 user.activeJWT = auth_token
                 app.db.session.add(user)
                 app.db.session.commit()
-                
+
                 return "success", auth_token
         else:
             return "failure", "user does not exist"

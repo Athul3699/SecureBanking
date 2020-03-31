@@ -39,6 +39,7 @@ import UpdateContactInfo from './UpdateContactInfo';
                 
               {/* <Route exact path="/" component={AccountSummaryCard}/> */}
               <Route exact path="/" component={AccountHome}/>
+              {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
               <Route exact path="/manageAccounts" component={ManageAccounts}/>
               <Route exact path="/manageRequests" component={ManageRequests}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}

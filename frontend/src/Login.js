@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Login.css';
 import { postRequest } from './util/api';
 import { API_URL } from './constants/references';
+import { Button } from 'antd';
 
 class Login extends Component {
 
@@ -37,9 +38,9 @@ class Login extends Component {
         <header className="Login-header">
         </header>
         <div className="Prompt-box">
-          <h2 className="Prompt-header">Secure Account Log In <i class="material-icons"> lock</i></h2>
+          <h2 className="Prompt-header">Log in <i class="material-icons"></i></h2>
           <p className="Prompt-textinput">
-            <label for="userID">&nbsp;&nbsp;&nbsp;User ID&nbsp;&nbsp;</label>
+            <label for="userID">&nbsp;&nbsp;&nbsp;Email&nbsp;&nbsp;</label>
             <input type="text" id="userID" name="userID" onChange={this.onEmailChange}/>
           </p>
           <p className="Prompt-textinput">
@@ -63,7 +64,9 @@ class Login extends Component {
               Create account
             </a>
           </p>
-          <button onClick={this.onSignInButtonClick} value="Sign In"/>
+          <Button onClick={this.onSignInButtonClick}>
+            Sign In
+          </Button>
         </div>
       </div>
     );

@@ -178,7 +178,7 @@ class UpdateContactInfo extends Component {
         <br />
         <br />
 
-                Contact Number:<br />
+        Contact Number:<br />
         <Input
           onChange={this.handleContact}
           value={this.state.contact}
@@ -187,7 +187,7 @@ class UpdateContactInfo extends Component {
         <br />
         <br />
 
-        Date of Birth: <br />
+        {/* Date of Birth: <br />
         <DatePicker
           format={dateFormat}
           onChange={this.handleDobChange}
@@ -195,7 +195,7 @@ class UpdateContactInfo extends Component {
         />
 
         <br />
-        <br />
+        <br /> */}
 
                 SSN: <br />
         <Input

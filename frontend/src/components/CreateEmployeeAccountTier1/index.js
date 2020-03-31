@@ -31,7 +31,7 @@ const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
 
-class CreateUserAccount extends Component {
+class CreateEmployeeAccountTier1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -161,7 +161,7 @@ class CreateUserAccount extends Component {
     if (this.validate()) {
       let data = this.state;
       delete data["confirm_password"];
-      postRequestWithoutToken(`${API_URL}/api/v1/auth/RegisterUser`, this.state)
+      postRequestWithoutToken(`${API_URL}/api/v1/common/CreateUser`, this.state)
         .then(() => {
           // route to appropriate page
         })
@@ -176,6 +176,8 @@ class CreateUserAccount extends Component {
   render() {
     return (
       <div className="create-form-container">
+        <h1>Tier 1 Employee</h1>
+        <br></br>
         First Name:
         <br />
         <Input
@@ -250,4 +252,4 @@ class CreateUserAccount extends Component {
   }
 }
 
-export default CreateUserAccount;
+export default CreateEmployeeAccountTier1;

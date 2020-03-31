@@ -6,32 +6,13 @@ import { Input, Button, Radio, Select, InputNumber, DatePicker } from "antd";
 import { postRequestWithoutToken } from "../../util/api";
 import { API_URL } from "../../constants/references";
 
-function formatNumber(value) {
-  value += "";
-  const list = value.split(".");
-  const prefix = list[0].charAt(0) === "-" ? "-" : "";
-  let num = prefix ? list[0].slice(1) : list[0];
-  let result = "";
-  while (num.length > 3) {
-    result = `,${num.slice(-3)}${result}`;
-    num = num.slice(0, num.length - 3);
-  }
-  if (num) {
-    result = num + result;
-  }
-  return `${prefix}${result}${list[1] ? `.${list[1]}` : ""}`;
-}
-
-const { TextArea } = Input;
-const { Option } = Select;
-
 const dateFormat = "YYYY/MM/DD";
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
 
-class CreateUserAccount extends Component {
+class CreateEmployeeAccountTier2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -161,7 +142,7 @@ class CreateUserAccount extends Component {
     if (this.validate()) {
       let data = this.state;
       delete data["confirm_password"];
-      postRequestWithoutToken(`${API_URL}/api/v1/auth/RegisterUser`, this.state)
+      postRequestWithoutToken(`${API_URL}/api/v1/common/CreateUser`, this.state)
         .then(() => {
           // route to appropriate page
         })
@@ -176,6 +157,8 @@ class CreateUserAccount extends Component {
   render() {
     return (
       <div className="create-form-container">
+        <h1>Tier 2 Employee</h1>
+        <br></br>
         First Name:
         <br />
         <Input
@@ -250,4 +233,4 @@ class CreateUserAccount extends Component {
   }
 }
 
-export default CreateUserAccount;
+export default CreateEmployeeAccountTier2;

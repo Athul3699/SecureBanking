@@ -1,10 +1,10 @@
 export async function postRequest(url = '', data = {}) {
-    data["token"] = window.localStorage.getItem('API_TOKEN')
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': window.localStorage.getItem('API_TOKEN')
       },
       body: JSON.stringify(data)
     });
@@ -13,13 +13,13 @@ export async function postRequest(url = '', data = {}) {
 }
 
 export async function getRequest(url = '') {
-  // data["token"] = window.localStorage.getItem('API_TOKEN')
 
   const response = await fetch(url, {
     method: 'GET',
     credentials: 'same-origin',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('API_TOKEN')
     },
   });
 
@@ -46,7 +46,8 @@ export async function putRequest(url = '', data = {}) {
     method: 'POST',
     credentials: 'same-origin',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('API_TOKEN')
     },
     body: JSON.stringify(data)
   });
