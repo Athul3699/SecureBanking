@@ -11,6 +11,7 @@ import csv
 import pdfkit
 transaction_api = Blueprint('transaction_api', __name__)
 
+
 @transaction_api.route("/DownloadStatements", methods=['POST'])
 def downloadStatements():
     app.logger.info("[api-POST-DownloadStatements]")
@@ -42,9 +43,8 @@ def downloadStatements():
         transaction_row['to_account']=transaction['to_account']
         transaction_row['amount']=transaction['amount']
         transaction_row['type']=transaction['type']
-        #transaction_row['description']=transaction['description']
+        transaction_row['description']=transaction['description']
         transactions.append(transaction_row)
-    print(transactions)
 
     html = render_template('downloadStatement.html', transationDetails=transactions)
     return render_pdf(HTML(string=html))

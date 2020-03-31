@@ -152,6 +152,7 @@ class Maintenancelog(db.Model):
     accessed_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     last_access_time = db.Column(db.DateTime, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    is_active = db.Column(db.Boolean, default=True)
 
 
 class Signinhistory(db.Model):
@@ -161,6 +162,7 @@ class Signinhistory(db.Model):
     logout_time = db.Column(db.DateTime, default= datetime.datetime.utcnow())
     logout_reason = db.Column(db.String, nullable=False, default= 'User Initiated')
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    is_active = db.Column(db.Boolean, default=True)
 
 
 class Transaction(db.Model):
@@ -179,6 +181,8 @@ class Transaction(db.Model):
     otp_sent_time = db.Column(db.DateTime, nullable=False)
     otp_valid_till = db.Column(db.DateTime, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    description = db.Column(db.String, default='', nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
 
 
 class Appointment(db.Model):
@@ -187,6 +191,7 @@ class Appointment(db.Model):
     reason = db.Column(db.DateTime, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
 
 
 if __name__ == '__main__':
