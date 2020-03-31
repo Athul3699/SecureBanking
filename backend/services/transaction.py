@@ -14,8 +14,32 @@ def get_transactions(**kwargs):
     transaction_qs = Transaction.query.filter_by(**kwargs)
     transactions = []
     for record in transaction_qs:
-        transactions.append(record.__dict__)
+        record_dict = record.__dict__
+        if "_sa_instance_state" in record_dict:
+            record_dict.pop("_sa_instance_state")
+        transactions.append(record_dict)
     return transactions
+
+
+def get_transactions_within(start_date,  end_date, accountnumber):
+    transaction_qs1 = Transaction.query.filter(app.db.and_(Transaction.initiated_time >= start_date, Transaction.initiated_time <= end_date, Transaction.from_account==accountnumber, Transaction.status=="Approved")).all()
+    transaction_qs2 = Transaction.query.filter(app.db.and_(Transaction.initiated_time >= start_date, Transaction.initiated_time <= end_date, Transaction.to_account==accountnumber, Transaction.status=="Approved")).all()
+    transactions = []
+
+    for record in transaction_qs1:
+        record_dict = record.__dict__
+        if "_sa_instance_state" in record_dict:
+            record_dict.pop("_sa_instance_state")
+        transactions.append(record_dict)
+
+    for record in transaction_qs2:
+        record_dict = record.__dict__
+        if "_sa_instance_state" in record_dict:
+            record_dict.pop("_sa_instance_state")
+        transactions.append(record_dict)
+
+    return transactions 
+
 
 
 def add_transaction(**kwargs):

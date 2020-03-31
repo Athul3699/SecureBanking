@@ -2,8 +2,53 @@ from flask import Blueprint, jsonify, request
 from backend import app
 from backend.services.common import *
 from backend.services.transaction import *
+from flask_weasyprint import HTML, render_pdf
+from flask import render_template
 import datetime
+import calendar
+import pandas as pd
+import csv
+import pdfkit
 transaction_api = Blueprint('transaction_api', __name__)
+
+@transaction_api.route("/DownloadStatements", methods=['POST'])
+def downloadStatements():
+    app.logger.info("[api-POST-DownloadStatements]")
+    args = request.json
+    # email = decode_email(args['token'])
+    # user_id = get_user_account(email=email)
+    
+    # if user_id == None:
+    #     return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+
+
+    # accounts = get_customer_bank_accounts(user_id=user_id,number=args['account_number'])
+    # if len(accounts)==0:
+    #     return jsonify(response={ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
+    
+
+    year = (int)(args['year'])
+    month = (int)(args['month'])
+    num_days = calendar.monthrange(year, month)[1]
+    start_date = datetime.date(year, month, 1)
+    end_date = datetime.date(year, month, num_days)
+
+    transactions_qs = get_transactions_within(start_date,  end_date, args['account_number'])
+
+    transactions = []
+    for transaction in transactions_qs:
+        transaction_row = {}
+        transaction_row['from_account']=transaction['from_account']
+        transaction_row['to_account']=transaction['to_account']
+        transaction_row['amount']=transaction['amount']
+        transaction_row['type']=transaction['type']
+        #transaction_row['description']=transaction['description']
+        transactions.append(transaction_row)
+    print(transactions)
+
+    html = render_template('downloadStatement.html', transationDetails=transactions)
+    return render_pdf(HTML(string=html))
+
 
 @transaction_api.route("/Transactions/<transaction_id>", methods=['GET'])
 def transactions(transaction_id):
@@ -50,6 +95,12 @@ def create_transaction():
 @transaction_api.route("/InitiateMoneyTransfer", methods=['POST'])
 def initiate_money_transfer():
     app.logger.info("[api-InitiateMoneyTransfer]")
+    args = request.json
+    email = decode_email(args['token'])
+    user_id = get_user_account(email=email)
+    if user_id == None:
+        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+
     trasaction_params = {}
     trasaction_params["type"] = request.json["transferType"]
     trasaction_params["from_account"] = 2#request.json["accountSource"]

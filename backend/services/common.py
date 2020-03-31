@@ -14,7 +14,7 @@ def get_customer_bank_accounts(**kwargs):
         record_dict.pop("_sa_instance_state")
         accounts.append(record_dict)
 
-    return { "status": "success", "data": { "data": accounts }}
+    return accounts
 
 
 def add_customer_bank_account(**kwargs):
