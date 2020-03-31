@@ -15,16 +15,16 @@ transaction_api = Blueprint('transaction_api', __name__)
 def downloadStatements():
     app.logger.info("[api-POST-DownloadStatements]")
     args = request.json
-    # email = decode_email(args['token'])
-    # user_id = get_user_account(email=email)
+    email = decode_email(args['token'])
+    user_id = get_user_account(email=email)
     
-    # if user_id == None:
-    #     return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+    if user_id == None:
+        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
 
 
-    # accounts = get_customer_bank_accounts(user_id=user_id,number=args['account_number'])
-    # if len(accounts)==0:
-    #     return jsonify(response={ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
+    accounts = get_customer_bank_accounts(user_id=user_id,number=args['account_number'])
+    if len(accounts)==0:
+        return jsonify(response={ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
     
 
     year = (int)(args['year'])
