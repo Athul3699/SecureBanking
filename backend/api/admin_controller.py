@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import get_user_account, update_user_account, add_user_account, update_employee_account
+from ..services.common import get_user_account, update_user_account, add_user_account, update_employee_account, get_all_employees
 from ..services.constants import *
 import datetime
 
@@ -67,4 +67,17 @@ def get_user():
 
     id = args['id']
     response = get_user_account(id=id)
+    return jsonify(response=response)
+
+
+"""
+request = id
+response = User(id=id)
+"""
+@admin_api.route("/GetAllEmployees", methods=['GET'])
+def get_all_employees_api():
+    app.logger.info("[api-get-user]")
+    args = request.json
+
+    response = get_all_employees()
     return jsonify(response=response)

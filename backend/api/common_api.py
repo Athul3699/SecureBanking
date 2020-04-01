@@ -25,22 +25,11 @@ def customer_accounts(user_id):
 def get_user_account_endpoint():
     app.logger.info("[api-get-user]")
     args = request.json
-    email = decode_email(args['token'])
-    # del args['token']
-    # email = 'a@a.com'
+    # email = decode_email(args['token'])
+    del args['token']
+    email = 'a@a.com'
     response = get_user_account(email=email)
     return jsonify( { "status": "success", "data": { "data": response }})
-
-
-@common_api.route("/CreateUser", methods=['POST'])
-def create_user():
-    app.logger.info("[api-CreateUser]")
-    user_params = request.json
-    user_params['date_of_birth'] = datetime.strptime(user_params['date_of_birth'], '%Y/%M/%d') # datetime.datetime.now() # datetime.datetime.fromtimestamp(user_params['date_of_birth'] / 1e3)
-    # if ('role_id' not in user_params) or (user_params['role_id'] == None):
-    #     user_params['role_id'] =  INDIVIDUAL
-    message = add_user_account(**user_params)
-    return jsonify(response=message)
 
 
 """ reference for getting json body args """
