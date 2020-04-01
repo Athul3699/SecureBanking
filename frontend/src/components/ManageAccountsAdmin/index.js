@@ -56,6 +56,7 @@ class ManageAccountsAdmin extends Component {
         // TODO: route to update contact info of employee
       } else if (type == 'delete') {
         deleteRequestWithoutToken(`${API_URL}/api/v1/admin/EmployeeAccount`).then()
+        this.refreshAccountsState()
       } else if (type == 'create') {
         // TODO: route to create employee account page according to role
         // Create EmployeeAccount form
