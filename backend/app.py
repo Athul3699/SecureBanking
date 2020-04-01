@@ -7,7 +7,8 @@ from backend.api.auth_controller import auth_api
 from backend.api.user_controller import user_api
 from backend.api.admin_controller import admin_api
 from backend.api.appointment_controller import appointment_api
-
+from backend.api.transaction_api import transaction_api
+from backend.api.bank_account_controller import bank_account_api
 import datetime
 import logging
 
@@ -26,7 +27,7 @@ app = Flask(__name__)
 CORS(app)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["DOWNLOAD_FOLDER"] = DOWNLOAD_FOLDER
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:t@localhost:5432/securebank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///securebank'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #Secret key for token authentication
 app.config['SECRET_KEY'] = '$$group10'
@@ -41,6 +42,9 @@ app.register_blueprint(auth_api, url_prefix=COMMON_PREFIX + '/auth')
 app.register_blueprint(user_api, url_prefix=COMMON_PREFIX + '/user')
 app.register_blueprint(admin_api, url_prefix=COMMON_PREFIX + '/admin')
 app.register_blueprint(appointment_api, url_prefix=COMMON_PREFIX + '/appointment')
+app.register_blueprint(transaction_api, url_prefix=COMMON_PREFIX+'/transaction')
+app.register_blueprint(bank_account_api, url_prefix=COMMON_PREFIX+'/bank_account')
+
 
 if __name__ == "__main__":
     db.init_app(app)

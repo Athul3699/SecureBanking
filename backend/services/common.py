@@ -3,8 +3,6 @@ from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccou
 from backend.services.security_util import encrypt
 from backend.services.constants import *
 
-# from backend.services.constants import *
-
 def get_customer_bank_accounts(**kwargs):
     accounts_qs = Bankaccount.query.filter_by(**kwargs)
     accounts = []
@@ -24,6 +22,7 @@ def add_customer_bank_account(**kwargs):
     app.db.session.add(account)
     app.db.session.commit()
 
+    return {"status": "success", "data": { "message": "success" }}
 
 def update_customer_bank_account(account_number, **kwargs):
     result = "success"
@@ -35,10 +34,11 @@ def update_customer_bank_account(account_number, **kwargs):
         app.db.session.commit()
     except:
         result = "error"
-    return result
+    return { "status": "success", "data": { "data": result }}
 
 
 def get_user_account(**kwargs):
+    # kwargs['email'] = 'a@a.com'
     kwargs['is_active'] = True
     profiles_qs = User.query.filter_by(**kwargs)
     profiles = []
@@ -79,6 +79,7 @@ def add_user_account(**kwargs):
     user = get_user_account(**kwargs)
     if user == None or len(user) == 0:
         try:
+            kwargs['password'] = encrypt(kwargs['password'])
             account = User(**kwargs)
             
             app.db.session.add(account)

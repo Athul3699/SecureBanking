@@ -1,7 +1,10 @@
 from flask import Blueprint, jsonify, request
 from backend import app
 from backend.services.common import *
-import datetime
+from datetime import datetime
+from dateutil.parser import parse
+from backend.services.security_util import *
+
 common_api = Blueprint('common_api', __name__)
 
 
@@ -12,24 +15,33 @@ def customer_accounts(user_id):
     return jsonify(response=accounts)
 
 
-@common_api.route("/User/<user_id>", methods=['GET'])
-def profile(user_id):
-    app.logger.info("[api-Profile]")
-    profile = get_user_account(id=request.view_args['user_id'])
-    return jsonify(response=profile)
+# @common_api.route("/User/<user_id>", methods=['GET'])
+# def profile(user_id):
+#     app.logger.info("[api-Profile]")
+#     profile = get_user_account(id=request.view_args['user_id'])
+#     return jsonify(response=profile)
+
+@common_api.route("/GetUser", methods=['POST'])
+def get_user_account_endpoint():
+    app.logger.info("[api-get-user]")
+    args = request.json
+    email = decode_email(args['token'])
+    # del args['token']
+    # email = 'a@a.com'
+    response = get_user_account(email=email)
+    return jsonify( { "status": "success", "data": { "data": response }})
 
 
 @common_api.route("/CreateUser", methods=['POST'])
 def create_user():
     app.logger.info("[api-CreateUser]")
     user_params = request.json
-    user_params['date_of_birth'] = datetime.datetime.now() # datetime.datetime.fromtimestamp(user_params['date_of_birth'] / 1e3)
-    user_params['ssn'] = 123456789
-    user_params['role_id'] =  INDIVIDUAL
+    user_params['date_of_birth'] = datetime.strptime(user_params['date_of_birth'], '%Y/%M/%d') # datetime.datetime.now() # datetime.datetime.fromtimestamp(user_params['date_of_birth'] / 1e3)
     # if ('role_id' not in user_params) or (user_params['role_id'] == None):
     #     user_params['role_id'] =  INDIVIDUAL
     message = add_user_account(**user_params)
     return jsonify(response=message)
+
 
 """ reference for getting json body args """
 @common_api.route("/testparams", methods=['POST'])

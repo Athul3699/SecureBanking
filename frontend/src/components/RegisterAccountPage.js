@@ -72,7 +72,7 @@ class App extends Component {
       };
       console.log(accountDetails);
 
-      postRequest(`${API_URL}/api/v1/common/CreateUser`, accountDetails)
+      postRequest(`${API_URL}/api/v1/auth/RegisterUser`, accountDetails)
       .then((data) => {
         console.log(data)
         // redirect to login page for simplicity

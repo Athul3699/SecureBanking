@@ -17,6 +17,8 @@ import Scheduler from './Scheduler';
 import HelpSupport from './HelpSupport';
 import UpdateContact from './UpdateContact';
 import BankingStatements from './BankingStatements';
+import AccountHome from './AccountHome';
+import UpdateContactInfo from './UpdateContactInfo';
   class LandingPage extends Component {
 
     render() {
@@ -35,10 +37,13 @@ import BankingStatements from './BankingStatements';
             </ul>
             <div className="content">
                 
-              <Route exact path="/" component={AccountSummaryCard}/>
+              {/* <Route exact path="/" component={AccountSummaryCard}/> */}
+              <Route exact path="/" component={AccountHome}/>
+              {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
               <Route exact path="/manageAccounts" component={ManageAccounts}/>
               <Route exact path="/manageRequests" component={ManageRequests}/>
-              <Route exact path="/updateInfo" component={UpdateContact}/>
+              {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
+              <Route exact path="/updateInfo" component={UpdateContactInfo}/>
               <Route exact path="/schedule" component={Scheduler}/>
               <Route exact path="/help" component={HelpSupport}/>
               <Route exact path="/bankingStatements" component={BankingStatements}/>
