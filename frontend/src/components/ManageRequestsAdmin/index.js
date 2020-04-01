@@ -16,17 +16,17 @@ class ManageRequestsAdmin extends Component {
         super(props)
         this.state = {
           accounts: [
-            {
-              "type": "abc",
-              "from_account": "abc",
-              "to_account": "t@t.com",
-              "amount": "t",
-              "status": "asdsa",
-              "awaiting_action_from_auth_level": "asdsad",
-              "last_approved_by": "2020/03/20",
-              "is_active": "123456789",
+            // {
+            //   "type": "abc",
+            //   "from_account": "abc",
+            //   "to_account": "t@t.com",
+            //   "amount": "t",
+            //   "status": "asdsa",
+            //   "awaiting_action_from_auth_level": "asdsad",
+            //   "last_approved_by": "2020/03/20",
+            //   "is_active": "123456789",
 
-            }
+            // }
           ],      
         }
     }
@@ -141,4 +141,4 @@ class ManageRequestsAdmin extends Component {
     }
 }
 
-export default ManageAccountsAdmin
+export default ManageRequestsAdmin

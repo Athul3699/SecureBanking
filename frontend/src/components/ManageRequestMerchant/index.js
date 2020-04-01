@@ -16,18 +16,18 @@ class ManageRequestsMerchant extends Component {
         super(props)
         this.state = {
           accounts: [
-            {
-              "first_name": "abc",
-              "last_name": "abc",
-              "email": "t@t.com",
-              "password": "t",
-              "address1": "asdsa",
-              "address2": "asdsad",
-              "date_of_birth": "2020/03/20",
-              "ssn": "123456789",
-              "contact": "asdasd",
-              "role_id": 1
-            }
+            // {
+            //   "first_name": "abc",
+            //   "last_name": "abc",
+            //   "email": "t@t.com",
+            //   "password": "t",
+            //   "address1": "asdsa",
+            //   "address2": "asdsad",
+            //   "date_of_birth": "2020/03/20",
+            //   "ssn": "123456789",
+            //   "contact": "asdasd",
+            //   "role_id": 1
+            // }
           ],      
         }
     }
@@ -142,4 +142,4 @@ class ManageRequestsMerchant extends Component {
     }
 }
 
-export default ManageAccountsAdmin
+export default ManageRequestsMerchant
