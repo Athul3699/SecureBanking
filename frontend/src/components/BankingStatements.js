@@ -59,7 +59,7 @@ class BankingStatements extends Component {
 
   onButtonClick(event){
     if(this.validate()){
-    postRequest(`${API_URL}/api/v1/transaction/DownloadStatements`, { "month": this.state.month, "password": this.state.year, "account_number": this.state.account })
+    postRequest(`${API_URL}/api/v1/transaction/DownloadStatements`, { "month": this.state.month, "year": this.state.year, "account_number": this.state.account })
     .then((data) => {
       //set state for statements
       window.localStorage.setItem('API_TOKEN', data["data"]["token"])
@@ -75,9 +75,9 @@ class BankingStatements extends Component {
 
     const menu = (
       <Menu onClick={onClick}>
-      {this.state.account_number.map((account) => {
+      {this.state.account_number.map((account) => 
         <Menu.Item key={account}>{account}</Menu.Item>
-      })
+      )
       }
       </Menu>
     );
