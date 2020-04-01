@@ -10,7 +10,7 @@ import {
     useParams
   } from "react-router-dom";
 import AccountSummaryCard from './AccountSummaryCard';
-import ManageAccounts from './ManageAccountsAdmin';
+import ManageAccountsAdmin from './ManageAccountsAdmin';
 import ManageRequests from './ManageRequests';
 import "./LandingPage.css";
 import Scheduler from './Scheduler';
@@ -19,6 +19,7 @@ import UpdateContact from './UpdateContact';
 import BankingStatements from './BankingStatements';
 import AccountHome from './AccountHome';
 import UpdateContactInfo from './UpdateContactInfo';
+import ManageAccountsTier2 from './ManageAccountsTier2';
   class LandingPage extends Component {
 
     render() {
@@ -40,7 +41,8 @@ import UpdateContactInfo from './UpdateContactInfo';
               {/* <Route exact path="/" component={AccountSummaryCard}/> */}
               <Route exact path="/" component={AccountHome}/>
               {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
-              <Route exact path="/manageAccounts" component={ManageAccounts}/>
+              {/* <Route exact path="/manageAccounts" component={ManageAccountsAdmin}/> */}
+              <Route exact path="/manageAccounts" component={ManageAccountsTier2} />
               <Route exact path="/manageRequests" component={ManageRequests}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
               <Route exact path="/updateInfo" component={UpdateContactInfo}/>
