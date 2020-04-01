@@ -14,20 +14,20 @@ import { roleMap } from '../../constants/api'
 class ManageAccountsAdmin extends Component {
     constructor(props) {
         super(props)
-        this.state = {
+        this.state = {  
           accounts: [
-            {
-              "first_name": "abc",
-              "last_name": "abc",
-              "email": "t@t.com",
-              "password": "t",
-              "address1": "asdsa",
-              "address2": "asdsad",
-              "date_of_birth": "2020/03/20",
-              "ssn": "123456789",
-              "contact": "asdasd",
-              "role_id": 1
-            }
+            // {
+            //   "first_name": "abc",
+            //   "last_name": "abc",
+            //   "email": "t@t.com",
+            //   "password": "t",
+            //   "address1": "asdsa",
+            //   "address2": "asdsad",
+            //   "date_of_birth": "2020/03/20",
+            //   "ssn": "123456789",
+            //   "contact": "asdasd",
+            //   "role_id": 1
+            // }
           ],      
         }
     }
@@ -120,8 +120,8 @@ class ManageAccountsAdmin extends Component {
             key: 'actions',
             render: (text, data) => (
               <span>
-                <a style={{ marginRight: 16 }} onClick={this.onButtonClick('edit', data)}> Edit </a>
-                <a onClick={this.onButtonClick('delete', data)}> Delete </a>
+                <a style={{ marginRight: 16 }} onClick={() => this.onButtonClick('edit', data)}> Edit </a>
+                <a onClick={() => this.onButtonClick('delete', data)}> Delete </a>
               </span>
             )
           },
@@ -130,7 +130,7 @@ class ManageAccountsAdmin extends Component {
 
             <div className="create-form-container">
                 <Button
-                  onClick={this.onButtonClick('create')}
+                  onClick={() => this.onButtonClick('create')}
                 >
                   Create Account
                 </Button>
