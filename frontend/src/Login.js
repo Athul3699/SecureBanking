@@ -58,7 +58,7 @@ class Login extends Component {
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a
-              href="/register"
+              href="/createuseraccount"
               rel="noopener noreferrer"
             >
               Create account

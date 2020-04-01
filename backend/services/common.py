@@ -37,9 +37,21 @@ def update_customer_bank_account(account_number, **kwargs):
         result = "error"
     return { "status": "success", "data": { "data": result }}
 
-
 def get_all_employees():
     profiles_qs = User.query.filter(User.is_active == True).filter((User.role_id == 3) | (User.role_id == 4))
+    profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
+    for record in profiles_qs:
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        profiles.append(record_dict)
+
+    return profiles
+
+def get_all_user_bank_accounts():
+    profiles_qs = BankAccount.query.all()
     profiles = []
 
     # SQLAlchemy adds an additional field called '_sa_instance_state'
@@ -170,7 +182,7 @@ def add_roles():
 
             tier1_obj = Authorizedrole(
                 role_name=TIER1,
-                view_all_customer_accounts=True,
+                view_all_customtr_accounts=True,
                 view_customer_request=True,
                 approve_customer_request_noncritical=True,
                 decline_customer_request_noncritical=True,

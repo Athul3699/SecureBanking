@@ -41,8 +41,8 @@ import ManageAccountsTier2 from './ManageAccountsTier2';
               {/* <Route exact path="/" component={AccountSummaryCard}/> */}
               <Route exact path="/" component={AccountHome}/>
               {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
-              {/* <Route exact path="/manageAccounts" component={ManageAccountsAdmin}/> */}
-              <Route exact path="/manageAccounts" component={ManageAccountsTier2} />
+              <Route exact path="/manageAccounts" component={ManageAccountsAdmin}/>
+              {/* <Route exact path="/manageAccounts" component={ManageAccountsTier2} /> */}
               <Route exact path="/manageRequests" component={ManageRequests}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
               <Route exact path="/updateInfo" component={UpdateContactInfo}/>
