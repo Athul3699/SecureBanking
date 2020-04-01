@@ -9,6 +9,7 @@ class BankingStatements extends Component {
     super(props);
     this.state = {
       account_number: [],
+      account: "",
       month: 0,
       year: 0,
       statements: [],
@@ -17,6 +18,7 @@ class BankingStatements extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   // componentDidMount() {
@@ -37,13 +39,32 @@ class BankingStatements extends Component {
  
   }
 
+  validate(){
+    if(this.state.account===""){
+      alert("Select the account");
+      return false;
+    }
+    if(this.state.month===0){
+      alert("Select the month");
+      return false;
+    }
+    if(this.state.year===0){
+      alert("Select the year");
+      return false;
+    }
+
+    return true;
+  }
+
   onButtonClick(event){
-    postRequest(`${API_URL}/api/v1/transaction/DownloadStatements`, { "month": this.state.month, "password": this.state.year, "account_number": this.state.account_number })
+    if(this.validate()){
+    postRequest(`${API_URL}/api/v1/transaction/DownloadStatements`, { "month": this.state.month, "password": this.state.year, "account_number": this.state.account })
     .then((data) => {
       //set state for statements
       window.localStorage.setItem('API_TOKEN', data["data"]["token"])
     })
     .catch((error) => console.log(error))
+  }
   }
 
   render() {
