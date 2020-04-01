@@ -68,6 +68,19 @@ export async function putRequest(url = '', data = {}) {
   return await response.json();
 }
 
+export async function putRequestWithoutToken(url = '', data = {}) {
+  const response = await fetch(url, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data)
+  });
+
+  return await response.json();
+}
+
 export async function deleteRequest(url = '', data = {}) {
   data["token"] = window.localStorage.getItem('API_TOKEN')
 
