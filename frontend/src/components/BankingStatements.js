@@ -26,6 +26,7 @@ class BankingStatements extends Component {
   //   postRequest(`${API_URL}/user/GetBankAccounts`)
   //   .then((data) => {
   //     console.log(data);
+  //     this.setState({account_number:data});
   //     window.localStorage.setItem('API_TOKEN', data["data"]["token"])
   //   })
   //   .catch((error) => console.log(error))
@@ -74,9 +75,10 @@ class BankingStatements extends Component {
 
     const menu = (
       <Menu onClick={onClick}>
-        <Menu.Item key="1">1st menu item</Menu.Item>
-        <Menu.Item key="2">2nd memu item</Menu.Item>
-        <Menu.Item key="3">3rd menu item</Menu.Item>
+      {this.state.account_number.map((account) => {
+        <Menu.Item key={account}>{account}</Menu.Item>
+      })
+      }
       </Menu>
     );
     return (
