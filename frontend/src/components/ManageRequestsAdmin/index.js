@@ -17,16 +17,15 @@ class ManageRequestsAdmin extends Component {
         this.state = {
           accounts: [
             {
-              "first_name": "abc",
-              "last_name": "abc",
-              "email": "t@t.com",
-              "password": "t",
-              "address1": "asdsa",
-              "address2": "asdsad",
-              "date_of_birth": "2020/03/20",
-              "ssn": "123456789",
-              "contact": "asdasd",
-              "role_id": 1
+              "type": "abc",
+              "from_account": "abc",
+              "to_account": "t@t.com",
+              "amount": "t",
+              "status": "asdsa",
+              "awaiting_action_from_auth_level": "asdsad",
+              "last_approved_by": "2020/03/20",
+              "is_active": "123456789",
+
             }
           ],      
         }
@@ -65,9 +64,9 @@ class ManageRequestsAdmin extends Component {
 
 
     onButtonClick = (type, data) => {
-      if (type == 'edit') {
+      if (type == 'approve') {
         // TODO: route to update contact info of employee
-      } else if (type == 'delete') {
+      } else if (type == 'decline') {
         deleteRequestWithoutToken(`${API_URL}/api/v1/admin/EmployeeAccount`).then()
         this.refreshAccountsState()
       } else if (type == 'create') {
@@ -80,40 +79,39 @@ class ManageRequestsAdmin extends Component {
       // define columns
         const columns = [
           {
-            title: 'First Name',
-            dataIndex: 'first_name',
-            key: 'first_name',
+            title: 'type',
+            dataIndex: 'type',
+            key: 'type',
           },
           {
-            title: 'Last Name',
-            dataIndex: 'last_name',
-            key: 'last_name',
+            title: 'From Account',
+            dataIndex: 'from_account',
+            key: 'from_account',
           },
           {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
+            title: 'To Account',
+            dataIndex: 'to_account',
+            key: 'to_account',
           },
           {
-            title: 'Address',
-            dataIndex: 'address1',
-            key: 'address',
+            title: 'Amount',
+            dataIndex: 'amount',
+            key: 'amount',
           },
           {
-            title: 'DOB',
-            dataIndex: 'date_of_birth',
-            key: 'dob',
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
           },
           {
-            title: 'contact',
-            dataIndex: 'contact',
-            key: 'contact',
+            title: 'Awaiting Action From',
+            dataIndex: 'awaiting_action_from_auth_level',
+            key: 'awaiting_action_from_auth_level',
           },
           {
-            title: 'Role',
-            dataIndex: 'role_id',
-            key: 'role_id',
-            render: text => text ? text : ''
+            title: 'Last Approved By',
+            dataIndex: 'last_approved_by',
+            key: 'last_approved_by',
           },
           {
             title: 'Actions',

@@ -78,44 +78,43 @@ class ManageRequestsIndividual extends Component {
 
     render() {
       // define columns
-        const columns = [
-          {
-            title: 'First Name',
-            dataIndex: 'first_name',
-            key: 'first_name',
-          },
-          {
-            title: 'Last Name',
-            dataIndex: 'last_name',
-            key: 'last_name',
-          },
-          {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-          },
-          {
-            title: 'Address',
-            dataIndex: 'address1',
-            key: 'address',
-          },
-          {
-            title: 'DOB',
-            dataIndex: 'date_of_birth',
-            key: 'dob',
-          },
-          {
-            title: 'contact',
-            dataIndex: 'contact',
-            key: 'contact',
-          },
-          {
-            title: 'Role',
-            dataIndex: 'role_id',
-            key: 'role_id',
-            render: text => text ? text : ''
-          },
-        ]
+      const columns = [
+        {
+          title: 'type',
+          dataIndex: 'type',
+          key: 'type',
+        },
+        {
+          title: 'From Account',
+          dataIndex: 'from_account',
+          key: 'from_account',
+        },
+        {
+          title: 'To Account',
+          dataIndex: 'to_account',
+          key: 'to_account',
+        },
+        {
+          title: 'Amount',
+          dataIndex: 'amount',
+          key: 'amount',
+        },
+        {
+          title: 'Status',
+          dataIndex: 'status',
+          key: 'status',
+        },
+        {
+          title: 'Awaiting Action From',
+          dataIndex: 'awaiting_action_from_auth_level',
+          key: 'awaiting_action_from_auth_level',
+        },
+        {
+          title: 'Last Approved By',
+          dataIndex: 'last_approved_by',
+          key: 'last_approved_by',
+        },
+      ]
         return (
 
             <div className="create-form-container">
