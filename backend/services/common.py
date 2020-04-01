@@ -2,6 +2,7 @@ from backend import app
 from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
 from backend.services.security_util import encrypt
 from backend.services.constants import *
+from sqlalchemy import or_
 
 def get_customer_bank_accounts(**kwargs):
     accounts_qs = Bankaccount.query.filter_by(**kwargs)
@@ -36,6 +37,19 @@ def update_customer_bank_account(account_number, **kwargs):
         result = "error"
     return { "status": "success", "data": { "data": result }}
 
+
+def get_all_employees():
+    profiles_qs = User.query.filter(User.is_active == True).filter((User.role_id == 3) | (User.role_id == 4))
+    profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
+    for record in profiles_qs:
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        profiles.append(record_dict)
+
+    return profiles
 
 def get_user_account(**kwargs):
     # kwargs['email'] = 'a@a.com'

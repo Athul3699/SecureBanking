@@ -10,7 +10,7 @@ import {
     useParams
   } from "react-router-dom";
 import AccountSummaryCard from './AccountSummaryCard';
-import ManageAccounts from './ManageAccounts';
+import ManageAccounts from './ManageAccountsAdmin';
 import ManageRequests from './ManageRequests';
 import "./LandingPage.css";
 import Scheduler from './Scheduler';
