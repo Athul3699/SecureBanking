@@ -18,6 +18,3 @@ public_key = key.public_key().public_bytes(
     crypto_serialization.PublicFormat.OpenSSH
 )
 
-encoded = jwt.encode({'some': 'payload'}, private_key, algorithm='RS256')
-decoded = jwt.decode(encoded, public_key, algorithms='RS256')
-print(decoded)
