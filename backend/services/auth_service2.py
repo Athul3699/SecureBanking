@@ -34,7 +34,7 @@ def register_user(**data):
             
             auth_token = jwt.encode(
                 payload,
-                public_key,
+                private_key,
                 algorithm='RS256'
             )
             
