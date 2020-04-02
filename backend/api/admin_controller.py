@@ -5,6 +5,7 @@ from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
 from ..services.security_util import decode_email
+from flask import send_file
 
 admin_api = Blueprint('admin_api', __name__)
 
@@ -158,3 +159,8 @@ def get_all_users_api():
     response = get_all_user_bank_accounts()
     return jsonify({"status": "success", "data": response})
 
+
+@admin_api.route('/DownloadMaintenanceLog', methods=['GET'])
+def downloadFile ():
+    path = "logs/logger.log"
+    return send_file(path, as_attachment=True)
