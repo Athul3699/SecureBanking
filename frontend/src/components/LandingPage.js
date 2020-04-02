@@ -19,9 +19,54 @@ import UpdateContact from './UpdateContact';
 import BankingStatements from './BankingStatements';
 import AccountHome from './AccountHome';
 import UpdateContactInfo from './UpdateContactInfo';
-import ManageAccountsTier2 from './ManageAccountsTier2';
 import ManageRequestsAdmin from './ManageRequestsAdmin';
+import ManageRequestsMerchant from './ManageRequestsMerchant';
+import ManageRequestsIndividualUser from'./ManageRequestsIndividualUser';
+import ManageRequestsTier1 from './ManageRequestsTier1';
+import ManageRequestsTier2 from './ManageRequestsTier2';
+import {  getRequest } from '../util/api';
+import { API_URL } from '../constants/references';
   class LandingPage extends Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        roleId:-1,      
+      }
+    }
+
+    componentDidMount(){
+      getRequest(`${API_URL}/api/v1/auth/GetRole`)
+      .then((data) => {
+          if(data.status==="success"){
+            this.setState({roleId: data.roleId})
+          }
+          else{
+            console.log("token invalid");
+          }
+
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+
+    getRequestPage(){
+      if(this.state.roleId===1){
+        return ManageRequestsIndividualUser;
+      }
+      if(this.state.roleId===2){
+        return ManageRequestsMerchant;
+      }
+      if(this.state.roleId===3){
+        return ManageRequestsTier1;
+      }
+      if(this.state.roleId===4){
+        return ManageRequestsTier2;
+      }
+      if(this.state.roleId===5){
+        return ManageRequestsAdmin;
+      }
+    }
 
     render() {
       return (
@@ -44,7 +89,7 @@ import ManageRequestsAdmin from './ManageRequestsAdmin';
               {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
               <Route exact path="/manageAccounts" component={ManageAccountsAdmin}/>
               {/* <Route exact path="/manageAccounts" component={ManageAccountsTier2} /> */}
-              <Route exact path="/manageRequests" component={ManageRequestsAdmin}/>
+              <Route exact path="/manageRequests" component={this.getRequestPage()}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
               <Route exact path="/updateInfo" component={UpdateContactInfo}/>
               <Route exact path="/schedule" component={ScheduleAppointment}/>

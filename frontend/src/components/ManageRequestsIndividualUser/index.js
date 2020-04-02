@@ -11,7 +11,7 @@ import { postRequest, getRequest, deleteRequest, deleteRequestWithoutToken, getR
 import { API_URL } from '../../constants/references';
 import { roleMap } from '../../constants/api'
 
-class ManageRequestsIndividual extends Component {
+class ManageRequestsIndividualUser extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -132,4 +132,4 @@ class ManageRequestsIndividual extends Component {
     }
 }
 
-export default ManageRequestsIndividual
+export default ManageRequestsIndividualUser
