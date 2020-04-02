@@ -40,6 +40,7 @@ def get_noncritical_transactions():
     else:
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
+
 @authenticate
 @transaction_api.route("/ApproveMoneyTransferNonCritical", methods=['POST'])
 def approve_money_transfer_noncritical():
@@ -241,6 +242,29 @@ def all_transactions():
 
 #customer
 @authenticate
+@transaction_api.route("/CustomerTransactions", methods=['GET'])
+def customer_transactions():
+    app.logger.info("[api-GET-All-CustomerTransactions]")
+    args = request.json
+
+    email = decode_email(request.headers['token'])
+    user = get_user_account(email=email)
+
+    if user == None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+    else:
+        user_id = user['id']
+        bank_accounts = get_customer_bank_accounts(user_id=user_id)
+        transactions = []
+        for bank_account in bank_accounts:
+            transactions_from = get_transactions(from_account=bank_account['number'])
+            transactions_to = get_transactions(to_account=bank_account['number'])
+            transactions.extend(transactions_from)
+            transactions.extend(transactions_to)
+        return jsonify({ "status": "success", "data": transactions})
+
+
+@authenticate
 @transaction_api.route("/CustomerApproveMoneyTransfer", methods=['POST'])
 def customer_approve_money_transfer():
     app.logger.info("[api-CustomerApproveMoneyTransfer]")
@@ -351,6 +375,29 @@ def initiate_money_transfer():
 
 
 #merchant
+@authenticate
+@transaction_api.route("/MerchantTransactions", methods=['GET'])
+def merchant_transactions():
+    app.logger.info("[api-GET-All-MerchantTransactions]")
+    args = request.json
+
+    email = decode_email(request.headers['token'])
+    user = get_user_account(email=email)
+
+    if user == None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+    else:
+        user_id = user['id']
+        bank_accounts = get_customer_bank_accounts(user_id=user_id)
+        transactions = []
+        for bank_account in bank_accounts:
+            transactions_from = get_transactions(from_account=bank_account['number'])
+            transactions_to = get_transactions(to_account=bank_account['number'])
+            transactions.extend(transactions_from)
+            transactions.extend(transactions_to)
+        return jsonify({ "status": "success", "data": transactions})
+
+
 @authenticate
 @transaction_api.route("/MerchantApproveMoneyTransfer", methods=['POST'])
 def merchant_approve_money_transfer():
