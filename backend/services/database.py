@@ -35,6 +35,13 @@ class db:
         cur.close()
         return rows[0]
 
+    def get_secret_key(self):
+        cur = self.con.cursor()
+        cur.execute("select secret_key from secret")
+        rows = cur.fetchone()
+        cur.close()
+        return rows[0]
+
     def get_passwords(self):
         res = []
         cur = self.con.cursor() #cursor
