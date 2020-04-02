@@ -4,9 +4,9 @@ from backend.services.security_util import encrypt
 from backend.services.constants import *
 
 
-def isCritical(user_id, current_transaction_amount):
+def isCritical(account_number, current_transaction_amount):
     todays_datetime = datetime(datetime.today().year, datetime.today().month, datetime.today().day)
-    transaction_qs = Transaction.query.filter_by(is_active==True, initiated_time >= todays_datetime, initiated_by==user_id)
+    transaction_qs = Transaction.query.filter_by(status!="declined", created_date >= todays_datetime, from_account==account_number)
     sum_of_transfer_amount_today = 0
     for record in transaction_qs:
         sum_of_transfer_amount_today+=record.amount
@@ -28,8 +28,8 @@ def get_transactions(**kwargs):
 
 
 def get_transactions_within(start_date,  end_date, accountnumber):
-    transaction_qs1 = Transaction.query.filter(app.db.and_(Transaction.initiated_time >= start_date, Transaction.initiated_time <= end_date, Transaction.from_account==accountnumber, Transaction.status=="Approved", Transaction.is_active==True)).all()
-    transaction_qs2 = Transaction.query.filter(app.db.and_(Transaction.initiated_time >= start_date, Transaction.initiated_time <= end_date, Transaction.to_account==accountnumber, Transaction.status=="Approved", Transaction.is_active==True)).all()
+    transaction_qs1 = Transaction.query.filter(app.db.and_(Transaction.created_date >= start_date, Transaction.created_date <= end_date, Transaction.from_account==accountnumber, Transaction.status=="approved" )).all()
+    transaction_qs2 = Transaction.query.filter(app.db.and_(Transaction.created_date >= start_date, Transaction.created_date <= end_date, Transaction.to_account==accountnumber, Transaction.status=="approved")).all()
     transactions = []
 
     for record in transaction_qs1:
