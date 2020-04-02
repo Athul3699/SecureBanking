@@ -35,6 +35,17 @@ def authenticate(f):
                 auth_token = ''
         if auth_token:
             try:
+                user = User.query.filter_by(
+                    activeJWT=token
+                ).first()
+
+                if user is None:
+                    responseObject = {
+                        'status': 'failure',
+                        'data': 'Provide a valid auth token.'
+                    }
+                return make_response(jsonify(responseObject)), 401
+                
                 resp = User.decode_auth_token(auth_token)
                 return f(*args, **kwargs)
             except ValueError as err:

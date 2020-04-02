@@ -35,7 +35,6 @@ def login_user_api():
         return make_response(jsonify({ "status": status, "data": data})), 500
 
 
-@authenticate
 @auth_api.route("/GetRole", methods=['GET'])
 def get_role():
     app.logger.info("[GetRole]")
