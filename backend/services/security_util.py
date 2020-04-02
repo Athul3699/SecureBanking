@@ -17,8 +17,8 @@ def check_decrypt(hash_credential, input_auth):
 
 
 def decode_email(token):
-    decoded = jwt.decode(token, '$$group10')
-    return decoded["user"]
+    decoded = jwt.decode(token, 'justatest')
+    return decoded["email"]
 
 
 #Function to ensure token is valid

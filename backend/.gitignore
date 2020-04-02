@@ -1,5 +1,7 @@
-__pycache__/
-api/__pycache__/
-models/__pycache__/
-services/__pycache__/
+__pycache__/*
+api/__pycache__/*
+model/__pycache__/*
+services/__pycache__/*
 .vscode
+logs/*
+/migrations

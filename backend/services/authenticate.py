@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response
 from flask import Flask, Response
 from functools import wraps
-from backend.models.manage import User
+from backend.model.manage import User
 
 def authenticate(f):
     @wraps(f)

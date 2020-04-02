@@ -35,7 +35,9 @@ def add_customer_bank_account(**kwargs):
         account = Bankaccount(**kwargs)
         app.db.session.add(account)
         app.db.session.commit()
-    except e:
+    except Exception as e:
+        print(e)
+
         result = "error"
 
     return result
@@ -197,7 +199,7 @@ def add_roles():
 
             tier1_obj = Authorizedrole(
                 role_name=TIER1,
-                view_all_customtr_accounts=True,
+                view_all_customer_accounts=True,
                 view_customer_request=True,
                 approve_customer_request_noncritical=True,
                 decline_customer_request_noncritical=True,

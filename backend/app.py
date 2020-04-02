@@ -27,7 +27,9 @@ app = Flask(__name__)
 CORS(app)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["DOWNLOAD_FOLDER"] = DOWNLOAD_FOLDER
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///securebank'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///securebank'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:t@localhost:5432/securebank'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #Secret key for token authentication
 app.config['SECRET_KEY'] = '$$group10'
