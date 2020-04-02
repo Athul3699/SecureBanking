@@ -4,7 +4,7 @@ export async function postRequest(url = '', data = {}) {
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': window.localStorage.getItem('API_TOKEN')
+        'token': window.localStorage.getItem('API_TOKEN')
       },
       body: JSON.stringify(data)
     });
@@ -19,7 +19,7 @@ export async function getRequest(url = '') {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('API_TOKEN')
+      'token': window.localStorage.getItem('API_TOKEN')
     },
   });
 
@@ -60,7 +60,7 @@ export async function putRequest(url = '', data = {}) {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('API_TOKEN')
+      'token': window.localStorage.getItem('API_TOKEN')
     },
     body: JSON.stringify(data)
   });
@@ -89,7 +89,7 @@ export async function deleteRequest(url = '', data = {}) {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': window.localStorage.getItem('API_TOKEN')
+      'token': window.localStorage.getItem('API_TOKEN')
     },
     body: JSON.stringify(data)
   });

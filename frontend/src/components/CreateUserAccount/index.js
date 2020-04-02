@@ -6,6 +6,8 @@ import { Input, Button, Radio, Select, InputNumber, DatePicker } from "antd";
 import { postRequestWithoutToken } from "../../util/api";
 import { API_URL } from "../../constants/references";
 
+import { withRouter } from "react-router-dom";
+
 function formatNumber(value) {
   value += "";
   const list = value.split(".");
@@ -143,10 +145,11 @@ class CreateUserAccount extends Component {
       return false;
     }
 
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re.test(this.state.email)) {
-      alert("The email entered is not valid!!");
-      return false;
+    var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (re.test(String(this.state.email).toLowerCase()) == false) {
+      alert("The email entered is not valid!!")
+      return false
     }
 
     if (this.state.password != this.state.confirm_password) {
@@ -164,6 +167,8 @@ class CreateUserAccount extends Component {
       postRequestWithoutToken(`${API_URL}/api/v1/auth/RegisterUser`, this.state)
         .then(() => {
           // route to appropriate page
+          window.localStorage.setItem('API_TOKEN', data["data"]["data"])
+          this.props.history.push('/landingPage')
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
@@ -250,4 +255,4 @@ class CreateUserAccount extends Component {
   }
 }
 
-export default CreateUserAccount;
+export default withRouter(CreateUserAccount);

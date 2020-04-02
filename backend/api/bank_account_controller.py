@@ -20,6 +20,8 @@ DELETE:
     request = id
     response = User
 """
+
+@authenticate
 @bank_account_api.route("/BankAccount", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def employee_account_actions():
     app.logger.info("[api-bank-account-actions]")
@@ -45,21 +47,42 @@ def employee_account_actions():
     return jsonify(response=response)
     
 
-
+@authenticate
 @bank_account_api.route("/GetCustomerAccounts", methods=['GET'])
 def get_all_customer_accounts():
     app.logger.info("[GetCustomerAccounts]")
-    args = request.json
+    token = request.headers['token']
 
-    email = decode_email(args['token'])
-    user_id = get_user_account(email=email)
+    email = decode_email(token)
+    user = get_user_account(email=email)
 
-    if user_id == None:
-        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
 
+    if user is None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+
+    user_id = user['id']
     accounts = get_customer_bank_accounts(user_id=user_id)
     
-    return jsonify(response={ "status": "success", data:accounts})
+    return jsonify({ "status": "success", "data": accounts})
+
+
+@authenticate
+@bank_account_api.route("/GetActiveCustomerAccounts", methods=['GET'])
+def get_all_active_customer_accounts():
+    app.logger.info("[GetCustomerAccounts]")
+    token = request.headers['token']
+
+    email = decode_email(token)
+    user = get_user_account(email=email)
+
+
+    if user is None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+
+    user_id = user['id']
+    accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
+    
+    return jsonify({ "status": "success", "data": accounts})
 
 
 @authenticate
@@ -74,7 +97,7 @@ def create_bank_account():
 
 
     if user == None:
-        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
 
     number = generate_account_number()
     account_type = args['type']
@@ -84,6 +107,6 @@ def create_bank_account():
 
     result = add_customer_bank_account(number=number, type=account_type, balance=balance, user_id=user_id, routing_number=routing_number)
     if result=='success':
-        return jsonify(response={ "status": "success"})
+        return jsonify({ "status": "success"})
     else:
-        return jsonify(response={ "status": "failure", "errorMessage": "error creating bank account"})
+        return jsonify({ "status": "failure", "errorMessage": "error creating bank account"})

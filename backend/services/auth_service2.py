@@ -27,7 +27,7 @@ def register_user(**data):
             data['date_of_birth'] = datetime.datetime.strptime(data['date_of_birth'], '%Y/%M/%d')
 
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1200),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
                 'email': data['email']
             }
             

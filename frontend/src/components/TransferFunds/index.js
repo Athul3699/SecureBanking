@@ -31,16 +31,32 @@ class TransferFunds extends Component {
     this.state = {
       accountType: "debit",
       componentSize: "small",
-      accounts: [{ number: 1234 }],
+      accounts: [],
       destinationAccount: null,
       accountSource: "",
       description: "",
-      amount: ""
+      amount: "",
     };
   }
 
   componentDidMount() {
     // getRequest(`${API_URL}/user/GetBankAccounts`)
+    this.refreshAccountState()
+  }
+
+  refreshAccountState = () => {
+    getRequest(`${API_URL}/api/v1/bank_account/GetCustomerAccounts`)
+    .then((data) => {
+      console.log(data["data"])
+      if (data["data"].length > 0) {
+        this.setState({ accounts: data["data"].map( (account, i) => {
+          return {
+            number: account.number,
+          }
+        })})
+      }
+    })
+    .catch ((err) => console.log(err))
   }
 
   setComponentSize = () => {
@@ -137,11 +153,13 @@ class TransferFunds extends Component {
         </Select>
         <br />
         <br />
+
         Payee Account Number:
         <br />
         <Input
           parser={value => value.replace(/\$\s?|(,*)/g, "")}
           onChange={this.handleDestinationAccountChange}
+          disabled={this.state.accountType != 'fund_transfer'}
         />
         <br />
         <br />

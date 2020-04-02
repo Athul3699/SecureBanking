@@ -10,47 +10,41 @@ import {
 
 import CreateBankAccount from '../CreateBankAccount'
 import TransferFunds from '../TransferFunds'
+import { getRequest } from '../../util/api';
+import { API_URL } from '../../constants/references';
 
 const { Column } = Table
 class AccountHome extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          accounts: [
-					  {
-						  "number":"1000000000",
-						  "type":"checking",
-						  "routing_number":"1234567",
-						  "balance":100,
-					  },
-					  {
-						  "number":"1000000002",
-						  "type":"savings",
-						  "routing_number":"1234567",
-						  "balance":120,
-					  },
-					  {
-						  "number":"1000000003",
-						  "type":"credit card",
-						  "routing_number":"1234567",
-						  "balance":101,
-					  },
-					  {
-						  "number":"1000000004",
-						  "type":"savings",
-						  "routing_number":"1234567",
-						  "balance":105,
-					  },
-          ],
+          accounts: [],
           transferVisible: false,
           createVisible: false,
         }
     }
 
     componentDidMount() {
-      this.state.accounts.map( (i, account) => {
-        return {}
+      this.refreshAccountState()
+    }
+
+    refreshAccountState = () => {
+      getRequest(`${API_URL}/api/v1/bank_account/GetCustomerAccounts`)
+      .then((data) => {
+        console.log(data["data"])
+        if (data["data"].length > 0) {
+          this.setState({ accounts: data["data"].map( (account, i) => {
+            return {
+              number: account.number,
+              type: account.type,
+              routing_number: account.routing_number,
+              balance: account.balance,
+              is_active: String(account.is_active),
+            }
+          })})
+        }
       })
+      .catch ((err) => console.log(err))
     }
 
     handleOk = (type) => {
@@ -64,8 +58,10 @@ class AccountHome extends Component {
     handleCancel = (type) => {
       if (type == 'create') {
         this.setState({ createVisible: false })
+        this.refreshAccountState()
       } else {
         this.setState({ transferFundsVisible: false })
+        this.refreshAccountState()
       }
     }
 
@@ -112,6 +108,7 @@ class AccountHome extends Component {
                   <Column title="Type" dataIndex="type" key="lastName" />
                   <Column title="Routing Number" dataIndex="routing_number" key="age" />
                   <Column title="Balance" dataIndex="balance" key="address" />
+                  <Column title="Is Active" dataIndex="is_active" key="is_active" />
                 </Table>
 
                 <Modal
@@ -121,6 +118,7 @@ class AccountHome extends Component {
                   onCancel={() => this.handleCancel('create')}
                 >
                   <CreateBankAccount // this should be a separate component for tier 2
+                    handleCancel={this.handleCancel}
                  />
                 </Modal>
 

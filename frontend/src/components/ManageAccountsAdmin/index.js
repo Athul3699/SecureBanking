@@ -44,23 +44,20 @@ class ManageAccountsAdmin extends Component {
     }
 
     componentDidMount() {
-      this.setState({ isLoading: false, isAuthorized: true })
-      this.refreshAccountsState()
+      getRequestWithoutToken(`${API_URL}/api/v1/auth/GetRole`) // make the get request (Athul - you need to make this work whenever Harshit pushes the code)
+      .then((data) => { // if it is successful
 
-      // getRequestWithoutToken(`${API_URL}/api/v1/auth/GetRole`) // make the get request (Athul - you need to make this work whenever Harshit pushes the code)
-      // .then((data) => { // if it is successful
-
-      //   const roleId = data["roleId"]
-      //   if (roleId == 1) {
-      //     this.setState({ isLoading: false, isAuthorized: true })
-      //     this.refreshAccountsState()
-      //   } else {
-      //     this.setState({ isLoading: false, isAuthorized: false})
-      //   }
-      // })
-      // .catch((err) => { // if it fails
-      //   this.setState({ error: true })
-      // })
+        const roleId = data["roleId"]
+        if (roleId == 1) {
+          this.setState({ isLoading: false, isAuthorized: true })
+          this.refreshAccountsState()
+        } else {
+          this.setState({ isLoading: false, isAuthorized: false})
+        }
+      })
+      .catch((err) => { // if it fails
+        this.setState({ error: true })
+      })
     }
 
     // accounts state is what is shown.

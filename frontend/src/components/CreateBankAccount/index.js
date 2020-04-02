@@ -12,40 +12,30 @@ import {
 import { postRequest,getRequest } from '../../util/api';
 import { API_URL } from '../../constants/references';
 
-function formatNumber(value) {
-  value += '';
-  const list = value.split('.');
-  const prefix = list[0].charAt(0) === '-' ? '-' : '';
-  let num = prefix ? list[0].slice(1) : list[0];
-  let result = '';
-  while (num.length > 3) {
-    result = `,${num.slice(-3)}${result}`;
-    num = num.slice(0, num.length - 3);
-  }
-  if (num) {
-    result = num + result;
-  }
-  return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
-}
-
-const { TextArea } = Input
-const { Option } = Select
+import { withRouter } from "react-router-dom"
 
 class CreateBankAccount extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            accountType: 'debit',
-            balance:1000,        
+            type: 'checking',
+            balance: 10,        
         }
     }
 
     onButtonClick = () => {
       // route to appropriate page
+      postRequest(`${API_URL}/api/v1/bank_account/CreateBankAccount`, this.state)
+      .then((res) => this.props.handleCancel('create'))
+      .catch((err) => console.log(err))
     }
 
     componentDidMount() {
       // getRequest(`${API_URL}/user/GetBankAccounts`)
+    }
+
+    handleAccountTypeChange = (e) => {
+      this.setState({ type: e.target.value })
     }
 
     render() {
@@ -53,10 +43,10 @@ class CreateBankAccount extends Component {
 
             <div className="create-form-container">
                 Account Type:<br />
-                <Radio.Group onChange={this.handleAccountTypeChange} value={this.state.accountType}>
-                   <Radio value={"debit"}>Debit</Radio>
-                    <Radio value={"credit"}>Credit</Radio>
-                    <Radio value={"fund_transfer"}>Fund Transfer</Radio>
+                <Radio.Group onChange={this.handleAccountTypeChange} value={this.state.type}>
+                   <Radio value={"checking"}>Checking</Radio>
+                    <Radio value={"savings"}>Savings</Radio>
+                    <Radio value={"credit_card"}>Credit Card</Radio>
                 </Radio.Group>
 
                 <br />
@@ -64,7 +54,7 @@ class CreateBankAccount extends Component {
 
                 Opening balance:<br />
                 <InputNumber
-                  defaultValue={1000}
+                  defaultValue={10}
                   formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                   parser={value => value.replace(/\$\s?|(,*)/g, '')}
                   onChange={this.handleAmountChange}
@@ -85,4 +75,4 @@ class CreateBankAccount extends Component {
     }
 }
 
-export default CreateBankAccount
+export default withRouter(CreateBankAccount)
