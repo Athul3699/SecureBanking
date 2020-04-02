@@ -3,18 +3,24 @@ from backend import app
 from ..services.common import *
 from ..services.constants import *
 from ..services import user_service
+from ..services.authenticate import authenticate
 
 user_api = Blueprint('user_api', __name__)
 
+@authenticate
 @user_api.route("/InitiateModifyUser", methods=['POST'])
 def initiate_modify_user():
     app.logger.info("[api-initiate-modify-user]")
     args = request.json
-    # token 
-    id = 5 # args['id'] # TODO: extract user_id for every end point
-    response = update_user_account(id=id, edit_mode=True, edit_data=args['edit_data'], edit_status=SUBMITTED)
-    return jsonify(response=response)
+    id = args['id']
+    # # token 
+    # id = 5 # args['id'] # TODO: extract user_id for every end point
 
+
+    response = update_user_account(id=id, edit_mode=True, edit_data=args['edit_data'], edit_status=SUBMITTED)
+    return jsonify(response)
+
+@authenticate
 @user_api.route("/GetUser", methods=['GET'])
 def get_user():
     app.logger.info("[api-get-user]")

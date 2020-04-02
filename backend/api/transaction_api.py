@@ -181,8 +181,7 @@ def decline_money_transfer_critical():
     else:
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
-
-#Tier 2
+# Admin
 @authenticate
 @transaction_api.route("/AdminTransactions", methods=['GET'])
 def get_admin_transactions():

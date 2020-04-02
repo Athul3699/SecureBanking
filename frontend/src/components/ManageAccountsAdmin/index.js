@@ -11,26 +11,16 @@ import {
 import { postRequest, getRequest, deleteRequest, deleteRequestWithoutToken, getRequestWithoutToken } from '../../util/api';
 import { API_URL } from '../../constants/references';
 import { roleMap } from '../../constants/api'
-import CreateEmployeeAccountTier1 from '../CreateEmployeeAccountTier1';
+// import CreateEmployeeAccountTier1 from '../CreateEmployeeAccount';
 import UpdateContactInfo from '../UpdateContactInfo';
+import CreateEmployeeAccount from '../CreateEmployeeAccountAdminPage';
+import EditEmployeeAccountAdminPage from '../EditEmployeeAccountAdminPage'
 
 class ManageAccountsAdmin extends Component {
     constructor(props) {
         super(props)
         this.state = {  
           accounts: [
-            {
-              "first_name": "abc",
-              "last_name": "abc",
-              "email": "t@t.com",
-              "password": "t",
-              "address1": "asdsa",
-              "address2": "asdsad",
-              "date_of_birth": "2020/03/20",
-              "ssn": "123456789",
-              "contact": "asdasd",
-              "role_id": 3
-            }
           ],   
           t1Visible: false,
           t2Visible: false,
@@ -44,15 +34,36 @@ class ManageAccountsAdmin extends Component {
     }
 
     componentDidMount() {
-      getRequestWithoutToken(`${API_URL}/api/v1/auth/GetRole`) // make the get request (Athul - you need to make this work whenever Harshit pushes the code)
+      console.log("Amdin component here...")
+      getRequest(`${API_URL}/api/v1/auth/GetRole`) // make the get request (Athul - you need to make this work whenever Harshit pushes the code)
       .then((data) => { // if it is successful
-
         const roleId = data["roleId"]
-        if (roleId == 1) {
-          this.setState({ isLoading: false, isAuthorized: true })
-          this.refreshAccountsState()
+        if (roleId == 5) {
+          getRequest(`${API_URL}/api/v1/admin/GetAllEmployees`)
+          .then((data) => {
+            this.setState({
+              accounts: data["data"].map((account, i) => {
+                return {
+                  first_name: account.first_name,
+                  last_name: account.last_name,
+                  email: account.email,
+                  address1: account.address1,
+                  date_of_birth: account.date_of_birth,
+                  contact: account.contact,
+                  role_id: account.role_id,
+                  role_id_modified: roleMap[account.role_id],
+                }
+              })
+            })
+
+            this.setState({ isLoading: false, isAuthorized: true })
+            this.refreshAccountsState()
+          })
+          .catch((err) => {
+            this.setState({ error: true })
+          })
         } else {
-          this.setState({ isLoading: false, isAuthorized: false})
+          this.setState({ isLoading: false, isAuthorized: false })
         }
       })
       .catch((err) => { // if it fails
@@ -69,6 +80,7 @@ class ManageAccountsAdmin extends Component {
         // take the current accounts, and take only the data we need
         let accounts = this.state.accounts.map((account) => {
           return {
+            id: account.id,
             first_name: account.first_name,
             last_name: account.last_name,
             email: account.email,
@@ -90,33 +102,26 @@ class ManageAccountsAdmin extends Component {
 
     onButtonClick = (type, data) => {
       if (type == 'edit') {
-        // TODO: route to update contact info of employee
-        if (data['role_id'] == 3) {
-          this.setState({ selectedAccount: data })
-          this.setState({ t1Visible: true })
-        } else if (data['role_id'] == 4) {
-          this.setState({ selectedAccount: data })
-          this.setState({ t2Visible: true })
-        }
+        this.setState({ t1Visible: true, selectedAccount: data })
       } else if (type == 'delete') {
-        deleteRequestWithoutToken(`${API_URL}/api/v1/admin/EmployeeAccount`).then()
+        postRequest(`${API_URL}/api/v1/admin/DeleteEmployeeAccount`, { email: data.email }).then()
         this.refreshAccountsState()
       } else if (type == 'create') {
-        // TODO: route to create employee account page according to role
-        // Create EmployeeAccount form
         this.setState({ selectedAccount: data })
         this.setState({ createVisible: true })
       }
     }
 
-    handleOk = (type) => {
+    handleOk = (type, data) => {
       if (type == 't1') {
         this.setState({ t1Visible: false })
+        this.setState({ selectedAccount: data })
       } else if (type == 't2') {
         this.setState({ t2Visible: false })
       } else {
         this.setState({ createVisible: false })
       }
+      this.refreshAccountsState()
     }
 
     handleCancel = (type) => {
@@ -127,6 +132,7 @@ class ManageAccountsAdmin extends Component {
       } else {
         this.setState({ createVisible: false })
       }
+      this.refreshAccountsState()
     }
 
     render() {
@@ -201,25 +207,14 @@ class ManageAccountsAdmin extends Component {
                     <Table dataSource={this.state.accounts} columns={columns} />
     
                     <Modal
-                      title="Edit Tier 1 employee details"
+                      title="Edit employee details"
                       visible={this.state.t1Visible}
                       onOk={() => this.handleOk('t1')}
                       onCancel={() => this.handleCancel('t1')}
                     >
-                     <UpdateContactInfo // this should be a separate component for tier 1
-                      account={this.state.selectedAccount}
-                     /> 
-                    </Modal>
-    
-                    <Modal
-                      title="Edit Tier 2 employee details"
-                      visible={this.state.t2Visible}
-                      onOk={() => this.handleOk('t2')}
-                      onCancel={() => this.handleCancel('t2')}
-                    >
-                      <UpdateContactInfo // this should be a separate component for tier 2
+                     <EditEmployeeAccountAdminPage // this should be a separate component for tier 1
                         account={this.state.selectedAccount}
-                     />
+                     /> 
                     </Modal>
     
                     <Modal // this should be a separate component for just creating an employee account
@@ -228,8 +223,8 @@ class ManageAccountsAdmin extends Component {
                       onOk={() => this.handleOk('create')}
                       onCancel={() => this.handleCancel('create')}
                     >
-                      <UpdateContactInfo
-                        account={this.state.selectedAccount}
+                      <CreateEmployeeAccount
+                        handleCancel={() => this.handleCancel('create')}
                       />
                     </Modal>
                 </div>

@@ -55,7 +55,7 @@ def update_customer_bank_account(account_number, **kwargs):
     return { "status": "success", "data": { "data": result }}
 
 def get_all_employees():
-    profiles_qs = User.query.filter(User.is_active == True).filter((User.role_id == 3) | (User.role_id == 4))
+    profiles_qs = User.query.filter(app.db.and_(User.is_active == True, app.db.or_(User.role_id == 3, User.role_id == 4)))
     profiles = []
 
     # SQLAlchemy adds an additional field called '_sa_instance_state'
@@ -107,15 +107,30 @@ def update_user_account(id, **kwargs):
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
 
-        if kwargs["password"] is not None:
-            user.password = encrypt(kwargs["password"])
-
         app.db.session.commit()
 
         result = get_user_account(id=id)
     except:
         result = "error"
     return result
+
+
+def update_user_account_email_args(email, **kwargs):
+    result = "error"
+    try:
+        keys = kwargs.keys()
+        user = app.db.session.query(User).filter_by(email=email).first()
+
+        for key in keys:
+            exec("user.{0} = kwargs['{0}']".format(key))
+
+        app.db.session.commit()
+
+        result = get_user_account(email=email)
+    except:
+        result = "error"
+    return result
+
 
 
 def add_user_account(**kwargs):
@@ -134,6 +149,8 @@ def add_user_account(**kwargs):
         return { "status": "success", "data": { "message": "Registered!" }}
     else:
         return { "status": "failure", "errorMessage": "User already exists" }
+
+
 
 def update_employee_account(id, **kwargs):
     result = "error"

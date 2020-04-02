@@ -15,24 +15,13 @@ class ManageRequestsTier1 extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          accounts: [
-            // {
-            //   "first_name": "abc",
-            //   "last_name": "abc",
-            //   "email": "t@t.com",
-            //   "password": "t",
-            //   "address1": "asdsa",
-            //   "address2": "asdsad",
-            //   "date_of_birth": "2020/03/20",
-            //   "ssn": "123456789",
-            //   "contact": "asdasd",
-            //   "role_id": 1
-            // }
-          ],      
+          accounts: [],
+          accounts2: [],      
         }
     }
 
     componentDidMount() {
+      console.log("Just rendered here...")
       this.refreshAccountsState()
     }
 
@@ -40,19 +29,21 @@ class ManageRequestsTier1 extends Component {
     // we refresh this if the user deletes an account or whatever...
     refreshAccountsState = () => {
       // get accounts
-      getRequestWithoutToken(`${API_URL}/api/v1/admin/GetAllEmployees`)
+      getRequest(`${API_URL}/api/v1/transaction/NonCriticalTransactions`)
       .then((data) => {
         // take the current accounts, and take only the data we need
-        let accounts = this.state.accounts.map((account) => {
+        let accounts = data["data"].map((account) => {
           return {
-            first_name: account.first_name,
-            last_name: account.last_name,
-            email: account.email,
-            address1: account.address1,
-            date_of_birth: account.date_of_birth,
-            contact: account.contact,
-            role_id: account.role_id,
-            role_id_modified: roleMap[account.role_id],
+            id: account.id,
+            type: account.type,
+            from_account: account.from_account,
+            to_account: account.to_account,
+            amount: account.amount,
+            status: account.status,
+            // is_critical: account.is_critical,
+            description: account.description,
+            message: account.message,
+            // created_date: account.created_date
           }
         })
 
@@ -66,13 +57,20 @@ class ManageRequestsTier1 extends Component {
 
     onButtonClick = (type, data) => {
       if (type == 'approve') {
-        // TODO: route to update contact info of employee
-      } else if (type == 'decline') {
-        deleteRequestWithoutToken(`${API_URL}/api/v1/admin/EmployeeAccount`).then()
-        this.refreshAccountsState()
-      } else if (type == 'create') {
-        // TODO: route to create employee account page according to role
-        // Create EmployeeAccount form
+        postRequest(`${API_URL}/api/v1/transaction/ApproveMoneyTransferNonCritical`, {id: data.id})
+        .then((res) => {
+          this.refreshAccountsState()
+          this.props.history.push('/manageRequests')
+        })
+        .catch ((err) => console.log(err))
+      } else if (type == 'deny') {
+        postRequest(`${API_URL}/api/v1/transaction/DeclineMoneyTransferNonCritical`, {id: data.id})
+        .then((res) => {
+          this.refreshAccountsState()
+          this.props.history.push('/manageRequests')
+          
+        })
+        .catch ((err) => console.log(err))
       }
     }
 
@@ -105,37 +103,35 @@ class ManageRequestsTier1 extends Component {
           key: 'status',
         },
         {
-          title: 'Awaiting Action From',
-          dataIndex: 'awaiting_action_from_auth_level',
-          key: 'awaiting_action_from_auth_level',
+          title: 'Description',
+          dataIndex: 'description',
+          key: 'description',
         },
         {
-          title: 'Last Approved By',
-          dataIndex: 'last_approved_by',
-          key: 'last_approved_by',
+          title: 'Message',
+          dataIndex: 'message',
+          key: 'message',
         },
         {
           title: 'Actions',
           key: 'actions',
-          render: (text, data) => (
-            <span>
-              <a style={{ marginRight: 16 }} onClick={this.onButtonClick('approve', data)}> Approve </a>
-              <a onClick={this.onButtonClick('decline', data)}> Decline </a>
-            </span>
-          )
+          render: (text, data) => data.status === 'approved_by_destination' ? (
+              <span>
+                <a style={{ marginRight: 16 }} onClick={() => this.onButtonClick('approve', data)}> Approve </a>
+                <a onClick={() => this.onButtonClick('deny', data)}> Deny </a>
+              </span>
+          ) : (<div></div>)  
         },
       ]
         return (
 
             <div className="create-form-container">
-                <Button
+                {/* <Button
                   onClick={this.onButtonClick('create')}
                 >
                   Create Account
-                </Button>
+                </Button> */}
 
-                <br />
-                <br />
                 <Table dataSource={this.state.accounts} columns={columns} />
             </div>
         );

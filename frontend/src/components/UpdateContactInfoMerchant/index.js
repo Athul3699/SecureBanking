@@ -34,7 +34,7 @@ const { Option } = Select
 
 const dateFormat = 'YYYY/MM/DD';
 
-class UpdateContactInfo extends Component {
+class UpdateContactInfoMerchant extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -53,8 +53,7 @@ class UpdateContactInfo extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
-    postRequest(`${API_URL}/api/v1/common/GetUser`, { email: this.props.account.email }).then((res) => {
+    postRequest(`${API_URL}/api/v1/common/GetUser`).then((res) => {
       let data = res["data"]["data"]
       this.setState({
         first_name: data['first_name'],
@@ -244,4 +243,4 @@ class UpdateContactInfo extends Component {
   }
 }
 
-export default UpdateContactInfo
+export default UpdateContactInfoMerchant

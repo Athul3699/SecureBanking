@@ -10,7 +10,6 @@ import {
     useParams
   } from "react-router-dom";
 import AccountSummaryCard from './AccountSummaryCard';
-import ManageAccountsAdmin from './ManageAccountsAdmin';
 import ManageRequests from './ManageRequests';
 import "./LandingPage.css";
 import ScheduleAppointment from './ScheduleAppointment';
@@ -24,8 +23,24 @@ import ManageRequestsMerchant from './ManageRequestsMerchant';
 import ManageRequestsIndividualUser from'./ManageRequestsIndividualUser';
 import ManageRequestsTier1 from './ManageRequestsTier1';
 import ManageRequestsTier2 from './ManageRequestsTier2';
+
+
+import ManageAccountsAdmin from './ManageAccountsAdmin';
+import ManageAccountsTier2 from './ManageAccountsTier2';
+import ManageAccountsTier1 from './ManageAccountsTier1';
+import ManageAccountsIndividualUser from './ManageAccountsIndividualUser';
+import ManageAccountsMerchant from './ManageAccountsMerchant';
+
+
 import {  getRequest } from '../util/api';
 import { API_URL } from '../constants/references';
+import UpdateContactInfoIndividualUser from './UpdateContactInfoIndividualUser';
+import UpdateContactInfoMerchant from './UpdateContactInfoMerchant';
+import UpdateContactInfoTier1 from './UpdateContactInfoTier1';
+import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
+
+
+
   class LandingPage extends Component {
     constructor(props) {
       super(props)
@@ -37,7 +52,8 @@ import { API_URL } from '../constants/references';
     componentDidMount(){
       getRequest(`${API_URL}/api/v1/auth/GetRole`)
       .then((data) => {
-          if(data.status==="success"){
+          console.log("This is the data...", data)
+          if(data.status === "success"){
             this.setState({roleId: data.roleId})
           }
           else{
@@ -68,6 +84,42 @@ import { API_URL } from '../constants/references';
       }
     }
 
+    getManageAccountsPage(){
+      if(this.state.roleId===1) {
+        return ManageAccountsIndividualUser;
+      }
+      if(this.state.roleId===2) {
+        return ManageAccountsMerchant;
+      }
+      if(this.state.roleId===3) {
+        return ManageAccountsTier1;
+      }
+      if(this.state.roleId===4) {
+        return ManageAccountsTier2;
+      }
+      if(this.state.roleId===5) {
+        return ManageAccountsAdmin;
+      }
+    }
+
+    getContactInfoPage() {
+      if(this.state.roleId===1) {
+        return UpdateContactInfoIndividualUser;
+      }
+      if(this.state.roleId===2) {
+        return UpdateContactInfoMerchant
+      }
+      if(this.state.roleId===3) {
+        return UpdateContactInfoTier1;
+      }
+      if(this.state.roleId===4) {
+        return UpdateContactInfoTier1;
+      }
+      if(this.state.roleId===5) {
+        return ManageAccountsAdmin;
+      }
+    }
+
     render() {
       return (
         <HashRouter>
@@ -87,11 +139,11 @@ import { API_URL } from '../constants/references';
               {/* <Route exact path="/" component={AccountSummaryCard}/> */}
               <Route exact path="/" component={AccountHome}/>
               {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
-              <Route exact path="/manageAccounts" component={ManageAccountsAdmin}/>
+              <Route exact path="/manageAccounts" component={this.getManageAccountsPage()}/>
               {/* <Route exact path="/manageAccounts" component={ManageAccountsTier2} /> */}
               <Route exact path="/manageRequests" component={this.getRequestPage()}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
-              <Route exact path="/updateInfo" component={UpdateContactInfo}/>
+              <Route exact path="/updateInfo" component={this.getContactInfoPage()}/>
               <Route exact path="/schedule" component={ScheduleAppointment}/>
               <Route exact path="/help" component={HelpSupport}/>
               <Route exact path="/bankingStatements" component={BankingStatements}/>

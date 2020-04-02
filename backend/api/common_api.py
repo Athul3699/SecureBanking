@@ -4,6 +4,7 @@ from backend.services.common import *
 from datetime import datetime
 from dateutil.parser import parse
 from backend.services.security_util import *
+from backend.services.authenticate import authenticate
 
 common_api = Blueprint('common_api', __name__)
 
@@ -21,11 +22,16 @@ def customer_accounts(user_id):
 #     profile = get_user_account(id=request.view_args['user_id'])
 #     return jsonify(response=profile)
 
+@authenticate
 @common_api.route("/GetUser", methods=['POST'])
 def get_user_account_endpoint():
     app.logger.info("[api-get-user]")
     args = request.json
-    email = args['email']
+    headers = request.headers
+
+    token = headers['token']
+    email = decode_email(token)
+
     # email = decode_email(args['token'])
     # del args['token']
     # email = 'a@a.com'

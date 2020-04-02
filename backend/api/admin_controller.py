@@ -1,8 +1,10 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import get_user_account, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
+from ..services.common import generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
 from ..services.constants import *
 import datetime
+from ..services.authenticate import authenticate
+from ..services.security_util import decode_email
 
 admin_api = Blueprint('admin_api', __name__)
 
@@ -24,20 +26,51 @@ PUT
 @admin_api.route("/EmployeeAccount", methods=['GET', 'POST', 'PUT', 'DELETE'])
 def employee_account_actions():
     app.logger.info("[api-employee-account-actions]")
-    args = request.json
 
     response = {}
     if (request.method == 'GET'):
-        response = get_user_account(**args)
-    elif (request.method == 'POST'):
-        args['date_of_birth'] = datetime.datetime.fromtimestamp(args['date_of_birth'] / 1e3)
-        response = add_user_account(**args)
-    elif (request.method == 'PUT'):
-        response = update_user_account(**args)
-    elif (request.method == 'DELETE'):
-        response = update_user_account(id=args['id'], is_active=False)
+        response = get_user_account()
+    else:
+        args = request.json
+        if (request.method == 'POST'):
+            args['date_of_birth'] = datetime.datetime.fromtimestamp(args['date_of_birth'] / 1e3)
+            response = add_user_account(**args)
+        elif (request.method == 'PUT'):
+            response = update_user_account(**args)
+        elif (request.method == 'DELETE'):
+            response = update_user_account(id=args['id'], is_active=False)
         
-    return jsonify(response=response)
+    return jsonify({"status": "success", "data": response})
+
+
+@authenticate
+@admin_api.route("/CreateEmployeeAccount", methods=['POST'])
+def create_employee_account():
+    app.logger.info("[api-employee-account-actions]")
+    args = request.json
+
+    response = add_user_account(**args)
+    return jsonify({ "status": "success", "data": response })
+
+
+@authenticate
+@admin_api.route("/EditEmployeeAccount", methods=['POST'])
+def edit_employee_account():
+    app.logger.info("[api-employee-account-actions]")
+    args = request.json
+
+    response = update_user_account(id=args['id'], **args)
+    return jsonify({ "status": "success", "data": response })
+
+
+@authenticate
+@admin_api.route("/DeleteEmployeeAccount", methods=['POST'])
+def delete_employee_account():
+    app.logger.info("[api-employee-account-actions]")
+    args = request.json
+
+    response = update_user_account_email_args(email=args['email'], is_active=False)
+    return jsonify({ "status": "success", "data": response })
 
 
 """
@@ -47,42 +80,81 @@ response = User(id=id)
 @admin_api.route("/ManageRequest", methods=['POST'])
 def manage_employee_request():
     app.logger.info("[api-manage-employee-request]")
-    args = request.json
 
     id = 5 # args['id']
     edit_status = args['edit_status']
 
     response = update_employee_account(id=id, edit_mode=False, edit_status=edit_status)
-    return jsonify(response=response)
+    return jsonify({"status": "success", "data": response})
 
-
-"""
-request = id
-response = User(id=id)
-"""
-@admin_api.route("/GetUser", methods=['GET'])
-def get_user():
-    app.logger.info("[api-get-user]")
-    args = request.json
-
-    id = args['id']
-    response = get_user_account(id=id)
-    return jsonify(response=response)
 
 
 @admin_api.route("/GetAllEmployees", methods=['GET'])
 def get_all_employees_api():
     app.logger.info("[api-get-all-employees]")
-    args = request.json
 
     response = get_all_employees()
-    return jsonify(response=response)
+    return jsonify({"status": "success", "data": response})
+
+
+@admin_api.route("/tier2/GetAllCustomerBankAccounts", methods=['GET'])
+def get_all_customer_bank_accounts_tier2():
+    app.logger.info("[api-get-all-customer-bank-accounts")
+
+    response = get_customer_bank_accounts(is_active=True)
+
+    return jsonify({ "status": "success", "data": response })
+
+
+@admin_api.route("/tier2/EditCustomerBankAccount", methods=['POST'])
+def edit_customer_account_tier2():
+    app.logger.info("[api-edit-customer-bank-accounts")
+    args = request.json
+
+    response = update_customer_bank_account(account_number=args['number'], **args)
+
+    return jsonify({ "status": "success", "data": response })
+
+@admin_api.route("/tier2/CreateCustomerBankAccount", methods=['POST'])
+def create_customer_account_tier2():
+    app.logger.info("[CreateCustomerBankAccount]")
+    args = request.json
+    token = request.headers['token']
+
+    email = decode_email(token)
+    user = get_user_account(email=email)
+
+
+    if user == None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+
+    number = generate_account_number()
+    account_type = args['type']
+    user_id = user['id']
+    balance = (float)(args['balance'])
+    routing_number = '1234567' 
+
+    result = add_customer_bank_account(number=number, type=account_type, balance=balance, user_id=user_id, routing_number=routing_number, is_active=True)
+    if result=='success':
+        return jsonify({ "status": "success"})
+    else:
+        return jsonify({ "status": "failure", "errorMessage": "error creating bank account"})
+
+
+@admin_api.route("/tier2/DeleteCustomerBankAccount", methods=['POST'])
+def delete_customer_account_tier2():
+    app.logger.info("[api-delete-customer-bank-accounts")
+    args = request.json
+
+    response = update_customer_bank_account(account_number=args['number'], is_active=False)
+
+    return jsonify({ "status": "success", "data": response })
 
 
 @admin_api.route("/GetAllUsersBankAccounts", methods=['GET'])
 def get_all_users_api():
     app.logger.info("[api-get-users-bank-accounts]")
-    args = request.json
 
     response = get_all_user_bank_accounts()
-    return jsonify(response=response)
+    return jsonify({"status": "success", "data": response})
+

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import 'antd/dist/antd.css'
 import './style.css'
+import { withRouter } from "react-router-dom"
 
 import {
   Input,
@@ -34,7 +35,8 @@ const { Option } = Select
 
 const dateFormat = 'YYYY/MM/DD';
 
-class UpdateContactInfo extends Component {
+
+class UpdateContactInfoIndividualUser extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -53,8 +55,7 @@ class UpdateContactInfo extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
-    postRequest(`${API_URL}/api/v1/common/GetUser`, { email: this.props.account.email }).then((res) => {
+    postRequest(`${API_URL}/api/v1/common/GetUser`).then((res) => {
       let data = res["data"]["data"]
       this.setState({
         first_name: data['first_name'],
@@ -64,6 +65,7 @@ class UpdateContactInfo extends Component {
         ssn: data['ssn'],
         address1: data['address1'],
         contact: data['contact'],
+        id: data['id']
       })
     })
   }
@@ -131,9 +133,11 @@ class UpdateContactInfo extends Component {
     if (this.validate()) {
       let data = this.state
       delete data['confirm_password']
-      postRequestWithoutToken(`${API_URL}/api/v1/common/CreateUser`, this.state)
+      let id = data['id'] 
+      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
         .then(() => {
           // route to appropriate page
+          // this.props.history.push('/')
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
@@ -244,4 +248,4 @@ class UpdateContactInfo extends Component {
   }
 }
 
-export default UpdateContactInfo
+export default withRouter(UpdateContactInfoIndividualUser)

@@ -15,7 +15,7 @@ import TransferFunds from "./components/TransferFunds";
 import CreateUserAccount from "./components/CreateUserAccount";
 import ForgotUserPassword from "./components/ForgotUserPassword";
 import ResetUserPassword from "./components/ResetUserPassword";
-import CreateEmployeeAccountTier1 from "./components/CreateEmployeeAccountTier1";
+import CreateEmployeeAccount from "./components/CreateEmployeeAccountAdminPage";
 import CreateEmployeeAccountTier2 from "./components/CreateEmployeeAccountTier2";
 
 
@@ -48,7 +48,7 @@ class AppRouter extends Component {
           </Route>
 
           <Route path="/createt1employeeaccount">
-            <CreateEmployeeAccountTier1 />
+            <CreateEmployeeAccount />
           </Route>
 
           <Route path="/createt2employeeaccount">

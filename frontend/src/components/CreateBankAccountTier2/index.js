@@ -14,7 +14,7 @@ import { API_URL } from '../../constants/references';
 
 import { withRouter } from "react-router-dom"
 
-class CreateBankAccount extends Component {
+class CreateBankAccountTier2 extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -25,7 +25,7 @@ class CreateBankAccount extends Component {
 
     onButtonClick = () => {
       // route to appropriate page
-      postRequest(`${API_URL}/api/v1/bank_account/CreateBankAccount`, this.state)
+      postRequest(`${API_URL}/api/v1/admin/tier2/CreateCustomerBankAccount`, this.state)
       .then((res) => this.props.handleCancel('create'))
       .catch((err) => console.log(err))
     }
@@ -79,4 +79,4 @@ class CreateBankAccount extends Component {
     }
 }
 
-export default withRouter(CreateBankAccount)
+export default withRouter(CreateBankAccountTier2)

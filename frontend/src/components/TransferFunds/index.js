@@ -5,22 +5,7 @@ import "./style.css";
 import { Input, Button, Radio, Select, InputNumber } from "antd";
 import { postRequest, getRequest } from "../../util/api";
 import { API_URL } from "../../constants/references";
-
-function formatNumber(value) {
-  value += "";
-  const list = value.split(".");
-  const prefix = list[0].charAt(0) === "-" ? "-" : "";
-  let num = prefix ? list[0].slice(1) : list[0];
-  let result = "";
-  while (num.length > 3) {
-    result = `,${num.slice(-3)}${result}`;
-    num = num.slice(0, num.length - 3);
-  }
-  if (num) {
-    result = num + result;
-  }
-  return `${prefix}${result}${list[1] ? `.${list[1]}` : ""}`;
-}
+import { withRouter } from "react-router-dom"
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -35,12 +20,11 @@ class TransferFunds extends Component {
       destinationAccount: null,
       accountSource: "",
       description: "",
-      amount: "",
+      amount: 10,
     };
   }
 
   componentDidMount() {
-    // getRequest(`${API_URL}/user/GetBankAccounts`)
     this.refreshAccountState()
   }
 
@@ -83,16 +67,11 @@ class TransferFunds extends Component {
     this.setState({ destinationAccount: e.target.value });
   };
 
+  handlePayeeTypeChange = e => {
+    this.setState({ payeeType: e.target.value })
+  }
+
   validate = () => {
-    // if (
-    //   !this.state.accountSource ||
-    //   !this.state.amount ||
-    //   !this.state.destinationAccount ||
-    //   !this.state.accountType
-    // ) {
-    //   alert("Some fields are unfilled !!!");
-    //   return false;
-    // }
     if (this.state.amount.length < 1) {
       alert("Enter a valid number in Amount!");
       return false;
@@ -106,17 +85,29 @@ class TransferFunds extends Component {
       alert("Payee account field should have a numeric value");
       return false;
     }
-    if (this.state.destinationAccount.length < 1) {
-      alert("Enter a valid payee account number");
-      return false;
+
+    if (this.state.accountType == "fund_transfer") {
+      if (this.state.destinationAccount.length < 1) {
+        alert("Enter a valid payee account number");
+        return false;
+      }
     }
     return true;
   };
 
   onButtonClick = () => {
     if (this.validate()) {
-      postRequest(`${API_URL}/common/CreateAccount`, this.state)
-        .then(() => {})
+      const body = {
+        "from_account": this.state.accountSource,
+        "to_account": this.state.destinationAccount,
+        "amount": this.state.amount,
+        "type": this.state.accountType,
+        "description": this.state.description,
+        "payee_type": "account"
+      }
+
+      postRequest(`${API_URL}/api/v1/transaction/InitiateMoneyTransfer`, body)
+        .then(() => this.props.history.push('/manageRequests'))
         .catch(() => {});
     } else {
       alert("Invalid values in the form!!");
@@ -138,6 +129,21 @@ class TransferFunds extends Component {
         </Radio.Group>
         <br />
         <br />
+
+        Payee Type:
+        <br />
+        <Radio.Group
+          onChange={this.handlePayeeTypeChange}
+          value={this.state.payeeType}
+          disabled={this.state.accountType !== 'fund_transfer'}
+        >
+          <Radio value={"account"}>Account</Radio>
+          <Radio value={"email"}>Email</Radio>
+          <Radio value={"contact"}>Contact</Radio>
+        </Radio.Group>
+        <br />
+        <br />
+
         Account:
         <br />
         <Select
@@ -145,7 +151,7 @@ class TransferFunds extends Component {
           onChange={this.handleAccountSourceChange}
         >
           {this.state.accounts.map((account, i) => (
-            <Option key={i} value={i}>
+            <Option key={i} value={account.number}>
               {" "}
               {account.number}{" "}
             </Option>
@@ -166,7 +172,7 @@ class TransferFunds extends Component {
         Amount:
         <br />
         <InputNumber
-          defaultValue={1000}
+          defaultValue={10}
           formatter={value =>
             `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
@@ -184,7 +190,7 @@ class TransferFunds extends Component {
         />
         <br />
         <br />
-        <Button type="primary" onClick={this.onButtonClick}>
+        <Button type="primary" onClick={() => this.onButtonClick()}>
           Submit Request
         </Button>
       </div>
@@ -192,4 +198,4 @@ class TransferFunds extends Component {
   }
 }
 
-export default TransferFunds;
+export default withRouter(TransferFunds);

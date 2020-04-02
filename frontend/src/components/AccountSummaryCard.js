@@ -6,13 +6,12 @@ class AccountSummaryCard extends Component {
   state = {
     showPopup: false
     };
+    
     togglePopup() {  
       this.setState({  
-           showPopup: !this.state.showPopup,
-
-      });  
-    
-       }
+        showPopup: !this.state.showPopup,
+      });
+    }
   render() {
 
     return (

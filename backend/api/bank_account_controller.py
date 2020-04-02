@@ -8,7 +8,6 @@ from ..services.authenticate import authenticate
 
 bank_account_api = Blueprint('bank_account_api', __name__)
 
-
 """
 GET:
     request = id
@@ -49,7 +48,7 @@ def employee_account_actions():
 
 @authenticate
 @bank_account_api.route("/GetCustomerAccounts", methods=['GET'])
-def get_all_customer_accounts():
+def get_all_customer_bank_accounts():
     app.logger.info("[GetCustomerAccounts]")
     token = request.headers['token']
 
@@ -80,7 +79,7 @@ def get_all_active_customer_accounts():
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
 
     user_id = user['id']
-    accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
+    accounts = get_all_customer_accounts(user_id=user_id, is_active=True)
     
     return jsonify({ "status": "success", "data": accounts})
 
