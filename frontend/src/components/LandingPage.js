@@ -13,7 +13,7 @@ import AccountSummaryCard from './AccountSummaryCard';
 import ManageAccountsAdmin from './ManageAccountsAdmin';
 import ManageRequests from './ManageRequests';
 import "./LandingPage.css";
-import Scheduler from './Scheduler';
+import ScheduleAppointment from './ScheduleAppointment';
 import HelpSupport from './HelpSupport';
 import UpdateContact from './UpdateContact';
 import BankingStatements from './BankingStatements';
@@ -34,7 +34,7 @@ import ManageRequestsAdmin from './ManageRequestsAdmin';
               <li><NavLink to="/manageAccounts">Manage Accounts</NavLink></li>
               <li><NavLink to="/manageRequests">Manage Requests</NavLink></li>
               <li><NavLink to="/updateInfo">Update Contact Info</NavLink></li>
-              <li><NavLink to="/schedule">Schedule</NavLink></li>
+              <li><NavLink to="/schedule">Schedule Appointment</NavLink></li>
               <li><NavLink to="/help">Help and Support</NavLink></li>
             </ul>
             <div className="content">
@@ -47,7 +47,7 @@ import ManageRequestsAdmin from './ManageRequestsAdmin';
               <Route exact path="/manageRequests" component={ManageRequestsAdmin}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
               <Route exact path="/updateInfo" component={UpdateContactInfo}/>
-              <Route exact path="/schedule" component={Scheduler}/>
+              <Route exact path="/schedule" component={ScheduleAppointment}/>
               <Route exact path="/help" component={HelpSupport}/>
               <Route exact path="/bankingStatements" component={BankingStatements}/>
             </div>

@@ -51,10 +51,10 @@ class Login extends Component {
             
           <p className="Login-link">
             <a
-              href="https://reactjs.org"
+              href="/forgotuserpassword"
               rel="noopener noreferrer"
             >
-              Forgot user ID/password?
+              Forgot user password?
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a
