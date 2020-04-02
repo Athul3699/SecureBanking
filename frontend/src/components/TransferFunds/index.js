@@ -124,8 +124,9 @@ class TransferFunds extends Component {
           value={this.state.accountType}
         >
           <Radio value={"debit"}>Debit</Radio>
-          <Radio value={"credit"}>Credit</Radio>
+          <Radio value={"credit"}>Credit</Radio>          
           <Radio value={"fund_transfer"}>Fund Transfer</Radio>
+          <Radio value={"cashiers_cheque"}>Cashier's cheque (Give Recepients name in the message)</Radio>
         </Radio.Group>
         <br />
         <br />

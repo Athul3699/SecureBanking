@@ -58,8 +58,10 @@ def approve_money_transfer_noncritical():
            
         src_account = get_customer_bank_accounts(number=transaction.from_account)
         source_balance = src_account[0]['balance']
-
-        update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+        if transaction.type=='credit':
+            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+transaction.amount)
+        else:
+            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
         
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
@@ -225,8 +227,11 @@ def admin_approve_money_transfer():
         src_account = get_customer_bank_accounts(number=transaction.from_account)
         source_balance = src_account[0]['balance']
 
-        update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
-        
+        if transaction.type=='credit':
+            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+transaction.amount)
+        else:
+            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+            
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
             destination_balance = dest_account[0]['balance']
