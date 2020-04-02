@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import get_customer_bank_accounts, add_customer_bank_account, update_customer_bank_account, get_user_account, close_customer_bank_account
+from ..services.common import get_customer_bank_accounts, add_customer_bank_account, generate_account_number, update_customer_bank_account, get_user_account, close_customer_bank_account
 from ..services.constants import *
 from ..services.security_util import decode_email
 import datetime
@@ -42,3 +42,43 @@ def employee_account_actions():
         response = update_customer_bank_account(account_number=args['account_number'], is_active=False)
         
     return jsonify(response=response)
+    
+
+
+@bank_account_api.route("/GetCustomerAccounts", methods=['GET'])
+def get_all_customer_accounts():
+    app.logger.info("[GetCustomerAccounts]")
+    args = request.json
+
+    email = decode_email(args['token'])
+    user_id = get_user_account(email=email)
+
+    if user_id == None:
+        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+
+    accounts = get_customer_bank_accounts(user_id=user_id)
+    
+    return jsonify(response={ "status": "success", data:accounts})
+
+
+@bank_account_api.route("/CreateBankAccount", methods=['GET'])
+def create_bank_account():
+    app.logger.info("[CreateBankAccount]")
+    args = request.json
+
+    email = decode_email(args['token'])
+    user_id = get_user_account(email=email)
+
+    if user_id == None:
+        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+
+    number = generate_account_number()
+    account_type = args['type']
+    balance = (float)(args['balance'])
+    routing_number = '1234567' 
+
+    result = add_customer_bank_account(number=number, type=account_type, balance=balance, user_id=user_id)
+    if result=='success':
+        return jsonify(response={ "status": "success"})
+    else:
+        return jsonify(response={ "status": "failure", "errorMessage": "error creating bank account"})

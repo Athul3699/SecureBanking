@@ -3,27 +3,42 @@ from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccou
 from backend.services.security_util import encrypt
 from backend.services.constants import *
 from sqlalchemy import or_
+import math, random
+
+
+def generate_account_number():
+    digits = "0123456789"
+    account_number = "7" 
+    accounts = ['123']
+    while len(accounts)!=0:
+        for i in range(9) :
+            account_number += digits[math.floor(random.random() * 10)]
+        accounts = get_customer_bank_accounts(number=account_number)
+    return account_number
 
 def get_customer_bank_accounts(**kwargs):
     accounts_qs = Bankaccount.query.filter_by(**kwargs)
     accounts = []
 
-    # SQLAlchemy adds an additional field called '_sa_instance_state'
-    # jsonify can't serialize this so we are just going to remove it
     for record in accounts_qs:
         record_dict = record.__dict__
-        record_dict.pop("_sa_instance_state")
+        if "_sa_instance_state" in record_dict:
+            record_dict.pop("_sa_instance_state")
         accounts.append(record_dict)
 
     return accounts
 
 
 def add_customer_bank_account(**kwargs):
-    account = Bankaccount(**kwargs)
-    app.db.session.add(account)
-    app.db.session.commit()
+    result = "success"
+    try:
+        account = Bankaccount(**kwargs)
+        app.db.session.add(account)
+        app.db.session.commit()
+    except e:
+        result = "error"
 
-    return {"status": "success", "data": { "message": "success" }}
+    return result
 
 def update_customer_bank_account(account_number, **kwargs):
     result = "success"
