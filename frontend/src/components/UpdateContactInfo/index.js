@@ -54,7 +54,7 @@ class UpdateContactInfo extends Component {
 
   componentDidMount() {
     // getRequest(`${API_URL}/user/GetBankAccounts`)
-    postRequest(`${API_URL}/api/v1/common/GetUser`).then((res) => {
+    postRequest(`${API_URL}/api/v1/common/GetUser`, { id: id }).then((res) => {
       let data = res["data"]["data"]
       this.setState({
         first_name: data['first_name'],

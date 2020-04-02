@@ -20,6 +20,7 @@ import BankingStatements from './BankingStatements';
 import AccountHome from './AccountHome';
 import UpdateContactInfo from './UpdateContactInfo';
 import ManageAccountsTier2 from './ManageAccountsTier2';
+import ManageRequestsAdmin from './ManageRequestsAdmin';
   class LandingPage extends Component {
 
     render() {
@@ -43,7 +44,7 @@ import ManageAccountsTier2 from './ManageAccountsTier2';
               {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
               <Route exact path="/manageAccounts" component={ManageAccountsAdmin}/>
               {/* <Route exact path="/manageAccounts" component={ManageAccountsTier2} /> */}
-              <Route exact path="/manageRequests" component={ManageRequests}/>
+              <Route exact path="/manageRequests" component={ManageRequestsAdmin}/>
               {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
               <Route exact path="/updateInfo" component={UpdateContactInfo}/>
               <Route exact path="/schedule" component={Scheduler}/>
