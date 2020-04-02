@@ -137,14 +137,13 @@ class BlacklistToken(db.Model):
 
 
 class Bankaccount(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    number = db.Column(db.String, nullable=False, unique=True)
+    number = db.Column(db.String, primary_key=True)
     type = db.Column(db.String, nullable=False)
     routing_number = db.Column(db.String, nullable=False)
     balance = db.Column(db.Numeric, default=0, nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    is_active = db.Column(db.Boolean, default=True)
+    is_active = db.Column(db.Boolean, default=False)
 
 
 class Maintenancelog(db.Model):
@@ -170,8 +169,8 @@ class Transaction(db.Model):
     initiated_time = db.Column(db.DateTime, default= datetime.datetime.utcnow())
     type = db.Column(db.String, nullable=False)
     initiated_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    from_account = db.Column(db.Integer, db.ForeignKey('bankaccount.id'), nullable=True)
-    to_account = db.Column(db.Integer, db.ForeignKey('bankaccount.id'), nullable=True)
+    from_account = db.Column(db.Integer, db.ForeignKey('bankaccount.number'), nullable=True)
+    to_account = db.Column(db.Integer, db.ForeignKey('bankaccount.number'), nullable=True)
     amount = db.Column(db.Numeric,nullable=False)
     status = db.Column(db.String, nullable=False)
     awaiting_action_from_auth_level = db.Column(db.String, nullable=False)
