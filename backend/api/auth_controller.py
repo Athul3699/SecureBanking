@@ -26,13 +26,31 @@ def login_user_api():
     data = request.json
 
     status, data = auth_service2.login_user(**data)
-
+    user_id = 1 # get it from token
     if status == "success":
+        message = add_sign_in(user_id=user_id)
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user does not exist":
         return make_response(jsonify({ "status": status, "data": data})), 304
     else:
         return make_response(jsonify({ "status": status, "data": data})), 500
+
+
+@authenticate
+@auth_api.route("/LogoutUser", methods=['POST'])
+def logout_user_api():
+    app.logger.info("[Log out]")
+    if 'token' in request.headers:
+        email = decode_email(request.headers['token'])
+        user = get_user_account(email=email)
+        if user == None:
+            return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+        else:
+            # write logut functionality
+            message = add_sign_in(user_id=user['id'],reason='log out')
+            return jsonify({"status":"success", "roleId":user['role_id']})
+    else:
+        return jsonify({ "status": "failure", "errorMessage": "token does not exist"})
 
 
 @authenticate
