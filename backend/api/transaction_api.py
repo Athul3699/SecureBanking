@@ -15,10 +15,6 @@ import pdfkit
 transaction_api = Blueprint('transaction_api', __name__)
 
 
-
-
-
-
 #Tier 1
 @authenticate
 @transaction_api.route("/NonCriticalTransactions", methods=['GET'])
@@ -175,7 +171,7 @@ def downloadStatements():
         return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
 
 
-    accounts = get_customer_bank_accounts(user_id=user_id,number=args['account_number'])
+    accounts = get_customer_bank_accounts(user_id=user_id,number=args['account_number'], is_active=True)
     if len(accounts)==0:
         return jsonify(response={ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
     
@@ -254,7 +250,7 @@ def customer_transactions():
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
         user_id = user['id']
-        bank_accounts = get_customer_bank_accounts(user_id=user_id)
+        bank_accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
         transactions = []
         for bank_account in bank_accounts:
             transactions_from = get_transactions(from_account=bank_account['number'])
@@ -330,7 +326,7 @@ def initiate_money_transfer():
 
     user_id = user['id']
 
-    accounts = get_customer_bank_accounts(user_id=user_id,number=args['from_account'])
+    accounts = get_customer_bank_accounts(user_id=user_id,number=args['from_account'], is_active=True)
     if len(accounts)==0:
         return jsonify({ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
     
@@ -342,7 +338,7 @@ def initiate_money_transfer():
     
     if trasaction_params["type"]=="fund_transfer":
         if args["payee_type"]=='account':
-            accounts = get_customer_bank_accounts(user_id=user_id,number=args['to_account'])
+            accounts = get_customer_bank_accounts(user_id=user_id,number=args['to_account'], is_active=True)
             if len(accounts)==0:
                 return jsonify({ "status": "failure", "errorMessage": "Destination Bank account is not found"})
         else:
@@ -355,7 +351,7 @@ def initiate_money_transfer():
 
             destination_user_id = destination_user[0]['id']
 
-            accounts = get_customer_bank_accounts(user_id=destination_user_id)
+            accounts = get_customer_bank_accounts(user_id=destination_user_id, is_active=True)
             if len(accounts)==0:
                 return jsonify({ "status": "failure", "errorMessage": "Destination Bank account is not found"})
         
@@ -388,7 +384,7 @@ def merchant_transactions():
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
         user_id = user['id']
-        bank_accounts = get_customer_bank_accounts(user_id=user_id)
+        bank_accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
         transactions = []
         for bank_account in bank_accounts:
             transactions_from = get_transactions(from_account=bank_account['number'])

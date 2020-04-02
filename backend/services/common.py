@@ -13,7 +13,7 @@ def generate_account_number():
     while len(accounts)!=0:
         for i in range(9) :
             account_number += digits[math.floor(random.random() * 10)]
-        accounts = get_customer_bank_accounts(number=account_number)
+        accounts = get_customer_bank_accounts(number=account_number, is_active=True)
     return account_number
 
 def get_customer_bank_accounts(**kwargs):
