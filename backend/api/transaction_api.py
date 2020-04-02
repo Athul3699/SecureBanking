@@ -20,7 +20,6 @@ transaction_api = Blueprint('transaction_api', __name__)
 @transaction_api.route("/NonCriticalTransactions", methods=['GET'])
 def get_noncritical_transactions():
     app.logger.info("[api-GET-All-NonCriticalTransactions]")
-    args = request.json
     role_expected = [3,4,5]
 
     email = decode_email(request.headers['token'])
@@ -28,7 +27,7 @@ def get_noncritical_transactions():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transactions = get_transactions(is_critical=False)
@@ -50,14 +49,27 @@ def approve_money_transfer_noncritical():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
-        transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_customer',is_critical=False).first()
+        transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_destination',is_critical=False).first()
         if transaction == None:
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
-        message = update_transaction(id = transaction_id, status='approved')
-        return jsonify({ "status": "success", "message": message})
+           
+        src_account = get_customer_bank_accounts(number=transaction.from_account)
+        source_balance = src_account[0]['balance']
+
+        update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+        
+        if transaction.to_account != '':
+            dest_account = get_customer_bank_accounts(number=transaction.to_account)
+            destination_balance = dest_account[0]['balance']
+            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
+
+        message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
+
+
+        return jsonify({ "status": "success", "message": message })
     else:
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
@@ -75,10 +87,10 @@ def decline_money_transfer_noncritical():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
-        transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_customer', is_critical=False).first()
+        transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_destination', is_critical=False).first()
         if transaction == None:
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
         message = update_transaction(id = transaction_id, status='declined')
@@ -92,7 +104,6 @@ def decline_money_transfer_noncritical():
 @transaction_api.route("/CriticalTransactions", methods=['GET'])
 def get_critical_transactions():
     app.logger.info("[api-GET-All-CriticalTransactions]")
-    args = request.json
     role_expected = [4,5]
 
     email = decode_email(request.headers['token'])
@@ -100,7 +111,7 @@ def get_critical_transactions():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transactions = get_transactions(is_critical=True)
@@ -122,10 +133,10 @@ def approve_money_transfer_critical():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
-        transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_customer', is_critical=True).first()
+        transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_destination', is_critical=True).first()
         if transaction == None:
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
         message = update_transaction(id = transaction_id, status='approved')
@@ -147,7 +158,7 @@ def decline_money_transfer_critical():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, is_critical=True).first()
@@ -179,8 +190,8 @@ def downloadStatements():
     year = (int)(args['year'])
     month = (int)(args['month'])
     num_days = calendar.monthrange(year, month)[1]
-    start_date = datetime.date(year, month, 1)
-    end_date = datetime.date(year, month, num_days)
+    start_date = datetime.datetime.date(year, month, 1)
+    end_date = datetime.datetime.date(year, month, num_days)
 
     transactions_qs = get_transactions_within(start_date,  end_date, args['account_number'])
 
@@ -241,7 +252,7 @@ def all_transactions():
 @transaction_api.route("/CustomerTransactions", methods=['GET'])
 def customer_transactions():
     app.logger.info("[api-GET-All-CustomerTransactions]")
-    args = request.json
+    # args = request.json
 
     email = decode_email(request.headers['token'])
     user = get_user_account(email=email)
@@ -252,13 +263,62 @@ def customer_transactions():
         user_id = user['id']
         bank_accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
         transactions = []
+        transactions_to_return = []
+        transactions_from_return = []
+
         for bank_account in bank_accounts:
             transactions_from = get_transactions(from_account=bank_account['number'])
             transactions_to = get_transactions(to_account=bank_account['number'])
-            transactions.extend(transactions_from)
-            transactions.extend(transactions_to)
-        return jsonify({ "status": "success", "data": transactions})
+            transactions_from_return.extend(transactions_from)
+            transactions_to_return.extend(transactions_to)
+        
+        return jsonify({ "status": "success", "data": { "transactions_to": transactions_to, "transactions_from": transactions_from }})
 
+
+# @authenticate
+# @transaction_api.route("/CustomerTransactionsOutgoing", methods=['GET'])
+# def customer_transactions_outgoing():
+#     app.logger.info("[api-GET-All-CustomerTransactions]")
+#     # args = request.json
+
+#     email = decode_email(request.headers['token'])
+#     user = get_user_account(email=email)
+
+#     if user == None:
+#         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+#     else:
+#         user_id = user['id']
+#         bank_accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
+#         transactions = []
+#         for bank_account in bank_accounts:
+#             transactions_from = get_transactions(from_account=bank_account['number'])
+#             transactions_to = get_transactions(to_account=bank_account['number'])
+#             transactions.extend(transactions_from)
+#             transactions.extend(transactions_to)
+#         return jsonify({ "status": "success", "data": transactions})
+
+
+# @authenticate
+# @transaction_api.route("/CustomerTransactionsIncoming", methods=['GET'])
+# def customer_transactions_incoming():
+#     app.logger.info("[api-GET-All-CustomerTransactions]")
+#     # args = request.json
+
+#     email = decode_email(request.headers['token'])
+#     user = get_user_account(email=email)
+
+#     if user == None:
+#         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+#     else:
+#         user_id = user['id']
+#         bank_accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
+#         transactions = []
+#         for bank_account in bank_accounts:
+#             transactions_from = get_transactions(from_account=bank_account['number'])
+#             transactions_to = get_transactions(to_account=bank_account['number'])
+#             transactions.extend(transactions_from)
+#             transactions.extend(transactions_to)
+#         return jsonify({ "status": "success", "data": transactions})
 
 @authenticate
 @transaction_api.route("/CustomerApproveMoneyTransfer", methods=['POST'])
@@ -273,13 +333,13 @@ def customer_approve_money_transfer():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='submitted').first()
         if transaction == None:
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
-        message = update_transaction(id = transaction_id, status='approved_by_customer')
+        message = update_transaction(id = transaction_id, status='approved_by_destination')
         return jsonify({ "status": "success", "message": message})
     else:
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
@@ -298,7 +358,7 @@ def customer_decline_money_transfer_critical():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='submitted').first()
@@ -318,6 +378,8 @@ def initiate_money_transfer():
     args = request.json
     token = request.headers['token']
 
+    print(args)
+
     email = decode_email(token)
     user = get_user_account(email=email)
     
@@ -330,7 +392,7 @@ def initiate_money_transfer():
     if len(accounts)==0:
         return jsonify({ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
     
-    balance = (float)(accounts[0]['balance']
+    balance = float(accounts[0]['balance'])
     trasaction_params = {}
     trasaction_params["type"] = args["type"]
     trasaction_params["from_account"] = args["from_account"] 
@@ -356,14 +418,18 @@ def initiate_money_transfer():
                 return jsonify({ "status": "failure", "errorMessage": "Destination Bank account is not found"})
         
         trasaction_params["to_account"] = accounts[0]['number']
+        if user_id == accounts[0]['user_id']:
+            trasaction_params['status'] = "approved_by_destination"
+        else:
+            trasaction_params["status"] = "submitted"
         trasaction_params["is_critical"] = isCritical(trasaction_params["from_account"], trasaction_params["amount"])
-        trasaction_params["status"] = "submitted"
+        
     else:
         trasaction_params["is_critical"] = False
-        rasaction_params["status"]='approved_by_customer'
+        trasaction_params["status"]='approved_by_destination'
 
     trasaction_params["description"] =  args["description"]
-    if balance<amount:
+    if balance < trasaction_params["amount"]:
         trasaction_params["status"] =  'declined'
         trasaction_params["message"] =  "Insufficient Balance"
     message = add_transaction(**trasaction_params)
@@ -375,7 +441,6 @@ def initiate_money_transfer():
 @transaction_api.route("/MerchantTransactions", methods=['GET'])
 def merchant_transactions():
     app.logger.info("[api-GET-All-MerchantTransactions]")
-    args = request.json
 
     email = decode_email(request.headers['token'])
     user = get_user_account(email=email)
@@ -386,12 +451,15 @@ def merchant_transactions():
         user_id = user['id']
         bank_accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
         transactions = []
+
+        transactions_to_return = []
+        transactions_from_return = []
         for bank_account in bank_accounts:
             transactions_from = get_transactions(from_account=bank_account['number'])
             transactions_to = get_transactions(to_account=bank_account['number'])
-            transactions.extend(transactions_from)
-            transactions.extend(transactions_to)
-        return jsonify({ "status": "success", "data": transactions})
+            transactions_from_return.extend(transactions_from)
+            transactions_to_return.extend(transactions_to)
+        return jsonify({ "status": "success", "data": { "transactions_from": transactions_from, "transactions_to": transactions_to }})
 
 
 @authenticate
@@ -407,13 +475,13 @@ def merchant_approve_money_transfer():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='submitted').first()
         if transaction == None:
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
-        message = update_transaction(id = transaction_id, status='approved_by_customer')
+        message = update_transaction(id=transaction_id, status='approved_by_destination')
         return jsonify({ "status": "success", "message": message})
     else:
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
@@ -432,7 +500,7 @@ def merchant_decline_money_transfer_critical():
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
     else:
-        role = user['role']
+        role = user['role_id']
 
     if role in role_expected:
         transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='submitted').first()

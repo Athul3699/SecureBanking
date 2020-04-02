@@ -1,16 +1,19 @@
 from backend import app
+
 from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
 from backend.services.security_util import encrypt
 from backend.services.constants import *
-
+import datetime
 
 def isCritical(account_number, current_transaction_amount):
-    todays_datetime = datetime(datetime.today().year, datetime.today().month, datetime.today().day)
-    transaction_qs = Transaction.query.filter_by(status!="declined", created_date >= todays_datetime, from_account==account_number)
+    todays_datetime = datetime.datetime(datetime.datetime.today().year, datetime.datetime.today().month, datetime.datetime.today().day)
+    transaction_qs = Transaction.query.filter(app.db.and_(Transaction.status != "declined", Transaction.created_date >= todays_datetime, Transaction.from_account == account_number))
+    
     sum_of_transfer_amount_today = 0
+
     for record in transaction_qs:
-        sum_of_transfer_amount_today+=record.amount
-    if sum_of_transfer_amount_today+current_transaction_amount>=1000:
+        sum_of_transfer_amount_today = sum_of_transfer_amount_today + record.amount
+    if (sum_of_transfer_amount_today+current_transaction_amount) >= 1000:
         return True
     else:
         return False

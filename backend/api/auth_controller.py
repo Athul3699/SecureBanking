@@ -43,8 +43,8 @@ def get_role():
         email = decode_email(request.headers['token'])
         user = get_user_account(email=email)
         if user == None:
-            return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+            return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
         else:
-            return jsonify(response={"status":success, "roleId":user['role_id']})
+            return jsonify({"status":"success", "roleId":user['role_id']})
     else:
-        return jsonify(response={ "status": "failure", "errorMessage": "token does not exist"})
+        return jsonify({ "status": "failure", "errorMessage": "token does not exist"})
