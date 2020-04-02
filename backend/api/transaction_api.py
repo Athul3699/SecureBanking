@@ -4,7 +4,9 @@ from backend.services.common import *
 from backend.services.transaction import *
 from flask_weasyprint import HTML, render_pdf
 from flask import render_template
+from ..services.security_util import decode_email
 import datetime
+from ..services.authenticate import authenticate
 import calendar
 import pandas as pd
 import csv
@@ -96,28 +98,53 @@ def create_transaction():
 def initiate_money_transfer():
     app.logger.info("[api-InitiateMoneyTransfer]")
     args = request.json
-    email = decode_email(args['token'])
-    user_id = get_user_account(email=email)
-    if user_id == None:
-        return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
+    token = request.headers['token']
 
+    email = decode_email(token)
+    user = get_user_account(email=email)
+
+    if user == None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+
+
+    accounts = get_customer_bank_accounts(user_id=user_id,number=args['accountSource'])
+    if len(accounts)==0:
+        return jsonify(response={ "status": "failure", "errorMessage": "Bank account is not tied to the user"})
+    balance = accounts[0]['balance']
+    user_id = user['id']
     trasaction_params = {}
-    trasaction_params["type"] = request.json["transferType"]
-    trasaction_params["from_account"] = 2#request.json["accountSource"]
-    trasaction_params["amount"] = request.json["amount"]
-    trasaction_params["initiated_by"] = 1 #get_user_id_from_token()
-    if trasaction_params["type"]=="transfer":
-        trasaction_params["to_account"] = request.json["destinationAccount"]
-    trasaction_params["status"] = "Submitted"
-    #trasaction_params["is_critical"] = False #isCritical(user_id, trasaction_params[amount])
-    trasaction_params["awaiting_action_from_auth_level"] = "Tier2" #if trasaction_params["is_critical"] else "Tier1"
-    trasaction_params["last_approved_by"] = 1
-    trasaction_params["last_approved_time"] = datetime.datetime.utcnow()
-    trasaction_params["otp_needed"] = True
-    trasaction_params["otp_sent_time"] = datetime.datetime.utcnow()
-    trasaction_params["otp_valid_till"] = datetime.datetime.utcnow()
-    # get email or phone number or account number as parameter
-    #perform checks on params and format them
+    trasaction_params["type"] = args["transferType"]
+    trasaction_params["from_account"] = args["accountSource"] 
+    trasaction_params["amount"] = args["amount"]
+    if trasaction_params["type"]=="fund transfer":
+        if args["payee_type"]=='account':
+            accounts = get_customer_bank_accounts(user_id=user_id,number=args['destinationAccount'])
+            if len(accounts)==0:
+                return jsonify(response={ "status": "failure", "errorMessage": "Destination Bank account is not found"})
+        else:
+            if args["payee_type"]=='email':
+                destination_user = get_user_account(email=args['destinationEmail'])
+            else:
+                destination_user = get_user_account(contact=args['destinationContact'])
+            if destination_user == None:
+                return jsonify({ "status": "failure", "errorMessage": "destiation account does not exist"})
+
+            destination_user_id = destination_user[0]['id']
+
+            accounts = get_customer_bank_accounts(user_id=destination_user_id)
+            if len(accounts)==0:
+                return jsonify(response={ "status": "failure", "errorMessage": "Destination Bank account is not found"})
+        
+        trasaction_params["to_account"] = accounts[0]['number']
+        trasaction_params["is_critical"] = isCritical(trasaction_params["to_account"], trasaction_params[amount])
+    else:
+        trasaction_params["is_critical"] = False
+
+    trasaction_params["status"] = "submitted"
+    trasaction_params["description"] =  args["description"]
+    if balance<amount:
+        trasaction_params["status"] =  'declined'
+        trasaction_params["message"] =  "Insufficient Balance"
     message = add_transaction(**trasaction_params)
     return jsonify(response=message)
 
