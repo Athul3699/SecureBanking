@@ -27,7 +27,9 @@ def dec(encrypted_secret):
    global key
    f = Fernet(key)
    decrypted = f.decrypt(encrypted_secret)
-   return decrypted
+   return decrypted.decode('utf8')
+
+
 
 
 
