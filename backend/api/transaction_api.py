@@ -139,8 +139,20 @@ def approve_money_transfer_critical():
         transaction = app.db.session.query(Transaction).filter_by(id=transaction_id, status='approved_by_destination', is_critical=True).first()
         if transaction == None:
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
-        message = update_transaction(id = transaction_id, status='approved')
-        return jsonify({ "status": "success", "message": message})
+            
+        src_account = get_customer_bank_accounts(number=transaction.from_account)
+        source_balance = src_account[0]['balance']
+
+        update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+        
+        if transaction.to_account != '':
+            dest_account = get_customer_bank_accounts(number=transaction.to_account)
+            destination_balance = dest_account[0]['balance']
+            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
+
+        message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
+
+        return jsonify({ "status": "success", "message": message })
     else:
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
