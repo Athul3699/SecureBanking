@@ -45,7 +45,7 @@ class TransferFunds extends Component {
   }
 
   refreshAccountState = () => {
-    getRequest(`${API_URL}/api/v1/bank_account/GetCustomerAccounts`)
+    getRequest(`${API_URL}/api/v1/bank_account/GetActiveCustomerAccounts`)
     .then((data) => {
       console.log(data["data"])
       if (data["data"].length > 0) {
