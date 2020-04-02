@@ -35,12 +35,32 @@ class ManageAccountsAdmin extends Component {
           t1Visible: false,
           t2Visible: false,
           createVisible: false,
-          selectedAccount: {}
+          selectedAccount: {},
+
+          isAuthorized: false,
+          isLoading: true,
+          error: false,
         }
     }
 
     componentDidMount() {
+      this.setState({ isLoading: false, isAuthorized: true })
       this.refreshAccountsState()
+
+      // getRequestWithoutToken(`${API_URL}/api/v1/auth/GetRole`) // make the get request (Athul - you need to make this work whenever Harshit pushes the code)
+      // .then((data) => { // if it is successful
+
+      //   const roleId = data["roleId"]
+      //   if (roleId == 1) {
+      //     this.setState({ isLoading: false, isAuthorized: true })
+      //     this.refreshAccountsState()
+      //   } else {
+      //     this.setState({ isLoading: false, isAuthorized: false})
+      //   }
+      // })
+      // .catch((err) => { // if it fails
+      //   this.setState({ error: true })
+      // })
     }
 
     // accounts state is what is shown.
@@ -113,7 +133,7 @@ class ManageAccountsAdmin extends Component {
     }
 
     render() {
-      // define columns
+        // define columns
         const columns = [
           {
             title: 'First Name',
@@ -162,53 +182,67 @@ class ManageAccountsAdmin extends Component {
             )
           },
         ]
-        return (
 
-            <div className="create-form-container">
-                <Button
-                  onClick={() => this.onButtonClick('create')}
-                >
-                  Create Account
-                </Button>
+        if (this.state.isLoading == true) { // if it is loading, show loading screen
+          return <div> Loading... </div>
+        } else {
+          if (this.state.error == true) { // if it is loaded, and the initial api call has an error, show error screen
+            return <div> Something went wrong here... Please reload the page or logout and login again to access the feature. </div>
+          } else {
+            if (this.state.isAuthorized == true) { // if it is loaded, and the initial api call does not have an error, and the response of the api call says they are authorized, render content
+              return (
 
-                <br />
-                <br />
-                <Table dataSource={this.state.accounts} columns={columns} />
+                <div className="create-form-container">
+                    <Button
+                      onClick={() => this.onButtonClick('create')}
+                    >
+                      Create Account
+                    </Button>
+    
+                    <br />
+                    <br />
+                    <Table dataSource={this.state.accounts} columns={columns} />
+    
+                    <Modal
+                      title="Edit Tier 1 employee details"
+                      visible={this.state.t1Visible}
+                      onOk={() => this.handleOk('t1')}
+                      onCancel={() => this.handleCancel('t1')}
+                    >
+                     <UpdateContactInfo // this should be a separate component for tier 1
+                      account={this.state.selectedAccount}
+                     /> 
+                    </Modal>
+    
+                    <Modal
+                      title="Edit Tier 2 employee details"
+                      visible={this.state.t2Visible}
+                      onOk={() => this.handleOk('t2')}
+                      onCancel={() => this.handleCancel('t2')}
+                    >
+                      <UpdateContactInfo // this should be a separate component for tier 2
+                        account={this.state.selectedAccount}
+                     />
+                    </Modal>
+    
+                    <Modal // this should be a separate component for just creating an employee account
+                      title="Create Employee Account"
+                      visible={this.state.createVisible}
+                      onOk={() => this.handleOk('create')}
+                      onCancel={() => this.handleCancel('create')}
+                    >
+                      <UpdateContactInfo
+                        account={this.state.selectedAccount}
+                      />
+                    </Modal>
+                </div>
+              );
+            } else { // if it is loaded, and the initial api call did not give an error, and response of the api call says they are not authorized
+              return <div> Sorry. You are not authorized to view this page. </div>
+            }
+          }
 
-                <Modal
-                  title="Edit Tier 1 employee details"
-                  visible={this.state.t1Visible}
-                  onOk={() => this.handleOk('t1')}
-                  onCancel={() => this.handleCancel('t1')}
-                >
-                 <UpdateContactInfo // this should be a separate component for tier 1
-                  account={this.state.selectedAccount}
-                 /> 
-                </Modal>
-
-                <Modal
-                  title="Edit Tier 2 employee details"
-                  visible={this.state.t2Visible}
-                  onOk={() => this.handleOk('t2')}
-                  onCancel={() => this.handleCancel('t2')}
-                >
-                  <UpdateContactInfo // this should be a separate component for tier 2
-                    account={this.state.selectedAccount}
-                 />
-                </Modal>
-
-                <Modal // this should be a separate component for just creating an employee account
-                  title="Create Employee Account"
-                  visible={this.state.createVisible}
-                  onOk={() => this.handleOk('create')}
-                  onCancel={() => this.handleCancel('create')}
-                >
-                  <UpdateContactInfo
-                    account={this.state.selectedAccount}
-                  />
-                </Modal>
-            </div>
-        );
+        }
     }
 }
 

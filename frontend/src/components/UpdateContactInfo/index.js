@@ -10,7 +10,7 @@ import {
   InputNumber,
   DatePicker
 } from 'antd';
-import { postRequestWithoutToken, getRequest, postRequest } from '../../util/api';
+import { postRequestWithoutToken, getRequest, postRequest, getRequestWithoutToken } from '../../util/api';
 import { API_URL } from '../../constants/references';
 
 function formatNumber(value) {
@@ -53,14 +53,13 @@ class UpdateContactInfo extends Component {
   }
 
   componentDidMount() {
-    // getRequest(`${API_URL}/user/GetBankAccounts`)
-    postRequest(`${API_URL}/api/v1/common/GetUser`, { id: id }).then((res) => {
+    console.log(this.props)
+    postRequestWithoutToken(`${API_URL}/api/v1/common/GetUser`, { email: this.props.account.email }).then((res) => {
       let data = res["data"]["data"]
       this.setState({
         first_name: data['first_name'],
         last_name: data['last_name'],
         email: data['email'],
-        // password: data['password'],
         date_of_birth: data['date_of_birth'],
         ssn: data['ssn'],
         address1: data['address1'],

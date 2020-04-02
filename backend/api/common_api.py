@@ -25,9 +25,10 @@ def customer_accounts(user_id):
 def get_user_account_endpoint():
     app.logger.info("[api-get-user]")
     args = request.json
+    email = args['email']
     # email = decode_email(args['token'])
-    del args['token']
-    email = 'a@a.com'
+    # del args['token']
+    # email = 'a@a.com'
     response = get_user_account(email=email)
     return jsonify( { "status": "success", "data": { "data": response }})
 
