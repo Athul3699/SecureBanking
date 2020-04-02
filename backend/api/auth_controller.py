@@ -5,7 +5,7 @@ from backend.services import auth_service2
 from ..services.authenticate import authenticate
 from ..services.security_util import decode_email
 auth_api = Blueprint('auth_api', __name__)
-
+from ..services.common import *
 
 @auth_api.route("/RegisterUser", methods=['POST'])
 def register_user_api():

@@ -170,15 +170,11 @@ class Transaction(db.Model):
     from_account = db.Column(db.String, db.ForeignKey('bankaccount.number'), nullable=True)
     to_account = db.Column(db.String, db.ForeignKey('bankaccount.number'), nullable=True)
     amount = db.Column(db.Numeric,nullable=False)
-    status = db.Column(db.String, nullable=False) # submitted, approved, declined
+    status = db.Column(db.String, nullable=False) # submitted, approved_by_customer, approved, declined
     is_critical = db.Column(db.Boolean, default=False, nullable=False)
     description = db.Column(db.String, default='', nullable=False)
     message = db.Column(db.String, default='', nullable=False)
     created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-
-    # last_approved_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # last_approved_time = db.Column(db.DateTime,nullable=False)
-    # is_active = db.Column(db.Boolean, default=True, nullable=False)
 
 
 class Appointment(db.Model):

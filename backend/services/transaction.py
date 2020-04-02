@@ -6,7 +6,7 @@ from backend.services.constants import *
 
 def isCritical(account_number, current_transaction_amount):
     todays_datetime = datetime(datetime.today().year, datetime.today().month, datetime.today().day)
-    transaction_qs = Transaction.query.filter_by(status=="approved", created_date >= todays_datetime, from_account==account_number)
+    transaction_qs = Transaction.query.filter_by(status!="declined", created_date >= todays_datetime, from_account==account_number)
     sum_of_transfer_amount_today = 0
     for record in transaction_qs:
         sum_of_transfer_amount_today+=record.amount
