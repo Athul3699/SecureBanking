@@ -82,12 +82,7 @@ class ResetUserPassword extends Component {
       return false;
     }
 
-    var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-    if (re.test(String(this.state.email).toLowerCase()) == false) {
-      alert("The email entered is not valid!!")
-      return false
-    }
 
     if (this.state.password != this.state.confirm_password) {
       alert("Passwords are not matching");
