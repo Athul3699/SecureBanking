@@ -45,15 +45,16 @@ class Transaction extends Contract {
         }
     }
 
-    async createTransaction(ctx, id, time, type, initiatedBy, fromAccount, toAccount, amount, approvedBy) {
+    async createTransaction(ctx, id, type, fromAccount, toAccount, amount, isCritical, description, message, createdDate) {
         const transaction = {
-            time,
             type,
-            initiatedBy,
             fromAccount,
             toAccount,
             amount,
-            approvedBy
+            isCritical,
+            description,
+            message,
+            createdDate
         };
 
         await ctx.stub.putState(id, Buffer.from(JSON.stringify(transaction)));
