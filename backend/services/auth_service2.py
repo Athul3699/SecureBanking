@@ -9,6 +9,8 @@ from backend.services.rsa import public_key, private_key
 from functools import wraps
 import uuid
 import hashlib
+# from backend.model.manage import BlackListToken
+from ..model.manage import BlacklistToken
 
 from backend.model.manage import User
 
@@ -73,6 +75,27 @@ def login_user(**data):
                 app.db.session.add(user)
                 app.db.session.commit()
 
+                return "success", auth_token
+        else:
+            return "failure", "user does not exist"
+    except Exception as e:
+        print(e)
+        return "failure", "some error occured"
+
+def logout_user(**data):
+    try:
+        user = User.query.filter_by(
+            email=data.get('email')
+        ).first()
+
+        if user:
+            auth_token = user.activeJWT
+
+            if auth_token:
+                token = BlackListToken(token=auth_token, blacklisted_on=datetime.datetime.now())
+            
+                app.db.session.add(token)
+                app.db.session.commit()
                 return "success", auth_token
         else:
             return "failure", "user does not exist"
