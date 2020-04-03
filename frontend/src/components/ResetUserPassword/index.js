@@ -36,6 +36,7 @@ class ResetUserPassword extends Component {
     super(props);
     this.state = {
       role_id: 1,
+      resetOTP: "",
       password: "",
       confirm_password: ""
     };
@@ -48,9 +49,8 @@ class ResetUserPassword extends Component {
   setComponentSize = () => {
     this.setState({ componentSize: "small" });
   };
-
-  handlePassword = e => {
-    this.setState({ address: e.target.value });
+  handleResetOTP = e => {
+    this.setState({ resetOTP: e.target.value });
   };
 
   handleAmountChange = value => {
@@ -114,7 +114,14 @@ class ResetUserPassword extends Component {
   render() {
     return (
       <div className="create-form-container">
-
+        Enter the verification code sent to your registered email: <br />
+        <Input
+          type="password"
+          onChange={this.handleResetOTP}
+          value={this.state.resetOTP}
+        />
+        <br />
+        <br />
         New Password: <br />
         <Input
           type="password"
@@ -131,6 +138,7 @@ class ResetUserPassword extends Component {
         />
         <br />
         <br />
+        
         <Button type="primary" onClick={this.onButtonClick}>
           Reset
         </Button>
