@@ -75,6 +75,8 @@ def get_all_users():
     for record in profiles_qs:
         record_dict = record.__dict__
         record_dict.pop("_sa_instance_state")
+        record_dict.pop("password")
+        record_dict.pop("ssn")
         profiles.append(record_dict)
 
     return profiles

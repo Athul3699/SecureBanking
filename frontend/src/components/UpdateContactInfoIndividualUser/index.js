@@ -123,8 +123,28 @@ class UpdateContactInfoIndividualUser extends Component {
     this.setState({ ssn: e.target.value })
   }
 
-  validate = () => {
-    // do some form validation
+  validate = () => { 
+    if (
+    !this.state.password ||
+    !this.state.confirm_password
+  ) {
+    alert("Please enter password to validate");
+    return false;
+  }
+  if (this.state.password != this.state.confirm_password) {
+    alert("Passwords are not matching");
+    return false;
+  }
+  if (this.state.contact){if (this.state.contact.length < 10) {
+    alert("The contact number should be 10 digits");
+    return false;
+  }}
+  var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+  if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
+      alert("The email entered is not valid!!")
+      return false
+    }}
     return true;
   }
 
@@ -152,7 +172,8 @@ class UpdateContactInfoIndividualUser extends Component {
     return (
 
       <div className="create-form-container">
-
+<h4>Personal Info</h4>
+        <br />
         First Name:<br />
         <Input
           // parser={value => value.replace(/\$\s?|(,*)/g, '')}
@@ -198,7 +219,7 @@ class UpdateContactInfoIndividualUser extends Component {
         />
 
         <br />
-        <br /> */}
+        <br /> 
 
                 {/* SSN: <br />
         <Input
@@ -214,7 +235,7 @@ class UpdateContactInfoIndividualUser extends Component {
           onChange={this.handleAddress}
           value={this.state.address1}
         />
-
+<br />
         <br />
         <br />
 

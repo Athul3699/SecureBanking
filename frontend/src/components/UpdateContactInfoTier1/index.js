@@ -42,7 +42,7 @@ class UpdateContactInfoTier1 extends Component {
       first_name: '',
       last_name: '',
       email: '',
-      role_id: 1,
+      role_id: 3,
       password: '',
       date_of_birth: '',
       ssn: '',
@@ -120,8 +120,28 @@ class UpdateContactInfoTier1 extends Component {
     this.setState({ ssn: e.target.value })
   }
 
-  validate = () => {
-    // do some form validation
+  validate = () => { 
+    if (
+    !this.state.password ||
+    !this.state.confirm_password
+  ) {
+    alert("Please enter password to validate");
+    return false;
+  }
+  if (this.state.password != this.state.confirm_password) {
+    alert("Passwords are not matching");
+    return false;
+  }
+  if (this.state.contact){if (this.state.contact.length < 10) {
+    alert("The contact number should be 10 digits");
+    return false;
+  }}
+  var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+  if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
+      alert("The email entered is not valid!!")
+      return false
+    }}
     return true;
   }
 
@@ -148,6 +168,8 @@ class UpdateContactInfoTier1 extends Component {
 
       <div className="create-form-container">
 
+<h4>Personal Info</h4>
+        <br />
         First Name:<br />
         <Input
           // parser={value => value.replace(/\$\s?|(,*)/g, '')}
@@ -193,7 +215,7 @@ class UpdateContactInfoTier1 extends Component {
         />
 
         <br />
-        <br /> */}
+        <br /> 
 
                 SSN: <br />
         <Input
@@ -202,18 +224,19 @@ class UpdateContactInfoTier1 extends Component {
         />
 
         <br />
-        <br />
+        <br />*/}
 
         Address: <br />
         <Input
           onChange={this.handleAddress}
           value={this.state.address1}
         />
-
+<br />
         <br />
         <br />
-
-        Password: <br />
+        <h4>Validate Update Request</h4>
+        <br />
+        Enter Password: <br />
         <Input
           onChange={this.handlePassword}
           value={this.state.password}

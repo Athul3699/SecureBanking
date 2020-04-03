@@ -34,17 +34,18 @@ app.post("/hyperledger", async (req, res) => {
 
         // Get passed parameters
         const id = req.body.id;
-        const time = req.body.time;
         const type = req.body.type;
-        const initiatedBy = req.body.initiatedBy;
         const fromAccount = req.body.fromAccount;
         const toAccount = req.body.toAccount;
         const amount = req.body.amount;
-        const approvedBy = req.body.amount;
+        const isCritical = req.body.isCritical;
+        const description = req.body.description;
+        const message = req.body.message;
+        const createdDate = req.body.createdDate;
 
         // Submit the specified transaction.
-        // createTransaction transaction - requires 8 argument
-        await contract.submitTransaction('createTransaction', id, time, type, initiatedBy, fromAccount, toAccount, amount, approvedBy);
+        // createTransaction transaction - requires 9 argument
+        await contract.submitTransaction('createTransaction', id, type, fromAccount, toAccount, amount, isCritical, description, message, createdDate);
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.

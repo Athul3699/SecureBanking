@@ -36,8 +36,8 @@ async function main() {
         const contract = network.getContract('securebank');
 
         // Submit the specified transaction.
-        // createTransaction transaction - requires 5 argument
-        await contract.submitTransaction('createTransaction', '0', 'time0', 'type0', 'initiatedBy0', 'fromAccount0', 'toAccount0', 'amount0', 'approvedBy0');
+        // createTransaction transaction - requires 9 argument
+        await contract.submitTransaction('createTransaction', '0', 'type0', 'fromAccount0', 'toAccount0', 'amount0', 'isCritical0', 'description0', 'message0', 'createdDate0');
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
