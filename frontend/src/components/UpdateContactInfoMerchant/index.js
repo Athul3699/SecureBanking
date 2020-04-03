@@ -42,7 +42,7 @@ class UpdateContactInfoMerchant extends Component {
       first_name: '',
       last_name: '',
       email: '',
-      role_id: 1,
+      role_id: 2,
       password: '',
       date_of_birth: '',
       ssn: '',
@@ -121,8 +121,14 @@ class UpdateContactInfoMerchant extends Component {
   }
 
   validate = () => {
-    // do some form validation
-    return true;
+    if (
+      !this.state.password ||
+      !this.state.confirm_password
+    ) {
+      alert("Please enter password to validate");
+      return false;
+    }
+      return true;
   }
 
   onButtonClick = () => {
@@ -147,7 +153,8 @@ class UpdateContactInfoMerchant extends Component {
     return (
 
       <div className="create-form-container">
-
+        <h4>Merchant Representative Info</h4>
+        <br />
         First Name:<br />
         <Input
           // parser={value => value.replace(/\$\s?|(,*)/g, '')}
@@ -167,7 +174,18 @@ class UpdateContactInfoMerchant extends Component {
         <br />
         <br />
 
-                Email: <br />
+         
+        SSN: <br />
+        <Input
+          onChange={this.handleSsnChange}
+          value={this.state.ssn}
+        />
+        <br />
+        <br />
+        <br />
+        <h4>Merchant Office</h4>
+        <br />
+               Email: <br />
         <Input
           onChange={this.handleEmail}
           value={this.state.email}
@@ -175,7 +193,6 @@ class UpdateContactInfoMerchant extends Component {
 
         <br />
         <br />
-
         Contact Number:<br />
         <Input
           onChange={this.handleContact}
@@ -195,25 +212,20 @@ class UpdateContactInfoMerchant extends Component {
         <br />
         <br /> */}
 
-                SSN: <br />
-        <Input
-          onChange={this.handleSsnChange}
-          value={this.state.ssn}
-        />
+        
 
-        <br />
-        <br />
-
+        
         Address: <br />
         <Input
           onChange={this.handleAddress}
           value={this.state.address1}
         />
-
+<br />
         <br />
         <br />
-
-        Password: <br />
+        <h4>Validate Update Request</h4>
+        <br />
+        Enter Password: <br />
         <Input
           onChange={this.handlePassword}
           value={this.state.password}
