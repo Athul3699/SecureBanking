@@ -1,6 +1,5 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, jsonify, request, make_response
-from backend.services.rsa import public_key, private_key
 import jwt
 import datetime
 from functools import wraps
@@ -18,7 +17,7 @@ def check_decrypt(hash_credential, input_auth):
 
 
 def decode_email(token):
-    decoded = jwt.decode(token, public_key, algorithms='RS256')
+    decoded = jwt.decode(token, 'justatest')
     return decoded["email"]
 
 
@@ -32,7 +31,7 @@ def token_required(f):
             return jsonify({'message' : 'Missing: token'}), 403
 
         try:
-            date = jwt.decode(token, public_key, algorithms='RS256')
+            date =  jwt.decode(token, app.config['SECRET_KEY'])
         except:
             return jsonify({'message' : 'Invalid token!'}), 403
 
