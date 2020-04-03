@@ -120,15 +120,33 @@ class UpdateContactInfoMerchant extends Component {
     this.setState({ ssn: e.target.value })
   }
 
-  validate = () => {
+  validate = () => { 
     if (
-      !this.state.password ||
-      !this.state.confirm_password
-    ) {
-      alert("Please enter password to validate");
-      return false;
-    }
-      return true;
+    !this.state.password ||
+    !this.state.confirm_password
+  ) {
+    alert("Please enter password to validate");
+    return false;
+  }
+  if (this.state.password != this.state.confirm_password) {
+    alert("Passwords are not matching");
+    return false;
+  }
+  if (this.state.contact){if (this.state.contact.length < 10) {
+    alert("The contact number should be 10 digits");
+    return false;
+  }}
+  if (this.state.ssn){ if (this.state.ssn.length != 10) {
+    alert("The SSN should be a 10 digit number");
+    return false;
+  }}
+  var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+  if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
+      alert("The email entered is not valid!!")
+      return false
+    }}
+    return true;
   }
 
   onButtonClick = () => {
