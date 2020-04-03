@@ -156,12 +156,9 @@ class Maintenancelog(db.Model):
 
 class Signinhistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    login_time = db.Column(db.DateTime, default= datetime.datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    logout_time = db.Column(db.DateTime, default= datetime.datetime.utcnow())
-    logout_reason = db.Column(db.String, nullable=False, default= 'User Initiated')
-    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
-    is_active = db.Column(db.Boolean, default=True)
+    reason = db.Column(db.String, nullable=False, default= 'log in')
+    created_time = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
 
 class Transaction(db.Model):

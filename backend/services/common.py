@@ -5,6 +5,18 @@ from backend.services.constants import *
 from sqlalchemy import or_
 import math, random
 
+def add_sign_in(**kwargs):
+    result = "success"
+    try:
+        signin = Signinhistory(**kwargs)
+        app.db.session.add(signin)
+        app.db.session.commit()
+    except Exception as e:
+        print(e)
+
+        result = "error"
+
+    return result
 
 def generate_account_number():
     digits = "0123456789"
