@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
+from ..services.common import get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
 from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
@@ -42,6 +42,8 @@ def employee_account_actions():
             response = update_user_account(id=args['id'], is_active=False)
         
     return jsonify({"status": "success", "data": response})
+
+
 
 
 @authenticate
@@ -89,6 +91,12 @@ def manage_employee_request():
     return jsonify({"status": "success", "data": response})
 
 
+@admin_api.route("/GetAllUsers", methods=['GET'])
+def get_all_users__api():
+    app.logger.info("[api-get-all-users]")
+
+    response = get_all_users()
+    return jsonify({"status": "success", "data": response})
 
 @admin_api.route("/GetAllEmployees", methods=['GET'])
 def get_all_employees_api():

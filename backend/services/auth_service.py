@@ -5,7 +5,6 @@ import jwt
 import datetime
 from backend.services.common import *
 from backend.services.security_util import token_required, encrypt, check_decrypt
-from backend.services.rsa import public_key, private_key
 from functools import wraps
 
 
@@ -30,7 +29,7 @@ def login_user(email, password):
     global flag_dict
     if check_decrypt(email_hashed, email):
         if check_decrypt(pwd_hashed, password):
-            token = jwt.encode({'user': email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=15)}, private_key, algorithm= 'RS256')
+            token = jwt.encode({'user': email, 'exp' : datetime.datetime.utcnow()+ datetime.timedelta(minutes=15)}, current_app.config['SECRET_KEY'])
             return {"status": "success", "data": { "token": token.decode('UTF-8') }, "statusCode": 200}
 
         else:

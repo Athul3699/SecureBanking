@@ -5,7 +5,6 @@ import jwt
 import datetime
 from backend.services.common import *
 from backend.services.security_util import token_required, encrypt, check_decrypt
-from backend.services.rsa import public_key, private_key
 from functools import wraps
 import uuid
 import hashlib
@@ -34,8 +33,8 @@ def register_user(**data):
             
             auth_token = jwt.encode(
                 payload,
-                private_key,
-                algorithm='RS256'
+                "justatest",
+                algorithm='HS256'
             )
             
             data['activeJWT'] = auth_token
