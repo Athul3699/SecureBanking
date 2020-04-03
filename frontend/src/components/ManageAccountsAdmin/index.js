@@ -20,13 +20,12 @@ class ManageAccountsAdmin extends Component {
     constructor(props) {
         super(props)
         this.state = {  
-          accounts: [
-          ],   
+          accounts: [],
+          accounts2: [],
           t1Visible: false,
           t2Visible: false,
           createVisible: false,
           selectedAccount: {},
-
           isAuthorized: false,
           isLoading: true,
           error: false,
@@ -52,9 +51,32 @@ class ManageAccountsAdmin extends Component {
                   contact: account.contact,
                   role_id: account.role_id,
                   role_id_modified: roleMap[account.role_id],
+                  id: account.id
                 }
               })
             })
+
+            getRequest(`${API_URL}/api/v1/admin/GetAllUsers`)
+              .then((data) => {
+                this.setState({
+                  accounts2: data["data"].map((account, i) => {
+                    return {
+                      first_name: account.first_name,
+                      last_name: account.last_name,
+                      email: account.email,
+                      address1: account.address1,
+                      date_of_birth: account.date_of_birth,
+                      contact: account.contact,
+                      role_id: account.role_id,
+                      role_id_modified: roleMap[account.role_id],
+                      id: account.id,
+                    }
+                  })
+                })
+            })
+            .catch(err => console.log(err))
+
+
 
             this.setState({ isLoading: false, isAuthorized: true })
             this.refreshAccountsState()
@@ -75,7 +97,26 @@ class ManageAccountsAdmin extends Component {
     // we refresh this if the user deletes an account or whatever...
     refreshAccountsState = () => {
       // get accounts
-      getRequestWithoutToken(`${API_URL}/api/v1/admin/GetAllEmployees`)
+      getRequest(`${API_URL}/api/v1/admin/GetAllEmployees`)
+      .then((data) => {
+        // take the current accounts, and take only the data we need
+        let accounts = this.state.accounts.map((account) => {
+          return {
+            id: account.id,
+            first_name: account.first_name,
+            last_name: account.last_name,
+            email: account.email,
+            address1: account.address1,
+            date_of_birth: account.date_of_birth,
+            contact: account.contact,
+            role_id: account.role_id,
+            role_id_modified: roleMap[account.role_id],
+          }
+        })
+      })
+      .catch(err => console.log(err))
+
+      getRequest(`${API_URL}/api/v1/admin/GetAllUsers`)
       .then((data) => {
         // take the current accounts, and take only the data we need
         let accounts = this.state.accounts.map((account) => {
@@ -104,8 +145,10 @@ class ManageAccountsAdmin extends Component {
       if (type == 'edit') {
         this.setState({ t1Visible: true, selectedAccount: data })
       } else if (type == 'delete') {
-        postRequest(`${API_URL}/api/v1/admin/DeleteEmployeeAccount`, { email: data.email }).then()
-        this.refreshAccountsState()
+        postRequest(`${API_URL}/api/v1/admin/DeleteUser`, { "id": data.id })
+        .then((res) => this.refreshAccountsState())
+        .catch((err) => console.log(err))
+
       } else if (type == 'create') {
         this.setState({ selectedAccount: data })
         this.setState({ createVisible: true })
@@ -136,7 +179,6 @@ class ManageAccountsAdmin extends Component {
     }
 
     render() {
-        // define columns
         const columns = [
           {
             title: 'First Name',
@@ -204,7 +246,17 @@ class ManageAccountsAdmin extends Component {
     
                     <br />
                     <br />
+
+                    Employee Accounts:
                     <Table dataSource={this.state.accounts} columns={columns} />
+
+                    <br />
+                    <br />
+
+                    User Accounts:
+                    <br />
+                    <br />
+                    <Table dataSource={this.state.accounts2} columns={columns} />
     
                     <Modal
                       title="Edit employee details"
@@ -214,6 +266,7 @@ class ManageAccountsAdmin extends Component {
                     >
                      <EditEmployeeAccountAdminPage // this should be a separate component for tier 1
                         account={this.state.selectedAccount}
+                        handleCancel={() => this.handleCancel('t1')}
                      /> 
                     </Modal>
     

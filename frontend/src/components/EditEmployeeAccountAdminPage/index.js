@@ -106,9 +106,6 @@ class EditEmployeeAccountAdminPage extends Component {
     if (
       !this.state.first_name ||
       !this.state.last_name ||
-      !this.state.password ||
-      !this.state.ssn ||
-      !this.state.date_of_birth ||
       !this.state.contact ||
       !this.state.date_of_birth
     ) {
@@ -123,31 +120,22 @@ class EditEmployeeAccountAdminPage extends Component {
       alert("Last name should contain at least 3 characters");
       return false;
     }
-    if (this.state.ssn.length < 10) {
-      alert("The SSN should be a 10 digit number");
-      return false;
-    }
 
     if (this.state.contact.length < 10) {
       alert("The contact number should be 10 digits");
       return false;
     }
 
-    if (this.state.password.length < 7) {
-      alert("The password should contain minimum 7 characters");
-      return false;
-    }
+    // if (this.state.password.length < 7) {
+    //   alert("The password should contain minimum 7 characters");
+    //   return false;
+    // }
 
     var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     if (re.test(String(this.state.email).toLowerCase()) == false) {
       alert("The email entered is not valid!!")
       return false
-    }
-
-    if (this.state.password != this.state.confirm_password) {
-      alert("Passwords are not matching");
-      return false;
     }
 
     return true;

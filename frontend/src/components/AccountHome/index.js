@@ -10,7 +10,7 @@ import {
 
 import CreateBankAccount from '../CreateBankAccount'
 import TransferFunds from '../TransferFunds'
-import { getRequest } from '../../util/api';
+import { getRequest, postRequest } from '../../util/api';
 import { API_URL } from '../../constants/references';
 
 const { Column } = Table
@@ -74,6 +74,18 @@ class AccountHome extends Component {
       }
     }
 
+    logoutUser = () => {
+      postRequest(`${API_URL}/api/v1/auth/LogoutUser`)
+      .then((data) => {
+        window.localStorage.removeItem('API_TOKEN')
+        this.props.history.push('/')
+      })
+      .catch((err) => {
+        console.err(err)
+        this.props.history.push('/')
+      })
+    }
+
     render() {
         return (
             <div className="create-form-container">
@@ -98,6 +110,9 @@ class AccountHome extends Component {
                 >
                   Banking
                 </Button>
+
+                
+                <Button onClick={() => this.logoutUser()}> Logout </Button>
 
                 </div>
 

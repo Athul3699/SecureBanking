@@ -17,10 +17,15 @@ import ForgotUserPassword from "./components/ForgotUserPassword";
 import ResetUserPassword from "./components/ResetUserPassword";
 import CreateEmployeeAccount from "./components/CreateEmployeeAccountAdminPage";
 import CreateEmployeeAccountTier2 from "./components/CreateEmployeeAccountTier2";
+import { Button } from "antd";
+import { postRequest } from "./util/api";
+import { API_URL } from "./constants/references";
 
 
 class AppRouter extends Component {
+
   state = {};
+
   render() {
     return (
       <Router>
@@ -57,6 +62,10 @@ class AppRouter extends Component {
 
           <Route path="/transferfunds">
             <TransferFunds />
+          </Route>
+
+          <Route path="/logout">
+            <Button onClick={() => this.logoutUser()}> Logout </Button>
           </Route>
         </Switch>
       </Router>

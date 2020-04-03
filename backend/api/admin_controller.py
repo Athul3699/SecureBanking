@@ -44,6 +44,15 @@ def employee_account_actions():
     return jsonify({"status": "success", "data": response})
 
 
+@admin_api.route("/DeleteUser", methods=['POST'])
+def delete_user_admin_related():
+    app.logger.info("[api-delete-account-actions]")
+    args = request.json
+    response = {}
+
+    response = update_user_account(id=args['id'], is_active=False)
+
+    return jsonify({ "status": "success", "data": response })
 
 
 @authenticate
@@ -92,7 +101,7 @@ def manage_employee_request():
 
 
 @admin_api.route("/GetAllUsers", methods=['GET'])
-def get_all_employees_api():
+def get_all_users_api_admin():
     app.logger.info("[api-get-all-users]")
 
     response = get_all_users()

@@ -137,7 +137,7 @@ class UpdateContactInfoIndividualUser extends Component {
       postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
         .then(() => {
           // route to appropriate page
-          // this.props.history.push('/')
+          this.props.history.push('/')
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
@@ -200,14 +200,14 @@ class UpdateContactInfoIndividualUser extends Component {
         <br />
         <br /> */}
 
-                SSN: <br />
+                {/* SSN: <br />
         <Input
           onChange={this.handleSsnChange}
           value={this.state.ssn}
         />
 
         <br />
-        <br />
+        <br /> */}
 
         Address: <br />
         <Input
@@ -218,7 +218,7 @@ class UpdateContactInfoIndividualUser extends Component {
         <br />
         <br />
 
-        Password: <br />
+        {/* Password: <br />
         <Input
           onChange={this.handlePassword}
           value={this.state.password}
@@ -234,7 +234,7 @@ class UpdateContactInfoIndividualUser extends Component {
         />
 
         <br />
-        <br />
+        <br /> */}
 
         <Button
           type="primary"
