@@ -69,7 +69,9 @@ class ResetUserPassword extends Component {
   validate = () => {
     // do some form validation
     if (
-      !this.state.password
+      !this.state.password ||
+      !this.state.confirm_password||
+      !this.state.resetOTP
     ) {
       alert("Form is Incomplete !!");
       return false;
