@@ -92,7 +92,7 @@ def manage_employee_request():
 
 
 @admin_api.route("/GetAllUsers", methods=['GET'])
-def get_all_employees_api():
+def get_all_users__api():
     app.logger.info("[api-get-all-users]")
 
     response = get_all_users()
