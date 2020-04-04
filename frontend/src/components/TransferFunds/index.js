@@ -80,6 +80,10 @@ class TransferFunds extends Component {
       alert("Amount field should have a numeric value!");
       return false;
     }
+    if (this.state.accountSource==="") {
+      alert("Select account or create a bank account if there is none");
+      return false;
+    }
     var amt = parseFloat(this.state.amount);
     if (isNaN(amt)) {
       alert("Payee account field should have a numeric value");
