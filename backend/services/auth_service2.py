@@ -58,12 +58,10 @@ def register_user(**data):
 
 def login_user(**data):
     try:
-        user = User.query.filter_by(
-            email=data.get('email')
-        ).first()
+           
+        user = User.query.filter_by(email=data['email']).first()
 
-        password_hash = hashlib.md5(
-            str(data['password']).encode('utf-8')).hexdigest()
+        password_hash = hashlib.md5(str(data['password']).encode('utf-8')).hexdigest()
 
         if user and user.password == password_hash:
 
@@ -72,7 +70,7 @@ def login_user(**data):
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
                 'email': user.email,
-                'sequence_number':session_t.seq_number+1
+                'sequence_number': session_t['seq_number']+1
             }
 
             auth_token = jwt.encode(
@@ -81,7 +79,7 @@ def login_user(**data):
                 algorithm='HS256'
             )
 
-            message = add_session(email=user.email, seq_number=session_t.seq_number+1)
+            message = add_session(email=user.email, seq_number=session_t['seq_number']+1)
 
             return "success", auth_token
         else:

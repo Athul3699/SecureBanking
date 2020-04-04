@@ -6,16 +6,20 @@ from sqlalchemy import or_
 import math, random
 
 
-
 def get_session(**kwargs):
-    session_qs = Session.query.filter_by(**kwargs).last()
+    session_qs = Session.query.filter_by(**kwargs)
+    session_last = None
+    
+    for session in session_qs:
+        session_last = session
+        # session_qs = session_last
+    
+    if session_last:
+        session_last = session_last.__dict__
+        # if "_sa_instance_state" in session_last:
+        #     session_last.pop("_sa_instance_state")
 
-    if session_qs:
-        session_qs = session_qs.__dict__
-        if "_sa_instance_state" in session_qs:
-            session_qs.pop("_sa_instance_state")
-
-    return session_qs
+    return session_last
 
 
 def add_session(**kwargs):

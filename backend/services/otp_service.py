@@ -5,8 +5,8 @@ from backend.model.manage import User
 from datetime import datetime, timedelta
 from backend import app
 
-EMAIL_ADDRESS = "arijit1007@gmail.com"
-PASSWORD = "Pratima@11"
+EMAIL_ADDRESS = "securebankb21@gmail.com"
+PASSWORD = "securebank123."
 
 def get_key():
     digits = "0123456789"
@@ -22,7 +22,9 @@ def send_email(subject, body, destination_address):
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.ehlo()
         server.starttls()
-        server.login(EMAIL_ADDRESS, PASSWORD)
+        server.ehlo()
+        server.login("securebankb21@gmail.com", "securebank123.")
+        # server.login(EMAIL_ADDRESS, PASSWORD)
         message = 'Subject: {}\n\n{}'.format(subject, body)
         server.sendmail(EMAIL_ADDRESS, destination_address, message)
         server.quit()
@@ -35,10 +37,12 @@ def send_email(subject, body, destination_address):
 
 
 def generate_otp(email):
-    user = User.query.filter_by(email=email).first()
+    user = app.db.session.query(User).filter_by(email=email).first()
+
+    if user == None:
+        return None, "failure"
 
     otp = get_key()
-
     user.active_otp = otp
     user.otp_active_till = datetime.now() + timedelta(minutes=5)
 
@@ -46,6 +50,8 @@ def generate_otp(email):
     app.db.session.commit()
     
     message = send_email("OTP: please enter in prompt on application", "Your OTP is " + otp, destination_address=email)
+
+    return otp, message
 
 
 def verify_otp(email, otp):

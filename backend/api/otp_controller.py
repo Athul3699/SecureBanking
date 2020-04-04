@@ -11,19 +11,14 @@ otp_api = Blueprint('otp_api', __name__)
 @otp_api.route("/GenerateOTP", methods=['POST'])
 def generate_otp_api():
     data = request.json
-
     email = data['email']
 
-    user = get_user_account(email=email)
+    otp, message = generate_otp(email=email)
 
-    if user == None:
+    if message == "failure":
         return make_response(jsonify({"status": "failure", "message": "user does not exist"})), 500
     else:
-        otp, message = generate_otp(email=email)
-        if message == "success":
-            return jsonify({ "status": "success", "data": otp })
-        else:
-            return make_response(jsonify({ "status": "failure", "message": "something went wrong..."})), 500
+        return jsonify({ "status": "success", "data": otp })
 
 
 @otp_api.route("/VerifyOTP", methods=['POST'])
