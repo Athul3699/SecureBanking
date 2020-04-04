@@ -5,7 +5,56 @@ from backend.services import auth_service2
 from ..services.authenticate import authenticate
 from ..services.security_util import decode_email
 auth_api = Blueprint('auth_api', __name__)
-from ..services.common import *
+from backend.services.common import *
+
+
+"""
+Technical Account Access Start
+"""
+@auth_api.route("/admin/user/getuser", methods=['POST'])
+def admin_getuser_api():
+
+    data = request.json
+    email = data['email']
+    
+    response = get_user_account(email=email)
+    return jsonify({"status": "success", "data": response})
+
+@auth_api.route("/admin/user/registeruser", methods=['POST'])
+def admin_getuser_api():
+
+    body = request.json
+    status, data = auth_service2.register_user(**body)
+
+    if status == "success":
+        return make_response(jsonify({ "status": status, "data": data })), 200
+    elif status == "failure" and data == "user already exists":
+        return make_response(jsonify({ "status": status, "data": data})), 304
+    else:
+        return make_response(jsonify({ "status": status, "data": data})), 500
+
+
+@auth_api.route("/admin/user/getallusers", methods=['POST'])
+def admin_getuser_api():
+
+    data = get_admin_every_user()
+
+    if data != None:
+        return make_response(jsonify({ "status": status, "data": data })), 200
+    else:
+        return make_response(jsonify({ "status": status, "data": data})), 500
+
+@auth_api.route("/admin/user/updateuser", methods=['POST'])
+def admin_getuser_api():
+
+    data = request.json
+    email = data['email']
+    response = update_user_account_email_args(email=email, **data)
+    return jsonify({"status": "success", "data": response})
+
+"""
+Technical Account Access End
+"""
 
 @auth_api.route("/RegisterUser", methods=['POST'])
 def register_user_api():

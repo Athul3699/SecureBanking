@@ -39,7 +39,7 @@ def register_user(**data):
                 algorithm='HS256'
             )
             
-            data['activeJWT'] = auth_token
+            # data['activeJWT'] = auth_token
 
             # create a user object
             user = User(**data)
@@ -48,7 +48,7 @@ def register_user(**data):
 
             user_data = User.query.filter_by(email=data['email']).first()
             message = add_session(email=user.email, seq_number=1)
-            return "success", auth_token
+            return "success", str(auth_token)[2:-1]
             
         except Exception as e:
             print(e)
@@ -81,7 +81,7 @@ def login_user(**data):
 
             message = add_session(email=user.email, seq_number=session_t['seq_number']+1)
 
-            return "success", auth_token
+            return "success", str(auth_token)[2:-1]
         else:
             return "failure", "user does not exist"
     except Exception as e:

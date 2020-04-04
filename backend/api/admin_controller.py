@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
+from ..services.common import get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
 from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
@@ -168,7 +168,7 @@ def delete_customer_account_tier2():
 
     return jsonify({ "status": "success", "data": response })
 
-
+@authenticate
 @admin_api.route("/GetAllUsersBankAccounts", methods=['GET'])
 def get_all_users_api():
     app.logger.info("[api-get-users-bank-accounts]")
