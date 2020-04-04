@@ -72,7 +72,9 @@ class User(db.Model):
     edit_data = db.Column(JSON, default={})
     edit_mode = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
+    active_otp = db.Column(db.String, default='')
     activeJWT = db.Column(db.String, default='')
+    otp_active_till = db.Column(db.DateTime, default=datetime.datetime.now())
 
     def encode_auth_token(self, email):
         try:
@@ -92,9 +94,9 @@ class User(db.Model):
     @staticmethod
     def decode_auth_token(auth_token):
         """
-        Validates the auth token
-        :param auth_token:
-        :return: integer|string
+            Validates the auth token
+            :param auth_token:
+            :return: integer|string
         """
         try:
             payload = jwt.decode(auth_token, "justatest")
