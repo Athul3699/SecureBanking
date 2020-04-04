@@ -28,7 +28,8 @@ def register_user(**data):
 
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
-                'email': data['email']
+                'email': data['email'],
+                'seq_number':1
             }
             
             auth_token = jwt.encode(
@@ -45,7 +46,7 @@ def register_user(**data):
             app.db.session.commit()
 
             user_data = User.query.filter_by(email=data['email']).first()
-
+            message = add_session(email=user.email, seq_number=1)
             return "success", auth_token
             
         except Exception as e:
@@ -65,9 +66,13 @@ def login_user(**data):
             str(data['password']).encode('utf-8')).hexdigest()
 
         if user and user.password == password_hash:
+
+            session_t = get_session(email=user.email)
+
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
-                'email': user.email
+                'email': user.email,
+                'sequence_number':session_t.seq_number+1
             }
 
             auth_token = jwt.encode(
@@ -75,6 +80,8 @@ def login_user(**data):
                 "justatest",
                 algorithm='HS256'
             )
+
+            message = add_session(email=user.email, seq_number=session_t.seq_number+1)
 
             return "success", auth_token
         else:

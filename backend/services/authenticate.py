@@ -55,47 +55,29 @@ def authenticate(f):
                 }
                 return make_response(jsonify(responseObject)), 401
         else:
-            token = request.headers.get('token')
-            if token:
-                user = User.query.filter_by(
-                    activeJWT=token
-                ).first()
+            auth_token = request.headers.get('token')
 
-                if user is None:
-                    responseObject = {
-                        'status': 'failure',
-                        'data': 'Provide a valid auth token.'
-                    }
-                    return make_response(jsonify(responseObject)), 401
-                else:
-                    auth_token = token
-            else:
-                auth_token = ''
         if auth_token:
             try:
-                user = User.query.filter_by(
-                    activeJWT=token
-                ).first()
+                payload = jwt.decode(auth_token, "justatest", algorithm='HS256')
+                decoded_email = payload['email']
+                decoded_seq_number = payload['seq_number']
+                session_t = get_session(email=user.email)
+                if decoded_seq_number==session_t.seq_number:
+                    message = add_session(decoded_email,decoded_seq_number+1)
+                    return f(*args, **kwargs)
+                else:
+                    message = "You are already logged in..Please log in again"
 
-                if user is None:
-                    responseObject = {
-                        'status': 'failure',
-                        'data': 'Provide a valid auth token.'
-                    }
-                return make_response(jsonify(responseObject)), 401
-                
-                resp = User.decode_auth_token(auth_token)
-                return f(*args, **kwargs)
-            except ValueError as err:
-                print(err)
-                responseObject = {
-                    'status': 'failure',
-                    'data': 'Some error occurred'
-                }
-                return make_response(jsonify(responseObject)), 401
+            except jwt.ExpiredSignatureError:
+                message = 'Signature expired. Please log in again.'
+
+            except jwt.InvalidTokenError:
+                message = 'Invalid token. Please log in again.'
+
             responseObject = {
                 'status': 'failure',
-                'data': resp
+                'data': message
             }
             return make_response(jsonify(responseObject)), 401
         else:
@@ -105,3 +87,4 @@ def authenticate(f):
             }
             return make_response(jsonify(responseObject)), 401
     return wrapper
+

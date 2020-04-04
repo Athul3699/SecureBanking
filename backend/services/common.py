@@ -1,9 +1,35 @@
 from backend import app
-from backend.model.manage import Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
+from backend.model.manage import Session, Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
 from backend.services.security_util import encrypt
 from backend.services.constants import *
 from sqlalchemy import or_
 import math, random
+
+
+
+def get_session(**kwargs):
+    session_qs = Session.query.filter_by(**kwargs).last()
+
+    if session_qs:
+        session_qs = session_qs.__dict__
+        if "_sa_instance_state" in session_qs:
+            session_qs.pop("_sa_instance_state")
+
+    return session_qs
+
+
+def add_session(**kwargs):
+    result = "success"
+    try:
+        session_t = Session(**kwargs)
+        app.db.session.add(session_t)
+        app.db.session.commit()
+    except Exception as e:
+        print(e)
+
+        result = "error"
+
+    return result
 
 def add_sign_in(**kwargs):
     result = "success"
@@ -36,6 +62,7 @@ def get_customer_bank_accounts(**kwargs):
         record_dict = record.__dict__
         if "_sa_instance_state" in record_dict:
             record_dict.pop("_sa_instance_state")
+        record_dict['balance'] = str(record_dict['balance'])
         accounts.append(record_dict)
 
     return accounts
