@@ -8,6 +8,7 @@ from ..services.security_util import decode_email
 from ..services.common import *
 import datetime
 from ..services.authenticate import authenticate
+from ..services.hyperledger import add_to_blockchain
 import calendar
 import pandas as pd
 import csv
@@ -230,14 +231,27 @@ def admin_approve_money_transfer():
         if transaction.type=='credit':
             update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+transaction.amount)
         else:
-            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+            msg = update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+            print(str(msg))
             
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
             destination_balance = dest_account[0]['balance']
-            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
+            msg = update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
+            print(str(msg))
 
         message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
+
+        if message == "success":
+            transaction = app.db.session.query(Transaction).filter_by(id=transaction_id).first()
+            json = transaction.__dict__
+            if "_sa_instance_state" in json:
+                json.pop("_sa_instance_state")
+            
+            for key in json.keys():
+                json[key] = str(json[key])
+            
+            message = add_to_blockchain(json)
 
         return jsonify({ "status": "success", "message": message })
     else:
@@ -371,7 +385,7 @@ def customer_transactions():
             transactions_from_return.extend(transactions_from)
             transactions_to_return.extend(transactions_to)
         
-        return jsonify({ "status": "success", "data": { "transactions_to": transactions_to, "transactions_from": transactions_from }})
+        return jsonify({ "status": "success", "data": { "transactions_to": transactions_to_return, "transactions_from": transactions_from_return }})
 
 
 # @authenticate
@@ -499,7 +513,7 @@ def initiate_money_transfer():
     
     if trasaction_params["type"]=="fund_transfer":
         if args["payee_type"]=='account':
-            accounts = get_customer_bank_accounts(user_id=user_id,number=args['to_account'], is_active=True)
+            accounts = get_customer_bank_accounts(number=args['to_account'], is_active=True)
             if len(accounts)==0:
                 return jsonify({ "status": "failure", "errorMessage": "Destination Bank account is not found"})
         else:
@@ -513,6 +527,7 @@ def initiate_money_transfer():
             destination_user_id = destination_user[0]['id']
 
             accounts = get_customer_bank_accounts(user_id=destination_user_id, is_active=True)
+            print(destination_user_id)
             if len(accounts)==0:
                 return jsonify({ "status": "failure", "errorMessage": "Destination Bank account is not found"})
         
@@ -532,6 +547,8 @@ def initiate_money_transfer():
         trasaction_params["status"] =  'declined'
         trasaction_params["message"] =  "Insufficient Balance"
     message = add_transaction(**trasaction_params)
+    print(message)
+    print(trasaction_params)
     return jsonify({"status":"success", "data": message})
 
 

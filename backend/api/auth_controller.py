@@ -27,14 +27,17 @@ def login_user_api():
 
     status, data = auth_service2.login_user(**data)
 
+    #data = bytes(data, encoding="utf-8")
+    print(data)
     token = data
     email = decode_email(token)
 
     user = get_user_account(email=email)
-    user_id = user.id
+    print(user)
+    user_id = user["id"]
     
     if status == "success":
-        message = add_sign_in(user_id=user_id)
+        #message = add_sign_in(user_id=user_id)
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user does not exist":
         return make_response(jsonify({ "status": status, "data": data})), 304

@@ -1,10 +1,26 @@
 import requests
+import ast
+import json
 
 def add_to_blockchain(json):
-    res = requests.post("http://localhost:5001/hyperledger", json=json)
-    return res
+    print("adding to block chain")
 
-def query_ledger(minKey, maxKey):
-    json = {"minKey": str(minKey), "maxKey": str(maxKey)}
-    res = requests.get("http://localhost:5001/hyperledgerquery", json=json)
-    return res
+    print(json)
+
+    res = requests.post("http://localhost:5001/hyperledger", json=json)
+    
+    if res.status_code == 200:
+        return "success"
+    else:
+        return "error"
+
+def query_ledger():
+    res = requests.get("http://localhost:5001/hyperledgerquery")
+
+    transactions = []
+
+    ast_data = ast.literal_eval(res.text)
+    for transaction in ast_data:
+        transactions.append(transaction["Record"])
+
+    return transactions

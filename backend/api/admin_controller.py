@@ -1,4 +1,4 @@
-from flask import jsonify, g, Blueprint, request
+from flask import jsonify, g, Blueprint, request, render_template
 from backend import app
 from ..services.common import get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
 from ..services.constants import *
@@ -6,6 +6,7 @@ import datetime
 from ..services.authenticate import authenticate
 from ..services.security_util import decode_email
 from flask import send_file
+from ..services.hyperledger import query_ledger
 
 admin_api = Blueprint('admin_api', __name__)
 
@@ -181,3 +182,10 @@ def get_all_users_api():
 def downloadFile ():
     path = "logs/logger.log"
     return send_file(path, as_attachment=True)
+
+@admin_api.route("/Hyperledger", methods=['GET'])
+def get_hyperledger_transactions():
+    app.logger.info("[api-employee-account-actions]")
+    transactions = query_ledger()
+    #print(transactions)
+    return render_template('HyperLedgerTransactions.html', transationDetails=transactions)

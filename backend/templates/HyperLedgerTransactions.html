@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>HyperLedger Transactions</title>
+    <style>
+        #transactions {
+          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        #transactions td, #transactions th {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+        
+        #transactions tr:nth-child(even){background-color: #f2f2f2;}
+        
+        #transactions tr:hover {background-color: #ddd;}
+        
+        #transactions th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #4CAF50;
+          color: white;
+        }
+        </style>
+  </head>
+  <body>
+    <table id="transactions">
+        <thead>
+            <th>Created Date</th>
+            <th>From Account</th>
+            <th>To Account</th>
+            <th>Amount</th>
+            <th>Type</th>
+            <th>Message</th>
+            <th>Is Critical</th>
+            <th>Description</th>
+        </thead>
+        <tbody>
+            <h1>HyperLedger Transactions</h1>
+          {% for dict_item in transationDetails %}
+                <tr>
+                    <td>{{ dict_item['createdDate'] }}</td>
+                    <td>{{ dict_item['fromAccount'] }}</td>
+                    <td>{{ dict_item['toAccount'] }}</td>
+                    <td>{{ dict_item['amount'] }}</td>
+                    <td>{{ dict_item['type'] }}</td>
+                    <td>{{ dict_item['message'] }}</td>
+                    <td>{{ dict_item['isCritical'] }}</td>
+                    <td>{{ dict_item['description'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+  </body>
+</html>

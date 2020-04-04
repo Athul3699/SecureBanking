@@ -65,14 +65,28 @@ def login_user(**data):
             str(data['password']).encode('utf-8')).hexdigest()
 
         if user and user.password == password_hash:
-            auth_token = user.encode_auth_token(str(user.id))
+            '''auth_token = user.encode_auth_token(str(user.id))
 
             if auth_token:
                 user.activeJWT = auth_token
                 app.db.session.add(user)
                 app.db.session.commit()
 
-                return "success", auth_token
+                return "success", auth_token'''
+
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
+                'email': user.email
+            }
+            
+            auth_token = jwt.encode(
+                payload,
+                "justatest",
+                algorithm='HS256'
+            )
+
+            return "success", auth_token
+            
         else:
             return "failure", "user does not exist"
     except Exception as e:

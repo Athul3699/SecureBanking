@@ -10,6 +10,7 @@ const walletPath = path.resolve(__dirname, '..', 'hyperledger', 'securebank', 'j
 
 app.post("/hyperledger", async (req, res) => {
     try {
+
         // Create a new file system based wallet for managing identities.
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
@@ -33,15 +34,16 @@ app.post("/hyperledger", async (req, res) => {
         const contract = network.getContract('securebank');
 
         // Get passed parameters
+        console.log(req.body);
         const id = req.body.id;
         const type = req.body.type;
-        const fromAccount = req.body.fromAccount;
-        const toAccount = req.body.toAccount;
+        const fromAccount = req.body.from_account;
+        const toAccount = req.body.to_account;
         const amount = req.body.amount;
-        const isCritical = req.body.isCritical;
+        const isCritical = req.body.is_critical;
         const description = req.body.description;
         const message = req.body.message;
-        const createdDate = req.body.createdDate;
+        const createdDate = req.body.created_date;
 
         // Submit the specified transaction.
         // createTransaction transaction - requires 9 argument
@@ -84,14 +86,10 @@ app.get("/hyperledgerquery", async (req, res) => {
         // Get the contract from the network.
         const contract = network.getContract('securebank');
 
-        // Get parameters
-        const minKey = req.body.minKey;
-        const maxKey = req.body.maxKey;
-
         // Evaluate the specified transaction.
         // queryTransaction transaction - requires 1 argument, ex: ('queryTransaction', '0')
         // queryTransactions transaction - requires 2 arguments, ex: ('queryTransactions', '0', '9')
-        const result = await contract.evaluateTransaction('queryTransactions', minKey, maxKey);
+        const result = await contract.evaluateTransaction('queryTransactions', "", "");
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
         await gateway.disconnect();

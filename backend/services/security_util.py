@@ -17,7 +17,7 @@ def check_decrypt(hash_credential, input_auth):
 
 
 def decode_email(token):
-    decoded = jwt.decode(token, 'justatest')
+    decoded = jwt.decode(token, 'justatest', algorithms=["HS256"])
     return decoded["email"]
 
 
