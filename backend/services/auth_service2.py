@@ -24,8 +24,9 @@ def register_user(**data):
             
             data['password'] = password_hash
             data['ssn'] = ssn_hash
-            data['date_of_birth'] = datetime.datetime.strptime(data['date_of_birth'], '%Y/%M/%d')
-
+            data['date_of_birth'] = datetime.datetime.strptime(data['date_of_birth'], '%Y/%m/%d')
+           
+           
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
                 'email': data['email'],
@@ -66,13 +67,12 @@ def login_user(**data):
             str(data['password']).encode('utf-8')).hexdigest()
 
         if user and user.password == password_hash:
-
             session_t = get_session(email=user.email)
 
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
                 'email': user.email,
-                'sequence_number':session_t.seq_number+1
+                'sequence_number':session_t["seq_number"]+1
             }
 
             auth_token = jwt.encode(
@@ -81,7 +81,7 @@ def login_user(**data):
                 algorithm='HS256'
             )
 
-            message = add_session(email=user.email, seq_number=session_t.seq_number+1)
+            message = add_session(email=user.email, seq_number=session_t["seq_number"]+1)
 
             return "success", auth_token
         else:

@@ -76,7 +76,9 @@ class User(db.Model):
     edit_data = db.Column(JSON, default={})
     edit_mode = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)
+    active_otp = db.Column(db.String, default='')
     activeJWT = db.Column(db.String, default='')
+    otp_active_till = db.Column(db.DateTime, default=datetime.datetime.now())
 
 
 class Bankaccount(db.Model):
@@ -119,11 +121,10 @@ class Transaction(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    schedule = db.Column(db.DateTime, nullable=False)
-    reason = db.Column(db.DateTime, nullable=False)
-    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    slot_time = db.Column(db.String, nullable=False)
+    reason = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    is_active = db.Column(db.Boolean, default=True)
+    date = db.Column(db.DateTime, nullable=False)
 
 
 if __name__ == '__main__':

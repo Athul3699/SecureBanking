@@ -9,6 +9,8 @@ from backend.api.admin_controller import admin_api
 from backend.api.appointment_controller import appointment_api
 from backend.api.transaction_api import transaction_api
 from backend.api.bank_account_controller import bank_account_api
+from backend.api.otp_controller import otp_api
+
 import datetime
 import logging
 
@@ -46,6 +48,7 @@ app.register_blueprint(admin_api, url_prefix=COMMON_PREFIX + '/admin')
 app.register_blueprint(appointment_api, url_prefix=COMMON_PREFIX + '/appointment')
 app.register_blueprint(transaction_api, url_prefix=COMMON_PREFIX+'/transaction')
 app.register_blueprint(bank_account_api, url_prefix=COMMON_PREFIX+'/bank_account')
+app.register_blueprint(otp_api, url_prefix=COMMON_PREFIX+'/otp')
 
 
 if __name__ == "__main__":

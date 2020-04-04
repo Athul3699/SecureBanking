@@ -75,7 +75,7 @@ class CreateUserAccount extends Component {
     this.setState({ contact: e.target.value });
   };
 
-  handleAccountTypeChange = e => {
+  handleAccountType = e => {
     this.setState({ role_id: e.target.value });
   };
 
