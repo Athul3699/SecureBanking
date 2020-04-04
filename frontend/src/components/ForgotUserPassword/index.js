@@ -6,7 +6,7 @@ import { Input, Button} from "antd";
 import { postRequestWithoutToken } from "../../util/api";
 import { API_URL } from "../../constants/references";
 
-
+import { withRouter } from 'react-router-dom'
 
 
 
@@ -19,9 +19,7 @@ class ForgotUserPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       email: "",
-      role_id: 1
     };
   }
 
@@ -71,8 +69,7 @@ class ForgotUserPassword extends Component {
   onButtonClick = () => {
     if (this.validate()) {
       let data = this.state;
-      delete data["confirm_password"];
-      postRequestWithoutToken(`${API_URL}/api/v1/auth/RegisterUser`, this.state)
+      postRequestWithoutToken(`${API_URL}/api/v1/otp/GenerateOTP`, this.state)
         .then(() => {
           // route to appropriate page
         })
@@ -97,7 +94,7 @@ class ForgotUserPassword extends Component {
         <br />
         <br />
 
-        <Button type="primary" onClick={this.onButtonClick}>
+        <Button type="primary" onClick={() => this.onButtonClick()}>
           Send reset email
         </Button>
       </div>
@@ -105,4 +102,4 @@ class ForgotUserPassword extends Component {
   }
 }
 
-export default ForgotUserPassword;
+export default withRouter(ForgotUserPassword);

@@ -63,6 +63,7 @@ class UpdateContactInfoMerchant extends Component {
         ssn: data['ssn'],
         address1: data['address1'],
         contact: data['contact'],
+        id: data['id']
       })
     })
   }
@@ -136,10 +137,6 @@ class UpdateContactInfoMerchant extends Component {
     alert("The contact number should be 10 digits");
     return false;
   }}
-  if (this.state.ssn){ if (this.state.ssn.length != 10) {
-    alert("The SSN should be a 10 digit number");
-    return false;
-  }}
   var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
@@ -154,9 +151,11 @@ class UpdateContactInfoMerchant extends Component {
     if (this.validate()) {
       let data = this.state
       delete data['confirm_password']
-      postRequestWithoutToken(`${API_URL}/api/v1/common/CreateUser`, this.state)
+      let id = data['id'] 
+      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
         .then(() => {
           // route to appropriate page
+          this.props.history.push('/')
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
@@ -192,14 +191,6 @@ class UpdateContactInfoMerchant extends Component {
         <br />
         <br />
 
-         
-        SSN: <br />
-        <Input
-          onChange={this.handleSsnChange}
-          value={this.state.ssn}
-        />
-        <br />
-        <br />
         <br />
         <h4>Merchant Office</h4>
         <br />
@@ -245,6 +236,7 @@ class UpdateContactInfoMerchant extends Component {
         <br />
         Enter Password: <br />
         <Input
+          type="password"
           onChange={this.handlePassword}
           value={this.state.password}
         />
@@ -254,6 +246,7 @@ class UpdateContactInfoMerchant extends Component {
 
         Confirm Password: <br />
         <Input
+          type="password"
           onChange={this.handleConfirmPassword}
           value={this.state.confirm_password}
         />
@@ -263,7 +256,7 @@ class UpdateContactInfoMerchant extends Component {
 
         <Button
           type="primary"
-          onClick={this.onButtonClick}
+          onClick={() => this.onButtonClick()}
         >
           Request for Update Of Information
         </Button>

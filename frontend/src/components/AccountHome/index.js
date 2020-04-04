@@ -12,8 +12,10 @@ import CreateBankAccount from '../CreateBankAccount'
 import TransferFunds from '../TransferFunds'
 import { getRequest, postRequest } from '../../util/api';
 import { API_URL } from '../../constants/references';
+import { Link, NavLink } from 'react-router-dom';
 
 const { Column } = Table
+
 class AccountHome extends Component {
     constructor(props) {
         super(props)
@@ -78,7 +80,7 @@ class AccountHome extends Component {
       postRequest(`${API_URL}/api/v1/auth/LogoutUser`)
       .then((data) => {
         window.localStorage.removeItem('API_TOKEN')
-        this.props.history.push('/')
+        // this.props.history.push('/')
       })
       .catch((err) => {
         console.err(err)
@@ -112,8 +114,7 @@ class AccountHome extends Component {
                 </Button>
 
                 
-                <Button onClick={() => this.logoutUser()}> Logout </Button>
-
+                <Link to="/" replace> Logout </Link>
                 </div>
 
                 <br />

@@ -11,27 +11,13 @@ import {
 import { postRequest, getRequest, deleteRequest, deleteRequestWithoutToken, getRequestWithoutToken, postRequestWithoutToken } from '../../util/api';
 import { API_URL } from '../../constants/references';
 import { roleMap } from '../../constants/api'
-// import CreateEmployeeAccountTier1 from '../CreateEmployeeAccount';
 import UpdateContactInfo from '../UpdateContactInfo';
 
 class ManageAccountsIndividualUser extends Component {
     constructor(props) {
         super(props)
         this.state = {  
-          accounts: [
-            // {
-            //   "first_name": "abc",
-            //   "last_name": "abc",
-            //   "email": "t@t.com",
-            //   "password": "t",
-            //   "address1": "asdsa",
-            //   "address2": "asdsad",
-            //   "date_of_birth": "2020/03/20",
-            //   "ssn": "123456789",
-            //   "contact": "asdasd",
-            //   "role_id": 3
-            // }
-          ],   
+          accounts: [],   
           t1Visible: false,
           t2Visible: false,
           createVisible: false,
@@ -131,121 +117,123 @@ class ManageAccountsIndividualUser extends Component {
     }
 
     render() {
-        // define columns
-        const columns = [
-          {
-            title: 'First Name',
-            dataIndex: 'first_name',
-            key: 'first_name',
-          },
-          {
-            title: 'Last Name',
-            dataIndex: 'last_name',
-            key: 'last_name',
-          },
-          {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-          },
-          {
-            title: 'Address',
-            dataIndex: 'address1',
-            key: 'address',
-          },
-          {
-            title: 'DOB',
-            dataIndex: 'date_of_birth',
-            key: 'dob',
-          },
-          {
-            title: 'contact',
-            dataIndex: 'contact',
-            key: 'contact',
-          },
-          {
-            title: 'Edit Mode',
-            dataIndex: 'edit_mode',
-            key: 'edit_mode',
-          },
-          {
-            title: 'Role',
-            dataIndex: 'role_id',
-            key: 'role_id',
-            render: text => text ? text : ''
-          },
-          // {
-          //   title: 'Actions',
-          //   key: 'actions',
-          //   render: (text, data) => (
-          //     <span>
-          //       <a style={{ marginRight: 16 }} onClick={() => this.onButtonClick('edit', data)}> Edit </a>
-          //       <a onClick={() => this.onButtonClick('delete', data)}> Delete </a>
-          //     </span>
-          //   )
-          // },
-        ]
 
-        if (this.state.isLoading == true) { // if it is loading, show loading screen
-          return <div> Loading... </div>
-        } else {
-          if (this.state.error == true) { // if it is loaded, and the initial api call has an error, show error screen
-            return <div> Something went wrong here... Please reload the page or logout and login again to access the feature. </div>
-          } else {
-            if (this.state.isAuthorized == true) { // if it is loaded, and the initial api call does not have an error, and the response of the api call says they are authorized, render content
-              return (
+      return <div> Please visit the update contact info page... </div>
+        // // define columns
+        // const columns = [
+        //   {
+        //     title: 'First Name',
+        //     dataIndex: 'first_name',
+        //     key: 'first_name',
+        //   },
+        //   {
+        //     title: 'Last Name',
+        //     dataIndex: 'last_name',
+        //     key: 'last_name',
+        //   },
+        //   {
+        //     title: 'Email',
+        //     dataIndex: 'email',
+        //     key: 'email',
+        //   },
+        //   {
+        //     title: 'Address',
+        //     dataIndex: 'address1',
+        //     key: 'address',
+        //   },
+        //   {
+        //     title: 'DOB',
+        //     dataIndex: 'date_of_birth',
+        //     key: 'dob',
+        //   },
+        //   {
+        //     title: 'contact',
+        //     dataIndex: 'contact',
+        //     key: 'contact',
+        //   },
+        //   {
+        //     title: 'Edit Mode',
+        //     dataIndex: 'edit_mode',
+        //     key: 'edit_mode',
+        //   },
+        //   {
+        //     title: 'Role',
+        //     dataIndex: 'role_id',
+        //     key: 'role_id',
+        //     render: text => text ? text : ''
+        //   },
+        //   // {
+        //   //   title: 'Actions',
+        //   //   key: 'actions',
+        //   //   render: (text, data) => (
+        //   //     <span>
+        //   //       <a style={{ marginRight: 16 }} onClick={() => this.onButtonClick('edit', data)}> Edit </a>
+        //   //       <a onClick={() => this.onButtonClick('delete', data)}> Delete </a>
+        //   //     </span>
+        //   //   )
+        //   // },
+        // ]
 
-                <div className="create-form-container">
-                    <Button
-                      onClick={() => this.onButtonClick('create')}
-                    >
-                      Create Account
-                    </Button>
-    
-                    <br />
-                    <br />
-                    <Table dataSource={this.state.accounts} columns={columns} />
-    
-                    <Modal
-                      title="Edit Tier 1 employee details"
-                      visible={this.state.t1Visible}
-                      onOk={() => this.handleOk('t1')}
-                      onCancel={() => this.handleCancel('t1')}
-                    >
-                     <UpdateContactInfo // this should be a separate component for tier 1
-                      account={this.state.selectedAccount}
-                     /> 
-                    </Modal>
-    
-                    <Modal
-                      title="Edit Tier 2 employee details"
-                      visible={this.state.t2Visible}
-                      onOk={() => this.handleOk('t2')}
-                      onCancel={() => this.handleCancel('t2')}
-                    >
-                      <UpdateContactInfo // this should be a separate component for tier 2
-                        account={this.state.selectedAccount}
-                     />
-                    </Modal>
-    
-                    <Modal // this should be a separate component for just creating an employee account
-                      title="Create Employee Account"
-                      visible={this.state.createVisible}
-                      onOk={() => this.handleOk('create')}
-                      onCancel={() => this.handleCancel('create')}
-                    >
-                      <UpdateContactInfo
-                        account={this.state.selectedAccount}
-                      />
-                    </Modal>
-                </div>
-              );
-            } else { // if it is loaded, and the initial api call did not give an error, and response of the api call says they are not authorized
-              return <div> Sorry. You are not authorized to view this page. </div>
-            }
-          }
+        // if (this.state.isLoading == true) { // if it is loading, show loading screen
+        //   return <div> Loading... </div>
+        // } else {
+        //   if (this.state.error == true) { // if it is loaded, and the initial api call has an error, show error screen
+        //     return <div> Something went wrong here... Please reload the page or logout and login again to access the feature. </div>
+        //   } else {
+        //     if (this.state.isAuthorized == true) { // if it is loaded, and the initial api call does not have an error, and the response of the api call says they are authorized, render content
+        //       return (
 
-        }
+        //         <div className="create-form-container">
+        //             <Button
+        //               onClick={() => this.onButtonClick('create')}
+        //             >
+        //               Create Bank Account
+        //             </Button>
+    
+        //             <br />
+        //             <br />
+        //             <Table dataSource={this.state.accounts} columns={columns} />
+    
+        //             <Modal
+        //               title="Edit Tier 1 employee details"
+        //               visible={this.state.t1Visible}
+        //               onOk={() => this.handleOk('t1')}
+        //               onCancel={() => this.handleCancel('t1')}
+        //             >
+        //              <UpdateContactInfo // this should be a separate component for tier 1
+        //               account={this.state.selectedAccount}
+        //              /> 
+        //             </Modal>
+    
+        //             <Modal
+        //               title="Edit Tier 2 employee details"
+        //               visible={this.state.t2Visible}
+        //               onOk={() => this.handleOk('t2')}
+        //               onCancel={() => this.handleCancel('t2')}
+        //             >
+        //               <UpdateContactInfo // this should be a separate component for tier 2
+        //                 account={this.state.selectedAccount}
+        //              />
+        //             </Modal>
+    
+        //             <Modal // this should be a separate component for just creating an employee account
+        //               title="Create Employee Account"
+        //               visible={this.state.createVisible}
+        //               onOk={() => this.handleOk('create')}
+        //               onCancel={() => this.handleCancel('create')}
+        //             >
+        //               <UpdateContactInfo
+        //                 account={this.state.selectedAccount}
+        //               />
+        //             </Modal>
+        //         </div>
+        //       );
+        //     } else { // if it is loaded, and the initial api call did not give an error, and response of the api call says they are not authorized
+        //       return <div> Sorry. You are not authorized to view this page. </div>
+        //     }
+        //   }
+
+        // }
     }
 }
 

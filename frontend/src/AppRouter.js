@@ -64,9 +64,9 @@ class AppRouter extends Component {
             <TransferFunds />
           </Route>
 
-          <Route path="/logout">
-            <Button onClick={() => this.logoutUser()}> Logout </Button>
-          </Route>
+          {/* <Route path="/logout">
+            <Link to="/" onClick={() => this.logoutUser()}> Logout </Link>
+          </Route> */}
         </Switch>
       </Router>
     );

@@ -89,6 +89,39 @@ componentDidMount() {
   }
   }
 
+    
+  saveAsFile = (text, filename) => {
+    // Step 1: Create the blob object with the text you received
+    const type = 'application/pdf'; // modify or get it from response
+    const blob = new Blob([text], {type});
+  
+    // Step 2: Create Blob Object URL for that blob
+    const url = URL.createObjectURL(blob);
+  
+    // Step 3: Trigger downloading the object using that URL
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click(); // triggering it manually
+  }
+
+  click = () => {
+    fetch(`${API_URL}/api/v1/transaction/DownloadStatements`, {
+      method: 'POST',
+      body: {},
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((response) => {
+        var a = response.body.getReader();
+        a.read().then(({ done, value }) => {
+            // console.log(new TextDecoder("utf-8").decode(value));
+            this.saveAsFile(new TextDecoder("utf-8").decode(value), 'filename');
+          }
+        );
+    });
+  }
+
   
   render() {
     const onClick = ({ key }) => {

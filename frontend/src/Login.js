@@ -4,6 +4,8 @@ import { postRequest } from './util/api';
 import { API_URL } from './constants/references';
 import { Button } from 'antd';
 
+import { withRouter } from "react-router-dom"
+
 class Login extends Component {
 
   constructor(props) {
@@ -20,6 +22,7 @@ class Login extends Component {
     .then((data) => {
       console.log(data)
       window.localStorage.setItem('API_TOKEN', data["data"])
+      this.props.history.push('/landingPage')
     })
     .catch((error) => console.log(error))
   }
@@ -45,7 +48,7 @@ class Login extends Component {
           </p>
           <p className="Prompt-textinput">
             <label for="password">Password&nbsp;&nbsp;</label>
-            <input type="text" id="password" name="password" onChange={this.onPasswordChange}/>
+            <input type="password" id="password" name="password" onChange={this.onPasswordChange}/>
           </p>
             
             
@@ -74,4 +77,4 @@ class Login extends Component {
 
 }
 
-export default Login;
+export default withRouter(Login);

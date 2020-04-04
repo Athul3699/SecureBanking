@@ -124,17 +124,6 @@ class UpdateContactInfoIndividualUser extends Component {
   }
 
   validate = () => { 
-    if (
-    !this.state.password ||
-    !this.state.confirm_password
-  ) {
-    alert("Please enter password to validate");
-    return false;
-  }
-  if (this.state.password != this.state.confirm_password) {
-    alert("Passwords are not matching");
-    return false;
-  }
   if (this.state.contact){if (this.state.contact.length < 10) {
     alert("The contact number should be 10 digits");
     return false;
