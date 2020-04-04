@@ -45,7 +45,10 @@ class HelpSupport extends Component {
   };
   
   validate = () => {
-   
+    if (this.state.description==="") {
+      alert("Please enter your feedback in the textarea");
+      return false;
+    }
 
     return true;
   };
