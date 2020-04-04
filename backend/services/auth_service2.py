@@ -24,8 +24,9 @@ def register_user(**data):
             
             data['password'] = password_hash
             data['ssn'] = ssn_hash
-            data['date_of_birth'] = datetime.datetime.strptime(data['date_of_birth'], '%Y/%M/%d')
-
+            data['date_of_birth'] = datetime.datetime.strptime(data['date_of_birth'], '%Y/%m/%d')
+           
+           
             payload = {
                 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
                 'email': data['email'],
@@ -64,7 +65,6 @@ def login_user(**data):
         password_hash = hashlib.md5(str(data['password']).encode('utf-8')).hexdigest()
 
         if user and user.password == password_hash:
-
             session_t = get_session(email=user.email)
 
             payload = {

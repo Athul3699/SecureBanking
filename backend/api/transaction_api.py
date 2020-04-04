@@ -274,12 +274,14 @@ def admin_decline_money_transfer():
 def downloadStatements():
     app.logger.info("[api-POST-DownloadStatements]")
     args = request.json
-    email = decode_email(args['token'])
-    user_id = get_user_account(email=email)
+    print(args)
+    email = decode_email(request.headers['token'])
+    user = get_user_account(email=email)
     
-    if user_id == None:
+    if user == None:
         return jsonify(response={ "status": "failure", "errorMessage": "user does not exist"})
 
+    user_id = user['id']
 
     accounts = get_customer_bank_accounts(user_id=user_id,number=args['account_number'], is_active=True)
     if len(accounts)==0:
@@ -289,8 +291,8 @@ def downloadStatements():
     year = (int)(args['year'])
     month = (int)(args['month'])
     num_days = calendar.monthrange(year, month)[1]
-    start_date = datetime.datetime.date(year, month, 1)
-    end_date = datetime.datetime.date(year, month, num_days)
+    start_date = datetime.date(year, month, 1)
+    end_date = datetime.date(year, month, num_days)
 
     transactions_qs = get_transactions_within(start_date,  end_date, args['account_number'])
 
