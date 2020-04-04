@@ -21,7 +21,7 @@ def admin_getuser_api():
     return jsonify({"status": "success", "data": response})
 
 @auth_api.route("/admin/user/registeruser", methods=['POST'])
-def admin_getuser_api():
+def admin_registeruser_api():
 
     body = request.json
     status, data = auth_service2.register_user(**body)
@@ -35,7 +35,7 @@ def admin_getuser_api():
 
 
 @auth_api.route("/admin/user/getallusers", methods=['POST'])
-def admin_getuser_api():
+def admin_getallusers_api():
 
     data = get_admin_every_user()
 
@@ -45,7 +45,7 @@ def admin_getuser_api():
         return make_response(jsonify({ "status": status, "data": data})), 500
 
 @auth_api.route("/admin/user/updateuser", methods=['POST'])
-def admin_getuser_api():
+def admin_updateuser_api():
 
     data = request.json
     email = data['email']
