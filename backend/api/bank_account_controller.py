@@ -79,7 +79,7 @@ def get_all_active_customer_accounts():
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
 
     user_id = user['id']
-    accounts = get_all_customer_accounts(user_id=user_id, is_active=True)
+    accounts = get_customer_bank_accounts(user_id=user_id, is_active=True)
     
     return jsonify({ "status": "success", "data": accounts})
 

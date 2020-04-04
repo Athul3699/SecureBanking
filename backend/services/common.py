@@ -58,7 +58,7 @@ def update_customer_bank_account(account_number, **kwargs):
     result = "success"
     try:
         keys = kwargs.keys()
-        account = Bankaccount.query.filter_by(number=account_number).first()
+        account = app.db.session.query(Bankaccount).filter_by(number=account_number).first()
         for key in keys:
             exec("account.{0} = kwargs['{0}']".format(key))
         app.db.session.commit()

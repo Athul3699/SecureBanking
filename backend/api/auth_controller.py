@@ -31,7 +31,7 @@ def login_user_api():
     email = decode_email(token)
 
     user = get_user_account(email=email)
-    user_id = user.id
+    user_id = user["id"]
     
     if status == "success":
         message = add_sign_in(user_id=user_id)
