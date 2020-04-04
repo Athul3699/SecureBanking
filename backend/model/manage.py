@@ -121,11 +121,10 @@ class Transaction(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    schedule = db.Column(db.DateTime, nullable=False)
-    reason = db.Column(db.DateTime, nullable=False)
-    created_date = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    slot_time = db.Column(db.String, nullable=False)
+    reason = db.Column(db.String, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    is_active = db.Column(db.Boolean, default=True)
+    date = db.Column(db.DateTime, nullable=False)
 
 
 if __name__ == '__main__':
