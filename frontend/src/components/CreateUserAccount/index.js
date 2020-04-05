@@ -130,8 +130,8 @@ class CreateUserAccount extends Component {
       alert("Last name should contain at least 3 characters");
       return false;
     }
-    if (this.state.ssn.length !== 10) {
-      alert("The SSN should be a 10 digit number");
+    if (this.state.ssn.length !== 9) {
+      alert("The SSN should be a 9 digit number");
       return false;
     }
 
