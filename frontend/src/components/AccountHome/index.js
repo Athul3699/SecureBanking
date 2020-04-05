@@ -76,18 +76,6 @@ class AccountHome extends Component {
       }
     }
 
-    logoutUser = () => {
-      postRequest(`${API_URL}/api/v1/auth/LogoutUser`)
-      .then((data) => {
-        window.localStorage.removeItem('API_TOKEN')
-        // this.props.history.push('/')
-      })
-      .catch((err) => {
-        console.err(err)
-        this.props.history.push('/')
-      })
-    }
-
     render() {
 let dispTrans=""
     if(this.state.transferFundsVisible){
@@ -118,7 +106,6 @@ let dispTrans=""
                 </Button>
 
                 
-                <Link to="/" replace> Logout </Link>
                 </div>
 
                 <br />
