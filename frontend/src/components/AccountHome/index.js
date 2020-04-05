@@ -89,6 +89,10 @@ class AccountHome extends Component {
     }
 
     render() {
+let dispTrans=""
+    if(this.state.transferFundsVisible){
+      dispTrans = <TransferFunds />;
+    }
         return (
             <div className="create-form-container">
 
@@ -144,8 +148,7 @@ class AccountHome extends Component {
                   onOk={() => this.handleOk('transfer')}
                   onCancel={() => this.handleCancel('transfer')}
                 >
-                  <TransferFunds
-                  />
+                  {dispTrans}
                 </Modal>
 
             </div>
