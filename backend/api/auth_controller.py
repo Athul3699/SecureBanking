@@ -28,7 +28,7 @@ def admin_registeruser_api():
     if status == "success":
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user already exists":
-        return make_response(jsonify({ "status": status, "data": data})), 304
+        return make_response(jsonify({ "status": status, "data": data})), 500
     else:
         return make_response(jsonify({ "status": status, "data": data})), 500
 
@@ -65,7 +65,7 @@ def register_user_api():
     if status == "success":
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user already exists":
-        return make_response(jsonify({ "status": status, "data": data})), 304
+        return make_response(jsonify({ "status": status, "data": data})), 500
     else:
         return make_response(jsonify({ "status": status, "data": data})), 500
 
