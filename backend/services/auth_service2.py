@@ -18,6 +18,7 @@ def register_user(**data):
             # hash the password
             password_hash = hashlib.md5(
                 str(data['password']).encode('utf-8')).hexdigest()
+            #password_hash = encrypt(data['password'])
             
             ssn_hash = hashlib.md5(
                 str(data['ssn']).encode('utf-8')).hexdigest()
@@ -63,12 +64,13 @@ def login_user(**data):
         user = User.query.filter_by(email=data['email']).first()
 
         password_hash = hashlib.md5(str(data['password']).encode('utf-8')).hexdigest()
+        #password_hash = encrypt(data['password'])
 
         if user and user.password == password_hash:
             session_t = get_session(email=user.email)
 
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30, seconds=1200),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1, seconds=1200),
                 'email': user.email,
                 'sequence_number': session_t['seq_number']+1
             }
