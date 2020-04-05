@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import MonthYearPicker from 'react-month-year-picker';
 import { getRequest, postRequest } from '../util/api';
 import { API_URL } from '../constants/references';
 import { Menu, Select, DatePicker, Button} from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-
+import moment from 'moment';
 const { Option } = Select;
 class BankingStatements extends Component {
   constructor(props) {
@@ -154,7 +153,7 @@ componentDidMount() {
         <br />
         <br />
         <br />
-        <DatePicker onChange={this.onChange} picker="month" />
+        <DatePicker onChange={this.onChange} picker="month" disabledDate={d => !d || !d.isBefore(moment().subtract(1, 'month'))}/>
         <br />
         <br />
         <br />
