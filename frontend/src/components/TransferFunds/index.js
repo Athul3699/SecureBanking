@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "antd/dist/antd.css";
 import "./style.css";
-import TransferOverLimit from '../TransferOverLimit'
 import { Input, Button, Radio, Select, InputNumber } from "antd";
 import { postRequest, getRequest, postRequestWithoutToken } from "../../util/api";
 import { API_URL } from "../../constants/references";
