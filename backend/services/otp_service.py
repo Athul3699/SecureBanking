@@ -5,6 +5,8 @@ from backend.model.manage import User
 from datetime import datetime, timedelta
 from backend import app
 
+import hashlib
+
 EMAIL_ADDRESS = "securebankb21@gmail.com"
 PASSWORD = "securebank123."
 
@@ -62,5 +64,23 @@ def verify_otp(email, otp):
     else:
         if datetime.now() <= user.otp_active_till:
             return "success"
+        else:
+            return "failure"
+
+def reset_password(otp, email, password):
+    user = User.query.filter_by(email=email, active_otp=otp).first()
+
+    if user == None:
+        return "failure"
+    else:
+        if datetime.now() <= user.otp_active_till:
+            password_hash = hashlib.md5(
+                str(password).encode('utf-8')).hexdigest()
+            message = update_user_account_email_args(email=email, password=password_hash)
+
+            if message != "error":
+                return "success"
+            else:
+                return "failure"
         else:
             return "failure"

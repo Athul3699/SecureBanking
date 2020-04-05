@@ -8,6 +8,8 @@ import { API_URL } from "../../constants/references";
 
 import { withRouter } from 'react-router-dom'
 
+import { browserHistory } from 'react-router'
+
 
 
 
@@ -20,6 +22,12 @@ class ForgotUserPassword extends Component {
     super(props);
     this.state = {
       email: "",
+      isOtpGenerated: false,
+      otp: "",
+      isOtpVerified: false,
+      password: "",
+      confirm_password: "",
+      isUpdated: false,
     };
   }
 
@@ -36,8 +44,18 @@ class ForgotUserPassword extends Component {
     this.setState({ email: e.target.value });
   };
 
+  handlePassword = e => {
+    this.setState({ password: e.target.value });
+  };
+
+  handleConfirmPassword = e => {
+    this.setState({ confirm_password: e.target.value });
+  };
 
 
+  handleOtp = e => {
+    this.setState({ otp: e.target.value });
+  }
 
   handleAmountChange = value => {
     this.setState({ amount: value });
@@ -66,16 +84,50 @@ class ForgotUserPassword extends Component {
     return true;
   };
 
-  onButtonClick = () => {
+  validatePassword = () => {
+    if (this.state.password.length >= 7 && this.state.confirm_password.length >= 7 && this.state.password === this.state.confirm_password)
+    return true;
+    else {
+      alert('match the passwords...')
+      return false;
+    }
+  }
+
+  onButtonClick = (type) => {
     if (this.validate()) {
       let data = this.state;
-      postRequestWithoutToken(`${API_URL}/api/v1/otp/GenerateOTP`, this.state)
+      if (type == 'generate') {
+        postRequestWithoutToken(`${API_URL}/api/v1/otp/GenerateOTPResetPassword`, {"email": this.state.email})
         .then(() => {
           // route to appropriate page
+          this.setState({ isOtpGenerated: true })
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
         });
+      } else if (type == 'verify') {
+        postRequestWithoutToken(`${API_URL}/api/v1/otp/VerifyOTPResetPassword`, {"email": this.state.email, "otp": this.state.otp})
+        .then(() => {
+          // route to appropriate page
+          this.setState({ isOtpVerified: true })
+        })
+        .catch(() => {
+          // display error message. not needed for now, we can assume api is stable.
+        });
+      } else if (type == 'update' && this.validatePassword()) {
+        postRequestWithoutToken(`${API_URL}/api/v1/otp/ResetPassword`, {"email": this.state.email, "otp": this.state.otp, "password": this.state.password })
+        .then(() => {
+          // route to appropriate page
+          this.setState({ isUpdated: true })
+
+          this.props.history.goBack()
+
+        })
+        .catch(() => {
+          // display error message. not needed for now, we can assume api is stable.
+        });
+      }
+
     } else {
       // display error message
     }
@@ -90,13 +142,50 @@ class ForgotUserPassword extends Component {
           type="email"
           onChange={this.handleEmail}
           value={this.state.email}
+          disabled={this.state.isOtpGenerated}
         />
         <br />
         <br />
 
-        <Button type="primary" onClick={() => this.onButtonClick()}>
+        <Button disabled={this.state.isOtpGenerated} type="primary" onClick={() => this.onButtonClick('generate')}>
           Send reset email
         </Button>
+
+        { this.state.isOtpGenerated ? 
+          <div>
+            <Input
+              onChange={this.handleOtp}
+              value={this.state.otp}
+              disabled={this.state.isOtpVerified}
+            />
+            <Button disabled={this.state.isOtpVerified} type="primary" onClick={() => this.onButtonClick('verify')}>
+              Verify OTP
+            </Button>
+          </div> : ''
+        }
+
+        { this.state.isOtpVerified ?
+          <div>
+            Password: <br></br> <br></br>
+            <Input
+              type="password"
+              onChange={this.handlePassword}
+              value={this.state.password}
+            />
+
+            <br></br>
+            Confirm Password: <br></br> <br></br>
+            <Input
+              type="password"
+              onChange={this.handleConfirmPassword}
+              value={this.state.confirmPassword}
+            />
+
+            <Button type="primary" onClick={() => this.onButtonClick('update')}>
+              Update Information
+            </Button>
+        </div> : ''
+        }
       </div>
     );
   }

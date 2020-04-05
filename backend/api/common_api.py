@@ -16,11 +16,13 @@ def customer_accounts(user_id):
     return jsonify(response=accounts)
 
 
-# @common_api.route("/User/<user_id>", methods=['GET'])
-# def profile(user_id):
-#     app.logger.info("[api-Profile]")
-#     profile = get_user_account(id=request.view_args['user_id'])
-#     return jsonify(response=profile)
+@common_api.route("/UpdateUser", methods=['POST'])
+def update_user_account_api_profile():
+    app.logger.info("[api-Profile]")
+    data = request.json
+
+    profile = update_user_account_email_service(email=data['email'])
+    return jsonify(response=profile)
 
 @authenticate
 @common_api.route("/GetUser", methods=['POST'])

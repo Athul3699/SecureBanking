@@ -227,3 +227,5 @@ def get_active_request_user_api():
 def downloadFile ():
     path = "logs/logger.log"
     return send_file(path, as_attachment=True)
+
+

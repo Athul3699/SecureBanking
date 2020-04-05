@@ -235,6 +235,18 @@ def update_user_account_email_args(email, **kwargs):
         result = "error"
     return result
 
+def update_user_account_email_service(email):
+    result = "error"
+    try:
+        user = app.db.session.query(User).filter_by(email=email).first()
+        user.email = email
+        app.db.session.commit()
+
+        result = get_user_account(email=email)
+    except:
+        result = "error"
+    return result
+
 
 
 def add_user_account(**kwargs):
