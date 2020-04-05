@@ -55,7 +55,7 @@ def generate_otp(email):
 
 
 def verify_otp(email, otp):
-    user = User.query.filter_by(email=email, otp=otp).first()
+    user = User.query.filter_by(email=email, active_otp=otp).first()
 
     if user == None:
         return "failure"
