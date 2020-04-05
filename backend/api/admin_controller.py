@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import post_feedback, get_all_feedback, get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
+from ..services.common import post_feedback, get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts, get_sign_in_history
 from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
@@ -234,3 +234,9 @@ def post_feedback_api():
     data = request.json
 
     return post_feedback(user_email=data['email'], message=data['message'])
+
+@authenticate
+@admin_api.route('/GetSignInHistory', methods=['GET'])
+def getSignInHistory():
+    signins = get_sign_in_history()
+    return jsonify({"status": "success", "data": signins})

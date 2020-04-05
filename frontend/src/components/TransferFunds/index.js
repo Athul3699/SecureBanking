@@ -16,6 +16,7 @@ class TransferFunds extends Component {
       accountType: "debit",
       componentSize: "small",
       accounts: [],
+      payeeType:"account",
       destinationAccount: null,
       accountSource: "",
       description: "",
@@ -75,7 +76,12 @@ class TransferFunds extends Component {
   };
 
   handleAmountChange = value => {
-    this.setState({ amount: value });
+    var amt = parseFloat(value);
+    if (value!=""&&isNaN(amt))  {
+      alert("Amount should have a numeric value");
+    }
+    else{this.setState({ amount: value });}
+    
   };
 
   handleDescriptionChange = e => {
@@ -94,7 +100,7 @@ class TransferFunds extends Component {
     postRequest(`${API_URL}/api/v1/otp/GenerateOTP`, this.state)
     .then(() =>{})
     .catch(() => {});
-      }
+      };
 
   onVerifyOTP = () => {
     postRequest(`${API_URL}/api/v1/otp/VerifyOTP`, this.state)
@@ -103,35 +109,54 @@ class TransferFunds extends Component {
     )
     .catch(() => {});
         
-  }
+  };
 
 
 
   validate = () => {
-    if (this.state.amount.length < 1) {
+    if (this.state.amount <= 0) {
       alert("Enter a valid number in Amount!");
       return false;
     }
-    if (this.state.amount.length < 1) {
+    if (this.state.amount==="") {
       alert("Amount field should have a numeric value!");
       return false;
     }
-    if (this.state.accountSource==="") {
-      alert("Select account or create a bank account if there is none");
-      return false;
-    }
-    var amt = parseFloat(this.state.amount);
-    if (isNaN(amt)) {
-      alert("Payee account field should have a numeric value");
-      return false;
-    }
-
+    
     if (this.state.accountType == "fund_transfer") {
-      if (this.state.destinationAccount.length < 1) {
-        alert("Enter a valid payee account number");
+      if (this.state.destinationAccount==="") {
+        alert("Enter a valid payee account");
         return false;
       }
     }
+    var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    if (this.state.accountType === "fund_transfer"&&this.state.payeeType==="email") {
+      if (re.test(String(this.state.destinationAccount).toLowerCase()) == false) {
+        alert("The email entered is not valid");
+        return false;
+      }
+    }
+    if (this.state.accountType === "fund_transfer"&&this.state.payeeType==="account") {
+      var n = parseFloat(this.state.destinationAccount);
+      if (n.toString() !== this.state.destinationAccount) {
+        alert("The account number entered is not valid");
+        return false;
+      }
+    }
+    if (this.state.accountType === "fund_transfer"&&this.state.payeeType==="contact") {
+      var n = parseFloat(this.state.destinationAccount);
+      if (this.state.destinationAccount.length != 10||n.toString() !== this.state.destinationAccount) {
+        alert("The contact number should be 10 digits");
+          return false;
+        }
+      }
+      if (this.state.accountSource==="") {
+        alert("Select account or create a bank account if there is none");
+        return false;
+      }
+    
+    
+    
     return true;
   };
   
@@ -236,6 +261,7 @@ postRequest(`${API_URL}/api/v1/transaction/InitiateMoneyTransfer`, body)
           allowClear
           onChange={this.handleDescriptionChange}
           disabled={this.state.finalizeForum}
+          autoSize={{ minRows: 4, maxRows: 4 }}
         />
         <br />
         <br />
@@ -259,6 +285,8 @@ postRequest(`${API_URL}/api/v1/transaction/InitiateMoneyTransfer`, body)
           Verify
         </Button>
         <br />
+        <br />
+        
       </div>
     );
   }

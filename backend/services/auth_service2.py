@@ -52,7 +52,7 @@ def register_user(**data):
             
         except Exception as e:
             print(e)
-            return "failure", "some error occured in the server, please try again."            
+            return "failure", "Please Ensure You have entered SSN and contact number that's unique to you"            
     else:
         return "failure", "user already exists"
 

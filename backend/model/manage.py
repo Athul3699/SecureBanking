@@ -101,7 +101,7 @@ class Maintenancelog(db.Model):
 
 class Signinhistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    email = db.Column(db.String, nullable=False)
     reason = db.Column(db.String, nullable=False, default= 'log in')
     created_time = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 

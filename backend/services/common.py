@@ -6,6 +6,19 @@ from sqlalchemy import or_
 import math, random
 
 
+def get_sign_in_history(**kwargs):
+    signin_qs = Signinhistory.query.filter_by(**kwargs)
+    signins = []
+
+    for record in signin_qs:
+        record_dict = record.__dict__
+        if "_sa_instance_state" in record_dict:
+            record_dict.pop("_sa_instance_state")
+        record_dict['created_time'] = str(record_dict['created_time'])
+        signins.append(record_dict)
+
+    return signins
+
 def get_session(**kwargs):
     session_qs = Session.query.filter_by(**kwargs)
     session_last = None
