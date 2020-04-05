@@ -99,9 +99,7 @@ def logout_user_api():
         if user == None:
             return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
         else:
-            # write logut functionality
             message = add_sign_in(user_id=user['id'],reason='log out')
-            message = auth_service2.logout_user(email=email)
             return jsonify({ "status": "success", "message": message })
     else:
         return jsonify({ "status": "failure", "errorMessage": "token does not exist"})

@@ -32,7 +32,7 @@ import ManageAccountsIndividualUser from './ManageAccountsIndividualUser';
 import ManageAccountsMerchant from './ManageAccountsMerchant';
 
 
-import {  getRequest } from '../util/api';
+import {  getRequest, postRequest } from '../util/api';
 import { API_URL } from '../constants/references';
 import UpdateContactInfoIndividualUser from './UpdateContactInfoIndividualUser';
 import UpdateContactInfoMerchant from './UpdateContactInfoMerchant';
@@ -121,7 +121,14 @@ import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
     }
 
     logout = () => {
-      window.localStorage.removeItem('API_TOKEN')
+      postRequest(`${API_URL}/api/v1/auth/LogoutUser`)
+      .then((data) => {
+          window.localStorage.removeItem('API_TOKEN')
+          // write redirect function here
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     }
 
     render() {
