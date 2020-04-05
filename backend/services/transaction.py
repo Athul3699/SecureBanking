@@ -26,6 +26,9 @@ def get_transactions(**kwargs):
         record_dict = record.__dict__
         if "_sa_instance_state" in record_dict:
             record_dict.pop("_sa_instance_state")
+        if "created_date" in record_dict:
+            record_dict.pop("created_date")
+        record_dict['amount'] = float(record_dict['amount'])
         transactions.append(record_dict)
     return transactions
 
@@ -39,13 +42,19 @@ def get_transactions_within(start_date,  end_date, accountnumber):
         record_dict = record.__dict__
         if "_sa_instance_state" in record_dict:
             record_dict.pop("_sa_instance_state")
-        transactions.append(record_dict)
+        if "created_date" in record_dict:
+            record_dict.pop("created_date")
+        record_dict['amount'] = float(record_dict['amount'])
+        transactions.append(record_dict.pop())
 
     for record in transaction_qs2:
         record_dict = record.__dict__
         if "_sa_instance_state" in record_dict:
             record_dict.pop("_sa_instance_state")
-        transactions.append(record_dict)
+        if "created_date" in record_dict:
+            record_dict.pop("created_date")
+        record_dict['amount'] = float(record_dict['amount'])
+        transactions.append(record_dict.pop())
 
     return transactions 
 
