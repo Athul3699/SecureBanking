@@ -38,7 +38,7 @@ import UpdateContactInfoIndividualUser from './UpdateContactInfoIndividualUser';
 import UpdateContactInfoMerchant from './UpdateContactInfoMerchant';
 import UpdateContactInfoTier1 from './UpdateContactInfoTier1';
 import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
-
+import ViewSignInHistory from './ViewSignInHistory';
 
 
   class LandingPage extends Component {
@@ -144,6 +144,7 @@ import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
               <li><NavLink to="/updateInfo">Update Contact Info</NavLink></li>
               <li><NavLink to="/schedule">Schedule Appointment</NavLink></li>
               <li><NavLink to="/help">Help and Support</NavLink></li>
+              <li><NavLink to="/signinhistory">Sign In History</NavLink></li>
               <li> <Link  onClick={() => this.logout()} exact path="/"> Logout </Link> </li>
             </ul>
             <div className="content">
@@ -159,6 +160,7 @@ import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
               <Route exact path="/schedule" component={ScheduleAppointment}/>
               <Route exact path="/help" component={HelpSupport}/>
               <Route exact path="/bankingStatements" component={BankingStatements}/>
+              <Route exact path="/signinhistory" component={ViewSignInHistory}/>
             </div>
           </div>
         </HashRouter>

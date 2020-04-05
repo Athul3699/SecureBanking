@@ -81,7 +81,7 @@ def login_user_api():
     user_id = user["id"]
     
     if status == "success":
-        message = add_sign_in(user_id=user_id)
+        message = add_sign_in(email=email)
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user does not exist":
         return make_response(jsonify({ "status": status, "data": data})), 304
@@ -99,7 +99,7 @@ def logout_user_api():
         if user == None:
             return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
         else:
-            message = add_sign_in(user_id=user['id'],reason='log out')
+            message = add_sign_in(email=email,reason='log out')
             return jsonify({ "status": "success", "message": message })
     else:
         return jsonify({ "status": "failure", "errorMessage": "token does not exist"})
