@@ -124,11 +124,11 @@ class CreateUserAccount extends Component {
     }
     var regName = /^[a-zA-Z]+$/;
     if (!regName.test(this.state.first_name)||this.state.first_name.length < 2) {
-      alert("Name entered is invalid ");
+      alert("Fist name entered is invalid ");
       return false;
     }
     if (!regName.test(this.state.last_name)||this.state.last_name.length < 2) {
-      alert("Last entered is invalid ");
+      alert("Last name entered is invalid ");
       return false;
     }
     if (this.state.ssn.length !== 9 ||parseFloat(this.state.ssn).toString() !== this.state.ssn) {
