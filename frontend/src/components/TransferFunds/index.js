@@ -27,7 +27,22 @@ class TransferFunds extends Component {
   }
 
   componentDidMount() {
+    this.initialize()
     this.refreshAccountState()
+  }
+
+  initialize = () => {
+    this.setState({
+      accountType: "debit",
+      componentSize: "small",
+      destinationAccount: null,
+      accountSource: "",
+      description: "",
+      amount: 10,
+      finalizeForum:false,
+      otp:"",
+      otpVerified:false,
+    });
   }
 
   refreshAccountState = () => {
@@ -76,18 +91,18 @@ class TransferFunds extends Component {
   }
   onSendOTP = () => {
     this.setState({ finalizeForum: true })
-    postRequestWithoutToken(`${API_URL}/api/v1/otp/GenerateOTP`, this.state)
-.then(() =>{})
-.catch(() => {});
-  }
+    postRequest(`${API_URL}/api/v1/otp/GenerateOTP`, this.state)
+    .then(() =>{})
+    .catch(() => {});
+      }
 
   onVerifyOTP = () => {
-    postRequestWithoutToken(`${API_URL}/api/v1/otp/VerifyOTP`, this.state)
-.then(() =>
-this.setState({ otpVerified: true })
-)
-.catch(() => {});
-    
+    postRequest(`${API_URL}/api/v1/otp/VerifyOTP`, this.state)
+    .then(() =>
+      this.setState({ otpVerified: true })
+    )
+    .catch(() => {});
+        
   }
 
 
@@ -236,7 +251,7 @@ postRequest(`${API_URL}/api/v1/transaction/InitiateMoneyTransfer`, body)
         <br />
         Enter the verification code sent to your registered email:
         <Input
-          onChange={this.handleOTP}
+          onChange={this.handleotp}
           disabled={!this.state.finalizeForum||this.state.otpVerified}
         />
 

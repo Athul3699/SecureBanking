@@ -51,7 +51,7 @@ def generate_otp(email):
     
     message = send_email("OTP: please enter in prompt on application", "Your OTP is " + otp, destination_address=email)
 
-    return otp, message
+    return message
 
 
 def verify_otp(email, otp):
