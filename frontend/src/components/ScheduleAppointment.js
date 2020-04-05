@@ -1,9 +1,15 @@
 import React, { Component } from "react";
-import { postRequest } from '../util/api';
+import { getRequest, postRequest } from '../util/api';
 import { API_URL } from '../constants/references';
 import { Menu, Select, DatePicker, Button} from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+import 'antd/dist/antd.css';
+import { Input } from 'antd';
+import './ScheduleAppointment.css';
+
 import moment from 'moment';
+const { TextArea } = Input;
+const { Option } = Select;
 const { RangePicker } = DatePicker;
 function range(start, end) {
   const result = [];
@@ -14,17 +20,11 @@ function range(start, end) {
 }
 function disabledDate(current) {
   // Can not select days before today and today
+  console.log(current);
   return current && current < moment().endOf('day');
 }
 
-function disabledDateTime() {
-  return {
-    disabledHours: () => [0, 1, 2, 3, 4, 5, 6, 7, 8, 17, 18, 19, 20, 21, 22, 23],
 
-
-  };
-}
-const { Option } = Select;
 
 class ScheduleAppointment extends Component {
   constructor(props) {
@@ -34,73 +34,93 @@ class ScheduleAppointment extends Component {
       month: 0,
       year: 0,
       date: 0,
-      hour: 0,
-      minute: 0,
-      location: 'Phoenix',
+      reason: "",
+      slot:"1",
+      appointments:[],
+      disableSlots:[false,false,false,false,false],
+      toggleSelect: true,
       accountId: null
     };
 
     this.onChange = this.onChange.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
     this.validate = this.validate.bind(this);
+    this.onTextChange = this.onTextChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  // componentDidMount() {
-  //   console.log('GrandChild did mount.');
-  //   postRequest(`${API_URL}/user/GetBankAccounts`)
-  //   .then((data) => {
-  //     console.log(data);
-  //     this.setState({account_number:data});
-  //     window.localStorage.setItem('API_TOKEN', data["data"]["token"])
-  //   })
-  //   .catch((error) => console.log(error))
-  // }
+  componentDidMount() {
+    
+    getRequest(`${API_URL}/api/v1/appointment/FilledSlots`)
+    .then((data) => {
+      console.log(data);
+      this.setState({appointments:data});
+      
+    })
+    .catch((error) => console.log(error))
+  }
   onChange(value, dateString) {
     console.log('Selected Time: ', value);
     console.log('Formatted Selected Time: ', dateString);
-    var vArray = dateString.split(" ");
-    var dateArray = vArray[0].split("-");
+    var dateArray = dateString.split("-");
     console.log(parseInt(dateArray[0]));
     console.log(parseInt(dateArray[1]));
     console.log(parseInt(dateArray[2]));
-    var timeArray =vArray[1].split(":");
-    console.log(parseInt(timeArray[0]));
-    console.log(parseInt(timeArray[1]));
-    this.setState({minute:parseInt(timeArray[1]), hour:parseInt(timeArray[0]), date:parseInt(dateArray[2]), month:parseInt(dateArray[1]), year:parseInt(dateArray[0])});
- 
 
+
+    //this.setState({ date:parseInt(dateArray[2]), month:parseInt(dateArray[1]), year:parseInt(dateArray[0])});
+    this.updateSlots(dateString);
   }
 
-  handleLocationChange =value => {
-    this.setState({ location: value });
+  updateSlots(dateString){
+    var dateArray = dateString.split("-");
+    let arr = this.state.appointments.data;
+    //console.log(moment(arr[0].date).format('YYYY-MM-DD'));
+    let disabled = [false,false,false,false, false];
+    for(var i=0;i<arr.length;i++){
+      if(moment(arr[i].date.split(",")[1].slice(0,-13)).format('YYYY-MM-DD')===dateString) {
+        console.log("here");
+        disabled[parseInt(arr[i].slot_time)-1] = true;
+      }
+    }
+    this.setState({ date:parseInt(dateArray[2]), month:parseInt(dateArray[1]), year:parseInt(dateArray[0])});
+    this.setState({disableSlots:disabled});
+    this.setState({toggleSelect:false});
+  }
+
+  onTextChange = ({ target: { value } }) => {
+    this.setState({ reason:value });
   };
   validate(){
     if(this.state.date===0){
       alert("Select the date");
       return false;
     }
-    if(this.state.month===0){
-      alert("Select the month");
-      return false;
-    }
-    if(this.state.year===0){
-      alert("Select the year");
+    if(this.state.reason===""){
+      alert("Select the reason");
       return false;
     }
 
     return true;
   }
 
-  onButtonClick(event){
+  onButtonClick = () => {
     if(this.validate()){
 
-    //postRequest(`${API_URL}/api/v1/transaction/DownloadStatements`, { "month": this.state.month, "year": this.state.year, "account_number": this.state.account })
-    //.then((data) => {
-      //set state for statements
-     // window.localStorage.setItem('API_TOKEN', data["data"]["token"])
-    //})
-   // .catch((error) => console.log(error))
+      console.log(this.state.year+"/"+this.state.month+"/"+this.state.date);
+      postRequest(`${API_URL}/api/v1/appointment/Schedule`, { "slot_time": this.state.slot, "date": this.state.year+"/"+this.state.month+"/"+this.state.date, "reason": this.state.reason })
+      .then((data) => {
+        console.log(data);
+        alert("Appointment Scheduled Successfully");
+        this.props.history.push(`/`)
+      })
+    .catch((error) => console.log(error))
+    }
   }
+
+  handleChange(value) {
+    console.log(`selected ${value}`);
+    this.setState({slot:value})
   }
 
   render() {
@@ -108,31 +128,42 @@ class ScheduleAppointment extends Component {
       console.log(key);
     };
 
+
     return (
       <div>
-        <br />
-        Select location:
-        <br />
-        <Select defaultValue="Phoenix" style={{ width: 120 }} onChange={this.handleLocationChange}>
-      <Option value="Tempe">Tempe</Option>
-      <Option value="Mesa">Mesa</Option>
-      <Option value="Scottsdale">Scottsdale</Option>
-    </Select>
    
         <br />
         <br />
-        Select date and time:
+        Select date:
         <br />
-        <DatePicker onChange={this.onChange}
-      format="YYYY-MM-DD HH:mm"
-      disabledDate={disabledDate}
-      disabledTime={disabledDateTime}
-      hideDisabledOptions
-      minuteStep={30}
-      showTime={{ defaultValue: moment('09:00', 'HH:mm') }}
-    />
-<br /><br />
+        <div >
+        <DatePicker  onChange={this.onChange}
+          showButtonPanel="false"
+          format="YYYY-MM-DD"
+          disabledDate={disabledDate}
+          hideDisabledOptions
+        />
+        </div>
+        <br></br>
+        Select time slots:
+        <br></br>
+        <>
+    <Select style={{ width: 240 }} onChange={this.handleChange} disabled={this.state.toggleSelect}>
+      <Option value="1" disabled={this.state.disableSlots[0]}>10:00AM - 11:00AM</Option>
+      <Option value="2" disabled={this.state.disableSlots[1]}>11:00AM - 12:00PM</Option>
+      <Option value="3" disabled={this.state.disableSlots[2]}>02:00PM - 03:00PM</Option>
+      <Option value="4" disabled={this.state.disableSlots[3]}>03:00PM - 04:00PM</Option>
+      <Option value="5" disabled={this.state.disableSlots[4]}>04:00PM - 05:00PM</Option>
+    </Select>
+  </>
         <br />
+        <br />
+        <br />
+        Reason for appointment:
+        <TextArea 
+          onChange={this.onTextChange}
+          rows={4} 
+          />
         
         <Button type="primary" onClick={this.onButtonClick}>Schedule</Button>
       </div>
