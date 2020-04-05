@@ -17,18 +17,36 @@ class Login extends Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({ email: '', password: '' })
+  }
+
+  validate = () => {
+    var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (re.test(String(this.state.email).toLowerCase()) == false) {
+      alert("The email entered is not valid!!")
+      return false
+    }
+
+    return true;
+  }
+  
   onSignInButtonClick = () => {
-    postRequest(`${API_URL}/api/v1/auth/LoginUser`, { "email": this.state.email, "password": this.state.password })
-    .then((data) => {
-      console.log(data)
-      window.localStorage.setItem('API_TOKEN', data["data"])
-      this.props.history.push('/landingPage')
-    })
-    .catch((error) => {
-      alert("The email or password entered is incorrect.")
-      this.setState({ email: "", password:"" });
-      console.log(error)
-    })
+    if (this.validate()) {
+      postRequest(`${API_URL}/api/v1/auth/LoginUser`, { "email": this.state.email, "password": this.state.password })
+      .then((data) => {
+        console.log(data)
+        window.localStorage.setItem('API_TOKEN', data["data"])
+        this.props.history.push('/landingPage')
+      })
+      .catch((error) => { 
+        alert('Invalid input... Clear email and password and try again... ')
+        this.setState({ email: '', password: '' })
+      })
+    } else {
+      alert('Please enter a valid email...')
+    }
   }
 
   onEmailChange = (e) => {
@@ -45,17 +63,18 @@ class Login extends Component {
         <header className="Login-header">
         </header>
         <div className="Prompt-box">
+          
           <h2 className="Prompt-header">Log in <i class="material-icons"></i></h2>
           <p className="Prompt-textinput">
             <label for="userID">&nbsp;&nbsp;&nbsp;Email&nbsp;&nbsp;</label>
-            <input type="text" id="userID" name="userID" value={this.state.email} onChange={this.onEmailChange}/>
+            <input type="text" id="userID" name="userID" onChange={this.onEmailChange}/>
           </p>
           <p className="Prompt-textinput">
             <label for="password">Password&nbsp;&nbsp;</label>
-            <input type="password" id="password" name="password" value={this.state.password} onChange={this.onPasswordChange}/>
+            <input type="password" id="password" name="password" onChange={this.onPasswordChange}/>
           </p>
             
-            
+
           <p className="Login-link">
             <a
               href="/forgotuserpassword"

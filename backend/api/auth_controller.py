@@ -7,7 +7,6 @@ from ..services.security_util import decode_email
 auth_api = Blueprint('auth_api', __name__)
 from backend.services.common import *
 
-
 """
 Technical Account Access Start
 """
@@ -29,7 +28,7 @@ def admin_registeruser_api():
     if status == "success":
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user already exists":
-        return make_response(jsonify({ "status": status, "data": data})), 304
+        return make_response(jsonify({ "status": status, "data": data})), 500
     else:
         return make_response(jsonify({ "status": status, "data": data})), 500
 
@@ -51,6 +50,9 @@ def admin_updateuser_api():
     response = update_user_account_email_args(email=email, **data)
     return jsonify({"status": "success", "data": response})
 
+@auth_api.route('/admin/GetFeedback', methods=['POST'])
+def get_all_feedback_api():
+    return get_all_feedback()
 """
 Technical Account Access End
 """
@@ -63,16 +65,16 @@ def register_user_api():
     if status == "success":
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user already exists":
-        return make_response(jsonify({ "status": status, "data": data})), 304
+        return make_response(jsonify({ "status": status, "data": data})), 500
     else:
         return make_response(jsonify({ "status": status, "data": data})), 500
 
 
 @auth_api.route("/LoginUser", methods=['POST'])
 def login_user_api():
-    data = request.json
+    body = request.json
 
-    status, data = auth_service2.login_user(**data)
+    status, data = auth_service2.login_user(**body)
 
     token = data
     email = decode_email(token)
@@ -84,7 +86,7 @@ def login_user_api():
         message = add_sign_in(email=email)
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user does not exist":
-        return make_response(jsonify({ "status": status, "data": data})), 304
+        return make_response(jsonify({ "status": status, "data": data})), 500
     else:
         return make_response(jsonify({ "status": status, "data": data})), 500
 

@@ -15,54 +15,57 @@ class HelpSupport extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
-      description:''
+      message:'',
+      email: ''
     };
   }
   componentDidMount() {
     this.refreshAccountState()
   }
   refreshAccountState = () => {
-    //getRequest(`${API_URL}/api/v1/bank_account/GetActiveCustomerAccounts`)
-    //.then((data) => {
-     // console.log(data["data"])
-      //if (data["data"].length > 0) {
-        //this.setState({ accounts: data["data"].map( (account, i) => {
-         // return {
-
-         // }
-       // })})
-     // }
- //   })
- //   .catch ((err) => console.log(err))
   }
+
   setComponentSize = () => {
     this.setState({ componentSize: "small" });
   };
   
   handleDescriptionChange = e => {
-    this.setState({ description: e.target.value });
+    this.setState({ message: e.target.value });
   };
   
   validate = () => {
-    if (this.state.description==="") {
+    if (this.state.message==="") {
       alert("Please enter your feedback in the textarea");
       return false;
+    }
+
+    var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    if (re.test(String(this.state.email).toLowerCase()) == false) {
+      alert("The email entered is not valid!!")
+      return false
     }
 
     return true;
   };
 
+  onEmailChange = (e) => this.setState({ email: e.target.value })
+
   onButtonClick = () => {
     if (this.validate()) {
       const body = {
-        "description": this.state.description
-
+        "message": this.state.message,
+        "email": this.state.email,
       }
-      document.getElementById("feedbackContent").value = "";
-      alert("Thank you for your feedback!");
+
+      postRequest(`${API_URL}/api/v1/admin/PostFeedback`, body)
+      .then((data) => {
+        alert("Thank you for your feedback! Somebody will contact you soon on the email address provided.");
+        this.setState({ message: '', email: '' })
+        this.props.history.goBack()
+      })
     } else {
-      
+      alert('Please enter valid input...')
     }
   };
 
@@ -73,17 +76,27 @@ class HelpSupport extends Component {
       <h4>Help &amp; Support</h4>
       <br />
         <br />
+
+        Email:
+        <Input
+          onChange={this.onEmailChange}
+          value={this.state.email}
+        />
+        <br /><br />
+
         Feedback/Report Problem:
         <TextArea
         id='feedbackContent'
           rows={4}
-          value={this.state.description}
+          value={this.state.message}
           allowClear
           onChange={this.handleDescriptionChange}
           autoSize={{ minRows: 6, maxRows: 6 }}
         />
         <br />
         <br />
+
+
         <Button type="primary" onClick={() => this.onButtonClick()}>
           Submit Request
         </Button>

@@ -1,5 +1,5 @@
 from backend import app
-from backend.model.manage import Session, Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment
+from backend.model.manage import Session, Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment, Feedback
 from backend.services.security_util import encrypt
 from backend.services.constants import *
 from sqlalchemy import or_
@@ -278,6 +278,28 @@ def add_user_account(**kwargs):
         return { "status": "success", "data": { "message": "Registered!" }}
     else:
         return { "status": "failure", "errorMessage": "User already exists" }
+
+
+def post_feedback(**kwargs):
+    feedback = Feedback(**kwargs)
+    app.db.session.add(feedback)
+    app.db.session.commit()
+    
+    return "success"
+
+
+def get_all_feedback():
+    profiles_qs = Feedback.query.all()
+    profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
+    for record in profiles_qs:
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        profiles.append(record_dict)
+
+    return profiles
 
 
 

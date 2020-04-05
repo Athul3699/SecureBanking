@@ -130,7 +130,7 @@ class Appointment(db.Model):
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String, nullable=False)
-    user_email = db.Column(db.Integer, db.ForeignKey('user.email'), nullable=False)
+    user_email = db.Column(db.String, nullable=False)
 
 
 if __name__ == '__main__':

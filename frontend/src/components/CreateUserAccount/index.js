@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "antd/dist/antd.css";
 import "./style.css";
-
+import moment from 'moment';
 import { Input, Button, Radio, Select, InputNumber, DatePicker } from "antd";
 import { postRequestWithoutToken } from "../../util/api";
 import { API_URL } from "../../constants/references";
@@ -122,24 +122,25 @@ class CreateUserAccount extends Component {
       alert("Form is Incomplete !!");
       return false;
     }
-    if (this.state.first_name.length < 3) {
-      alert("Name should contain at least 3 characters ");
+    var regName = /^[a-zA-Z]+$/;
+    if (!regName.test(this.state.first_name)||this.state.first_name.length < 2) {
+      alert("Fist name entered is invalid ");
       return false;
     }
-    if (this.state.last_name.length < 3) {
-      alert("Last name should contain at least 3 characters");
+    if (!regName.test(this.state.last_name)||this.state.last_name.length < 2) {
+      alert("Last name entered is invalid ");
       return false;
     }
-    if (this.state.ssn.length !== 10) {
-      alert("The SSN should be a 10 digit number");
-      return false;
-    }
-
-    if (this.state.contact.length < 10) {
-      alert("The contact number should be 10 digits");
+    if (this.state.ssn.length !== 9 ||parseFloat(this.state.ssn).toString() !== this.state.ssn) {
+      alert("The SSN should be a 9 digit number");
       return false;
     }
 
+
+    if (this.state.contact.length !== 10||parseFloat(this.state.contact).toString() !== this.state.contact) {
+      alert("The contact number should be 10 digits number");
+        return false;
+      }
     if (this.state.password.length < 7) {
       alert("The password should contain minimum 7 characters");
       return false;
@@ -162,18 +163,23 @@ class CreateUserAccount extends Component {
 
   onButtonClick = () => {
     if (this.validate()) {  
-      console.log("Coming here...")
       let data = this.state;
       let confirm_password = data['confirm_password']
       delete data["confirm_password"];
+
       postRequestWithoutToken(`${API_URL}/api/v1/auth/RegisterUser`, this.state)
         .then((data) => {
-          // route to appropriate page
-          window.localStorage.setItem('API_TOKEN', data["data"])
-          this.props.history.push('/landingPage')
+          if (data["status"] === "success") {
+            // route to appropriate page
+            window.localStorage.setItem('API_TOKEN', data["data"])
+            this.props.history.push('/landingPage')
+          } else {
+            alert("Failed! Please check form fields... Your contact/email may already be registered.")
+          }
         })
-        .catch(() => {
+        .catch((err) => {
           // display error message. not needed for now, we can assume api is stable.
+          alert("Failed! Please check form fields... Your contact/email may already be registered.")
           this.setState({ confirm_password })
         });
     } else {
@@ -212,7 +218,7 @@ class CreateUserAccount extends Component {
         <br />
         <br />
         Date of Birth: <br />
-        <DatePicker format={dateFormat} onChange={this.handleDobChange} />
+        <DatePicker format={dateFormat} onChange={this.handleDobChange} disabledDate={d => !d || !d.isBefore(moment())} />
         <br />
         <br />
         SSN: <br />
