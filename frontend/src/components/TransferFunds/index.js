@@ -82,11 +82,11 @@ class TransferFunds extends Component {
   }
 
   onVerifyOTP = () => {
-    //postRequestWithoutToken(`${API_URL}/api/v1/otp/VerifyOTP`, this.state)
-//.then(() =>
+    postRequestWithoutToken(`${API_URL}/api/v1/otp/VerifyOTP`, this.state)
+.then(() =>
 this.setState({ otpVerified: true })
-//)
-//.catch(() => {});
+)
+.catch(() => {});
     
   }
 
