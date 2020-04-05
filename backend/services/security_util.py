@@ -6,8 +6,13 @@ from functools import wraps
 from backend import app
 
 #Function to hash the credential after adding a salt of length=6.
-def encrypt(credential):
+def encrypted(credential):
     pwd_hashed = generate_password_hash(credential, method='sha256', salt_length=6)
+    return pwd_hashed
+
+#Function to hash the credential
+def encrypt(credential):
+    pwd_hashed = generate_password_hash(credential, method='sha256')
     return pwd_hashed
 
 #Function to check if the salted credentials match with the input value.
