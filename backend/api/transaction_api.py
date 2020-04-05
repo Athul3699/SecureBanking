@@ -373,7 +373,7 @@ def customer_transactions():
             transactions_from_return.extend(transactions_from)
             transactions_to_return.extend(transactions_to)
         
-        return jsonify({ "status": "success", "data": { "transactions_to": transactions_to, "transactions_from": transactions_from }})
+        return jsonify({ "status": "success", "data": { "transactions_to": transactions_to_return, "transactions_from": transactions_from_return }})
 
 
 # @authenticate
