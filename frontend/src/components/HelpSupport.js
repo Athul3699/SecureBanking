@@ -59,12 +59,10 @@ class HelpSupport extends Component {
         "description": this.state.description
 
       }
-
-      postRequest(`${API_URL}/api/v1/transaction/InitiateMoneyTransfer`, body)
-        .then(() => this.props.history.push('/manageRequests'))
-        .catch(() => {});
+      document.getElementById("feedbackContent").value = "";
+      alert("Thank you for your feedback!");
     } else {
-      alert("Invalid values in the form!!");
+      
     }
   };
 
@@ -77,10 +75,12 @@ class HelpSupport extends Component {
         <br />
         Feedback/Report Problem:
         <TextArea
+        id='feedbackContent'
           rows={4}
           value={this.state.description}
           allowClear
           onChange={this.handleDescriptionChange}
+          autoSize={{ minRows: 6, maxRows: 6 }}
         />
         <br />
         <br />
