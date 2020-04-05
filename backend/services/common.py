@@ -126,6 +126,38 @@ def get_all_users():
 
     return profiles
 
+
+def get_all_active_user_requests():
+    profiles_qs = User.query.filter(app.db.and_(User.is_active == True, app.db.or_(User.role_id == 1, User.role_id == 2), User.edit_mode == True))
+    profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
+    for record in profiles_qs:
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        record_dict.pop("password")
+        record_dict.pop("ssn")
+        # record_dict.pop("")
+        profiles.append(record_dict)
+
+    return profiles
+
+
+def get_all_active_employee_requests():
+    profiles_qs = User.query.filter(app.db.and_(User.is_active == True, app.db.or_(User.role_id == 3, User.role_id == 4), User.edit_mode == True))
+    profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
+    for record in profiles_qs:
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        profiles.append(record_dict)
+
+    return profiles
+
+
 def get_all_employees():
     profiles_qs = User.query.filter(app.db.and_(User.is_active == True, app.db.or_(User.role_id == 3, User.role_id == 4)))
     profiles = []
@@ -140,7 +172,7 @@ def get_all_employees():
     return profiles
 
 def get_all_user_bank_accounts():
-    profiles_qs = BankAccount.query.all()
+    profiles_qs = Bankaccount.query.all()
     profiles = []
 
     # SQLAlchemy adds an additional field called '_sa_instance_state'

@@ -161,9 +161,10 @@ class CreateUserAccount extends Component {
   };
 
   onButtonClick = () => {
-    if (this.validate()) {
+    if (this.validate()) {  
       console.log("Coming here...")
       let data = this.state;
+      let confirm_password = data['confirm_password']
       delete data["confirm_password"];
       postRequestWithoutToken(`${API_URL}/api/v1/auth/RegisterUser`, this.state)
         .then((data) => {
@@ -173,6 +174,7 @@ class CreateUserAccount extends Component {
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
+          this.setState({ confirm_password })
         });
     } else {
       // display error message

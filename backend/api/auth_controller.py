@@ -46,7 +46,6 @@ def admin_getallusers_api():
 
 @auth_api.route("/admin/user/updateuser", methods=['POST'])
 def admin_updateuser_api():
-
     data = request.json
     email = data['email']
     response = update_user_account_email_args(email=email, **data)
@@ -58,9 +57,8 @@ Technical Account Access End
 
 @auth_api.route("/RegisterUser", methods=['POST'])
 def register_user_api():
-    data = request.json
-
-    status, data = auth_service2.register_user(**data)
+    body = request.json    
+    status, data = auth_service2.register_user(**body)
 
     if status == "success":
         return make_response(jsonify({ "status": status, "data": data })), 200

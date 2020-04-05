@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
+from ..services.common import get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts
 from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
@@ -89,14 +89,31 @@ def delete_employee_account():
 request = id, edit_status={2,3}, edit_data
 response = User(id=id)
 """
-@admin_api.route("/ManageRequest", methods=['POST'])
+@admin_api.route("/ManageEmployeeRequest", methods=['POST'])
 def manage_employee_request():
     app.logger.info("[api-manage-employee-request]")
 
-    id = 5 # args['id']
+    args = request.json
+    args['id']
     edit_status = args['edit_status']
 
     response = update_employee_account(id=id, edit_mode=False, edit_status=edit_status)
+    return jsonify({"status": "success", "data": response})
+
+"""
+request = id, edit_status={2,3}, edit_data
+response = User(id=id)
+"""
+@admin_api.route("/ManageUserRequest", methods=['POST'])
+def manage_user_request():
+    app.logger.info("[api-manage-user-request]")
+
+    args = request.json
+
+    email = args['email']
+    edit_status = args['edit_status']
+
+    response = update_user_account_email_args(email=email, edit_mode=False, edit_status=edit_status)
     return jsonify({"status": "success", "data": response})
 
 
@@ -175,6 +192,35 @@ def get_all_users_api():
 
     response = get_all_user_bank_accounts()
     return jsonify({"status": "success", "data": response})
+
+
+@authenticate
+@admin_api.route("/GetAllActiveUserRequests", methods=['GET'])
+def get_all_active_user_requests_api():
+    app.logger.info("[api-get-active-requests]")
+
+    response = get_all_active_user_requests()
+    return jsonify({"status": "success", "data": response})
+
+@authenticate
+@admin_api.route("/GetAllActiveEmployeeRequests", methods=['GET'])
+def get_all_active_employee_requests_api():
+    app.logger.info("[api-get-active-requests]")
+
+    response = get_all_active_employee_requests()
+    return jsonify({"status": "success", "data": response})
+
+
+@authenticate
+@admin_api.route("/GetUserActiveRequest", methods=['GET'])
+def get_active_request_user_api():
+    app.logger.info("[api-get-active-requests]")
+
+    token = request.headers['token']
+
+    response = get_user_account(email=decode_email(token), edit_mode=True)
+    return jsonify({"status": "success", "data": response})
+
 
 
 @admin_api.route('/DownloadMaintenanceLog', methods=['GET'])

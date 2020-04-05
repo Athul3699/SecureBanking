@@ -5,7 +5,7 @@ import { Menu, Select, DatePicker, Button} from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css';
 import { Input } from 'antd';
-import './ScheduleAppointment.css';
+// import './ScheduleAppointment.css';
 
 import moment from 'moment';
 const { TextArea } = Input;

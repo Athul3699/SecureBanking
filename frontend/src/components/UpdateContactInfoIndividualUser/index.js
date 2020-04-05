@@ -62,7 +62,6 @@ class UpdateContactInfoIndividualUser extends Component {
         last_name: data['last_name'],
         email: data['email'],
         date_of_birth: data['date_of_birth'],
-        ssn: data['ssn'],
         address1: data['address1'],
         contact: data['contact'],
         id: data['id']
@@ -142,7 +141,6 @@ class UpdateContactInfoIndividualUser extends Component {
     if (this.validate()) {
       let data = this.state
       delete data['confirm_password']
-      let id = data['id'] 
       postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
         .then(() => {
           // route to appropriate page

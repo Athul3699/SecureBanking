@@ -120,6 +120,10 @@ import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
       }
     }
 
+    logout = () => {
+      window.localStorage.removeItem('API_TOKEN')
+    }
+
     render() {
       return (
         <HashRouter>
@@ -133,6 +137,7 @@ import UpdateContactInfoTier2 from './UpdateContactInfoTier2';
               <li><NavLink to="/updateInfo">Update Contact Info</NavLink></li>
               <li><NavLink to="/schedule">Schedule Appointment</NavLink></li>
               <li><NavLink to="/help">Help and Support</NavLink></li>
+              <li> <Link  onClick={() => this.logout()} exact path="/"> Logout </Link> </li>
             </ul>
             <div className="content">
                 
