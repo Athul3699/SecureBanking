@@ -39,9 +39,9 @@ def admin_getallusers_api():
     data = get_admin_every_user()
 
     if data != None:
-        return make_response(jsonify({ "status": status, "data": data })), 200
+        return make_response(jsonify({ "status": "success", "data": data })), 200
     else:
-        return make_response(jsonify({ "status": status, "data": data})), 500
+        return make_response(jsonify({ "status": "error", "data": data})), 500
 
 @auth_api.route("/admin/user/updateuser", methods=['POST'])
 def admin_updateuser_api():
@@ -59,7 +59,8 @@ Technical Account Access End
 
 @auth_api.route("/RegisterUser", methods=['POST'])
 def register_user_api():
-    body = request.json    
+    body = request.json
+    
     status, data = auth_service2.register_user(**body)
 
     if status == "success":

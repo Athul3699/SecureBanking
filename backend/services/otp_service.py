@@ -4,6 +4,7 @@ from backend.services.common import *
 from backend.model.manage import User
 from datetime import datetime, timedelta
 from backend import app
+from backend.services.security_util import token_required, encrypt, check_decrypt
 
 import hashlib
 
@@ -76,6 +77,7 @@ def reset_password(otp, email, password):
         if datetime.now() <= user.otp_active_till:
             password_hash = hashlib.md5(
                 str(password).encode('utf-8')).hexdigest()
+            #password_hash = encrypt(password)
             message = update_user_account_email_args(email=email, password=password_hash)
 
             if message != "error":
