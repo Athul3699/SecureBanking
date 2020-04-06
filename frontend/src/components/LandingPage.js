@@ -159,29 +159,29 @@ import { Button } from 'antd';
               <div>
                 <h1>Account</h1>
                 <ul className="header">
-                  <li><NavLink to="/">Home</NavLink></li>
-                  <li><NavLink to="/bankingStatements">Banking Statements</NavLink></li>
+                  {this.state.roleId < 3 ? <li><NavLink to="/">Home</NavLink></li> : <li></li>}
+                  {this.state.roleId < 3 ? <li><NavLink to="/bankingStatements">Banking Statements</NavLink></li> : <li></li>}
                   <li><NavLink to="/manageAccounts">Manage Accounts</NavLink></li>
                   <li><NavLink to="/manageRequests">Manage Requests</NavLink></li>
                   <li><NavLink to="/updateInfo">Update Contact Info</NavLink></li>
-                  <li><NavLink to="/schedule">Schedule Appointment</NavLink></li>
-                  <li><NavLink to="/help">Help and Support</NavLink></li>
-                  <li><NavLink to="/signinhistory">Sign In History</NavLink></li>
+                  {this.state.roleId < 3 ? <li><NavLink to="/schedule">Schedule Appointment</NavLink></li> : <li></li>}
+                  {this.state.roleId < 3 ? <li><NavLink to="/help">Help and Support</NavLink></li> : <li></li>}
+                  <li><NavLink to="/signinhistory">Sign In History</NavLink></li> 
                   <li> <Link  onClick={() => this.logout()} exact path="/"> Logout </Link> </li>
                 </ul>
                 <div className="content">
                     
                   {/* <Route exact path="/" component={AccountSummaryCard}/> */}
-                  <Route exact path="/" component={AccountHome}/>
+                  {this.state.roleId < 3 ? <Route exact path="/" component={AccountHome}/> : <Route exact path="/" component={this.getManageAccountsPage()}/>}
                   {/* <Route exact path="/manageAccounts" component={ManageAccounts}/> */}
                   <Route exact path="/manageAccounts" component={this.getManageAccountsPage()}/>
                   {/* <Route exact path="/manageAccounts" component={ManageAccountsTier2} /> */}
                   <Route exact path="/manageRequests" component={this.getRequestPage()}/>
                   {/* <Route exact path="/updateInfo" component={UpdateContact}/> */}
                   <Route exact path="/updateInfo" component={this.getContactInfoPage()}/>
-                  <Route exact path="/schedule" component={ScheduleAppointment}/>
-                  <Route exact path="/help" component={HelpSupport}/>
-                  <Route exact path="/bankingStatements" component={BankingStatements}/>
+                  {this.state.roleId < 3 ? <Route exact path="/schedule" component={ScheduleAppointment}/> : <Route exact path="/schedule" component={this.getManageAccountsPage()}/>}
+                  {this.state.roleId < 3 ? <Route exact path="/help" component={HelpSupport}/> : <Route exact path="/help" component={this.getManageAccountsPage()}/>}
+                  {this.state.roleId < 3 ? <Route exact path="/bankingStatements" component={BankingStatements}/> : <Route exact path="/bankingStatements" component={this.getManageAccountsPage()}/>}
                   <Route exact path="/signinhistory" component={ViewSignInHistory}/>
                 </div>
               </div>
