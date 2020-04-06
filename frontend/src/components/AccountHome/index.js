@@ -23,6 +23,7 @@ class AccountHome extends Component {
           accounts: [],
           transferVisible: false,
           createVisible: false,
+          isAuthorizedAccountHome: false
         }
     }
 
@@ -31,22 +32,37 @@ class AccountHome extends Component {
     }
 
     refreshAccountState = () => {
-      getRequest(`${API_URL}/api/v1/bank_account/GetCustomerAccounts`)
-      .then((data) => {
-        console.log(data["data"])
-        if (data["data"].length > 0) {
-          this.setState({ accounts: data["data"].map( (account, i) => {
-            return {
-              number: account.number,
-              type: account.type,
-              routing_number: account.routing_number,
-              balance: account.balance,
-              is_active: String(account.is_active),
+      if (window.localStorage.getItem('API_TOKEN')) {
+        getRequest(`${API_URL}/api/v1/bank_account/GetCustomerAccounts`)
+        .then((data) => {
+          console.log(data["data"])
+          if(data.status === "success"){
+            if (data["data"].length > 0) {
+              this.setState({ accounts: data["data"].map( (account, i) => {
+                return {
+                  number: account.number,
+                  type: account.type,
+                  routing_number: account.routing_number,
+                  balance: account.balance,
+                  is_active: String(account.is_active),
+                }
+              })})
             }
-          })})
-        }
-      })
-      .catch ((err) => console.log(err))
+            this.setState({isAuthorizedAccountHome:true});
+          }
+          else{
+            console.log("token invalid");
+            this.setState({ isAuthorizedAccountHome: false })
+          }
+        })
+        .catch ((err) => console.log(err))
+      }else {
+        this.setState({ isAuthorizedAccountHome: false })
+      }
+    }
+
+    goToLogin = () => {
+      this.props.history.push('')
     }
 
     handleOk = (type) => {
@@ -77,10 +93,11 @@ class AccountHome extends Component {
     }
 
     render() {
-let dispTrans=""
-    if(this.state.transferFundsVisible){
-      dispTrans = <TransferFunds />;
-    }
+      if (this.state.isAuthorizedAccountHome) {
+        let dispTrans=""
+          if(this.state.transferFundsVisible){
+            dispTrans = <TransferFunds />;
+          }
         return (
             <div className="create-form-container">
 
@@ -139,7 +156,15 @@ let dispTrans=""
                 </Modal>
 
             </div>
-        );
+          );
+        } else {
+          return (
+            <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+              You are not authorized... Please log in again.           
+              <Button onClick={() => this.goToLogin()}> Go back to login </Button>
+            </div>
+          ) 
+        }
     }
 }
 
