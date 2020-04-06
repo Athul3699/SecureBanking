@@ -139,6 +139,7 @@ class ScheduleAppointment extends Component {
           format="YYYY-MM-DD"
           disabledDate={disabledDate}
           hideDisabledOptions
+          defaultValue={moment().add(1, 'day')}
         />
         </div>
         <br></br>
