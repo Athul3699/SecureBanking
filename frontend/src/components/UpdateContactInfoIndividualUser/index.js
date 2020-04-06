@@ -51,22 +51,30 @@ class UpdateContactInfoIndividualUser extends Component {
       address1: '',
       contact: '',
       confirm_password: '',
+      isAuthorizedUpdate: false
     }
   }
 
   componentDidMount() {
-    postRequest(`${API_URL}/api/v1/common/GetUser`).then((res) => {
-      let data = res["data"]["data"]
-      this.setState({
-        first_name: data['first_name'],
-        last_name: data['last_name'],
-        email: data['email'],
-        date_of_birth: data['date_of_birth'],
-        address1: data['address1'],
-        contact: data['contact'],
-        id: data['id']
+    if (window.localStorage.getItem('API_TOKEN')) {
+      postRequest(`${API_URL}/api/v1/common/GetUser`).then((res) => {
+        let data = res["data"]["data"]
+        this.setState({
+          first_name: data['first_name'],
+          last_name: data['last_name'],
+          email: data['email'],
+          date_of_birth: data['date_of_birth'],
+          address1: data['address1'],
+          contact: data['contact'],
+          id: data['id'],
+          isAuthorizedUpdate: true
+        })
       })
-    })
+      .catch ((err) => console.log(err))
+    }
+    else {
+        this.setState({ isAuthorizedUpdate: false })
+      }
   }
 
   setComponentSize = () => {
@@ -164,8 +172,12 @@ class UpdateContactInfoIndividualUser extends Component {
     }
   }
 
-  render() {
+  goToLogin = () => {
+    this.props.history.push('')
+  }
 
+  render() {
+    if(this.state.isAuthorizedUpdate){
     return (
 
       <div className="create-form-container">
@@ -257,6 +269,14 @@ class UpdateContactInfoIndividualUser extends Component {
 
       </div>
     );
+  }else {
+    return (
+      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+        You are not authorized... Please log in again.           
+        <Button onClick={() => this.goToLogin()}> Go back to login </Button>
+      </div>
+    ) 
+  }
   }
 }
 

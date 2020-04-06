@@ -14,7 +14,8 @@ class BankingStatements extends Component {
       month: 0,
       year: 0,
       statements: [],
-      accountId: null
+      accountId: null,
+      isAuthorizedBanking: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -27,6 +28,7 @@ componentDidMount() {
   }
 
   refreshAccountState = () => {
+    if (window.localStorage.getItem('API_TOKEN')) {
     getRequest(`${API_URL}/api/v1/bank_account/GetActiveCustomerAccounts`)
     .then((data) => {
       console.log(data["data"])
@@ -37,10 +39,18 @@ componentDidMount() {
           }
         })})
       }
+      this.setState({isAuthorizedBanking:true})
     })
     .catch ((err) => console.log(err))
   }
-
+  else {
+    console.log("Invalid Token")
+    this.setState({ isAuthorizedBanking: false })
+  }
+}
+goToLogin = () => {
+  this.props.history.push('')
+}
   onChange(date, dateString) {
     var dateArray = dateString.split("-");
     console.log(parseInt(dateArray[0]));
@@ -50,6 +60,7 @@ componentDidMount() {
   }
 
   validate(){
+
     if(this.state.account===""){
       alert("Select the account");
       return false;
@@ -123,6 +134,7 @@ componentDidMount() {
 
   
   render() {
+    if(this.state.isAuthorizedBanking){
     const onClick = ({ key }) => {
       console.log(key);
     };
@@ -160,6 +172,14 @@ componentDidMount() {
         <Button type="primary" onClick={this.onButtonClick}>Download Statements</Button>
       </div>
     );
+    } else {
+        return (
+          <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+            You are not authorized... Please log in again.           
+            <Button onClick={() => this.goToLogin()}> Go back to login </Button>
+          </div>
+        ) 
+      }
   }
 }
 

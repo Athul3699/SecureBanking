@@ -49,10 +49,12 @@ class UpdateContactInfoMerchant extends Component {
       address1: '',
       contact: '',
       confirm_password: '',
+      isAuthorizedUpdate: false
     }
   }
 
   componentDidMount() {
+    if (window.localStorage.getItem('API_TOKEN')) {
     postRequest(`${API_URL}/api/v1/common/GetUser`).then((res) => {
       let data = res["data"]["data"]
       this.setState({
@@ -63,9 +65,16 @@ class UpdateContactInfoMerchant extends Component {
         ssn: data['ssn'],
         address1: data['address1'],
         contact: data['contact'],
-        id: data['id']
+        id: data['id'],
+        isAuthorizedUpdate: true
       })
     })
+    .catch ((err) => console.log(err))
+  }
+  else {
+      console.log("Invalid Token")
+      this.setState({ isAuthorizedUpdate: false })
+    }
   }
 
   setComponentSize = () => {
@@ -175,8 +184,12 @@ if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == fal
     }
   }
 
-  render() {
+  goToLogin = () => {
+    this.props.history.push('')
+  }
 
+  render() {
+    if(this.state.isAuthorizedUpdate){
     return (
 
       <div className="create-form-container">
@@ -273,6 +286,14 @@ if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == fal
 
       </div>
     );
+      } else {
+        return (
+          <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+            You are not authorized... Please log in again.           
+            <Button onClick={() => this.goToLogin()}> Go back to login </Button>
+          </div>
+        ) 
+      }
   }
 }
 
