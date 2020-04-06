@@ -82,6 +82,10 @@ class ManageAccountsIndividualUser extends Component {
             })
     }
 
+    goToLogin = () => {
+      this.props.history.push('')
+    }
+
     render() {
 
         // define columns
@@ -124,8 +128,13 @@ class ManageAccountsIndividualUser extends Component {
                     <Table dataSource={this.state.accounts} columns={columns} />
                 </div>
               );
-            } else { // if it is loaded, and the initial api call did not give an error, and response of the api call says they are not authorized
-              return <div> Sorry. You are not authorized to view this page. </div>
+            } else {
+              return (
+                <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+                  You are not authorized... Please log in again.           
+                  <Button onClick={() => this.goToLogin()}> Go back to login </Button>
+                </div>
+              ) 
             }
           }
 
