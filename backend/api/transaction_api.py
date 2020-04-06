@@ -59,14 +59,14 @@ def approve_money_transfer_noncritical():
         src_account = get_customer_bank_accounts(number=transaction.from_account)
         source_balance = float(src_account[0]['balance'])
         if transaction.type=='credit':
-            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+transaction.amount)
+            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+float(transaction.amount))
         else:
-            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+            update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-float(transaction.amount))
         
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
             destination_balance = float(dest_account[0]['balance'])
-            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
+            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+float(transaction.amount))
 
         message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
 
@@ -145,12 +145,12 @@ def approve_money_transfer_critical():
         src_account = get_customer_bank_accounts(number=transaction.from_account)
         source_balance = float(src_account[0]['balance'])
 
-        update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
+        update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-float(transaction.amount))
         
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
             destination_balance = float(dest_account[0]['balance'])
-            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
+            update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+float(transaction.amount))
 
         message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
 
