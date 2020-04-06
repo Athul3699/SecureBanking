@@ -30,6 +30,7 @@ def get_user():
     response = get_user_account(id=id)
     return jsonify(response=response)
 
+# not using this URL
 @user_api.route("/GenerateStatements", methods=['GET'])
 def generate_statements():
     app.logger.info("[api-get-user]")

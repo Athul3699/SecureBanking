@@ -139,7 +139,7 @@ import { Button } from 'antd';
     logout = () => {
       window.localStorage.removeItem('API_TOKEN')
       this.refreshState()
-      this.props.history.goBack()
+      this.goToLogin();
     }
 
     goToLogin = () => {

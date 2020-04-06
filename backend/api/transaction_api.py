@@ -316,7 +316,7 @@ def downloadStatements():
 #     transactions = get_transactions(id=request.view_args['transaction_id'])
 #     return jsonify(response=transactions)
 
-
+@authenticate
 @transaction_api.route("/AllTransactions", methods=['GET'])
 def all_transactions():
     app.logger.info("[api-GET-All-Transactions]")

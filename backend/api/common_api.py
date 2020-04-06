@@ -8,14 +8,14 @@ from backend.services.authenticate import authenticate
 
 common_api = Blueprint('common_api', __name__)
 
-
+@authenticate
 @common_api.route("/CustomerAccounts/<user_id>", methods=['GET'])
 def customer_accounts(user_id):
     app.logger.info("[api-CustomerAccounts]")
     accounts = get_customer_bank_accounts(user_id=request.view_args['user_id'])
     return jsonify(response=accounts)
 
-
+@authenticate
 @common_api.route("/UpdateUser", methods=['POST'])
 def update_user_account_api_profile():
     app.logger.info("[api-Profile]")
@@ -42,6 +42,7 @@ def get_user_account_endpoint():
 
 
 """ reference for getting json body args """
+# not needed
 @common_api.route("/testparams", methods=['POST'])
 def test_params():
     app.logger.info("[api-CreateUser]")
@@ -49,7 +50,7 @@ def test_params():
     print(user_params)
     return jsonify({'message': user_params['first_name']})
 
-
+# not needed
 @common_api.route("/CreateRoles", methods=['GET'])
 def create_roles():
     message = add_roles()

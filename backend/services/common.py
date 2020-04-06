@@ -1,9 +1,49 @@
 from backend import app
-from backend.model.manage import Session, Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment, Feedback
+from backend.model.manage import IncorrectLogins, Session, Authorizedrole, Maintenancelog, User, Bankaccount, Signinhistory, Transaction, Appointment, Feedback
 from backend.services.security_util import encrypt
 from backend.services.constants import *
 from sqlalchemy import or_
 import math, random
+
+
+def get_incorrect_logins(**kwargs):
+    inc_login_qs = IncorrectLogins.query.filter_by(**kwargs)
+    inc_logins = []
+
+    for record in inc_login_qs:
+        record_dict = record.__dict__
+        if "_sa_instance_state" in record_dict:
+            record_dict.pop("_sa_instance_state")
+        inc_logins.append(record_dict)
+
+    return inc_logins
+
+
+def add_incorrect_logins(**kwargs):
+    result = "success"
+    try:
+        inc_login = IncorrectLogins(**kwargs)
+        app.db.session.add(inc_login)
+        app.db.session.commit()
+    except Exception as e:
+        print(e)
+
+        result = "error"
+
+    return result
+
+
+def update_incorrect_logins(user_email, **kwargs):
+    result = "success"
+    try:
+        keys = kwargs.keys()
+        inc_login = app.db.session.query(IncorrectLogins).filter_by(user_email=user_email).first()
+        for key in keys:
+            exec("inc_login.{0} = kwargs['{0}']".format(key))
+        app.db.session.commit()
+    except:
+        result = "error"
+    return result
 
 
 def get_sign_in_history(**kwargs):
