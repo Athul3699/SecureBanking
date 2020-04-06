@@ -137,9 +137,15 @@ import { Button } from 'antd';
     }
 
     logout = () => {
-      window.localStorage.removeItem('API_TOKEN')
-      this.refreshState()
-      this.goToLogin();
+      postRequest(`${API_URL}/api/v1/auth/LogoutUser`)
+      .then((data) => {
+        window.localStorage.removeItem('API_TOKEN')
+        this.refreshState()
+        this.goToLogin();
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     }
 
     goToLogin = () => {
