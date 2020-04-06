@@ -11,14 +11,20 @@ class EditCustomerAccountTier2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: props.account.type,
-      balance: props.account.balance,
-      number: props.account.number,
+      // type: props.account.type,
+      // balance: props.account.balance,
+      // number: props.account.number,
     };
   }
 
   componentDidMount() {
-    // getRequest(`${API_URL}/user/GetBankAccounts`)
+    postRequest(`${API_URL}/api/v1/admin/tier2/GetCustomerBankAccount`, { number: this.props.account.number })
+    .then((data) => {
+      console.log(data)
+      let res_data = data["data"]
+      this.setState({ ...res_data })
+    })
+    .catch((err) => console.log(err))
   }
 
   setComponentSize = () => {
@@ -99,6 +105,7 @@ class EditCustomerAccountTier2 extends Component {
           formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           parser={value => value.replace(/\$\s?|(,*)/g, '')}
           onChange={this.handleAmountChange}
+          value={this.state.balance}
         />
 
         <br />
@@ -108,7 +115,7 @@ class EditCustomerAccountTier2 extends Component {
           type="primary"
           onClick={() => this.onButtonClick()}
         >
-          Submit Request
+          Edit account
         </Button>
 
     </div>

@@ -71,6 +71,27 @@ def generate_account_number():
         accounts = get_customer_bank_accounts(number=account_number, is_active=True)
     return account_number
 
+def get_user_bank_account(**kwargs):
+    # kwargs['email'] = 'a@a.com'
+    # user = get_user_account(email=kwargs['email'])
+
+    kwargs['is_active'] = True
+    profiles_qs = Bankaccount.query.filter_by(**kwargs)
+    profiles = []
+
+    # SQLAlchemy adds an additional field called '_sa_instance_state'
+    # jsonify can't serialize this so we are just going to remove it
+    for record in profiles_qs:
+        record_dict = record.__dict__
+        record_dict.pop("_sa_instance_state")
+        profiles.append(record_dict)
+
+    if (len(profiles) > 0):
+        return profiles[0]
+
+    return None
+
+
 def get_customer_bank_accounts(**kwargs):
     accounts_qs = Bankaccount.query.filter_by(**kwargs)
     accounts = []
@@ -110,6 +131,20 @@ def update_customer_bank_account(account_number, **kwargs):
         result = "error"
     return { "status": "success", "data": { "data": result }}
 
+
+def update_customer_bank_account_tier2(**kwargs):
+    result = "success"
+    try:
+        keys = kwargs.keys()
+        number = kwargs['number']
+        account = app.db.session.query(Bankaccount).filter_by(number=number).first()
+        
+        for key in keys:
+            exec("account.{0} = kwargs['{0}']".format(key))
+        app.db.session.commit()
+    except:
+        result = "error"
+    return { "status": "success", "data": { "data": result } }
 
 def get_admin_every_user():
     profiles_qs = User.query.all()
@@ -214,6 +249,7 @@ def get_user_account(**kwargs):
         return profiles[0]
 
     return None
+
 
 def update_user_account(id, **kwargs):
     result = "error"
