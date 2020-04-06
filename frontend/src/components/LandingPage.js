@@ -143,7 +143,7 @@ import { Button } from 'antd';
     }
 
     goToLogin = () => {
-      this.props.history.goBack()
+      this.props.history.push('')
     }
 
     render() {
