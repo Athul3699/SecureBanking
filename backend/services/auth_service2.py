@@ -29,7 +29,7 @@ def register_user(**data):
            
            
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=500),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1200),
                 'email': data['email'],
                 'seq_number':1
             }
@@ -78,11 +78,11 @@ def login_user(**data):
                         return "failure", "DB error"
                 session_t = get_session(email=user.email)
 
-                payload = {
-                    'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=500),
-                    'email': user.email,
-                    'sequseq_numberence_number': session_t['seq_number']+1
-                }
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1200),
+                'email': user.email,
+                'seq_number': session_t['seq_number']+1
+            }
 
                 auth_token = jwt.encode(
                     payload,
