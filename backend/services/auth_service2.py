@@ -50,7 +50,7 @@ def register_user(**data):
             user_data = User.query.filter_by(email=data['email']).first()
             message = add_session(email=user.email, seq_number=1)
             if message=="success":
-                message = add_incorrect_logins(user_email=user.email, incorrect_count=0, expires_at=datetime.datetime.utcnow() + datetime.timedelta(seconds=3000))
+                message = add_incorrect_logins(user_email=user.email, incorrect_count=0, expires_at=datetime.datetime.utcnow() + datetime.timedelta(seconds=300000))
             return "success", str(auth_token)[2:-1]
             
         except Exception as e:
@@ -69,7 +69,7 @@ def login_user(**data):
         if user:
             incor_login = get_incorrect_logins(user_email=user.email)
             if incor_login is None or len(incor_login)==0:
-                message = add_incorrect_logins(user_email=user.email, incorrect_count=0, expires_at=datetime.datetime.utcnow() + datetime.timedelta(seconds=3000))
+                message = add_incorrect_logins(user_email=user.email, incorrect_count=0, expires_at=datetime.datetime.utcnow() + datetime.timedelta(seconds=300000))
             incor_login = get_incorrect_logins(user_email=user.email)
             incor_login = incor_login[0]
             if user.password == password_hash:

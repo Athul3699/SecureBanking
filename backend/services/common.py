@@ -329,27 +329,15 @@ def update_user_account_email_args_request(email, **kwargs):
     try:
         keys = kwargs.keys()
         password_hash = hashlib.md5(str(kwargs['password']).encode('utf-8')).hexdigest()
-
-        # profiles_qs = User.query.filter(app.db.or_(User.contact==kwargs['contact'], User.email==email))
         
-        # app.db.session.commit()
         kwargs['password'] = password_hash
 
-        # count = 0
-        # for record in profiles_qs:
-        #     count = count+1
-
-        # if count == 0 or count > 1:
-        #     return "error"
-
-        # if profiles_qs[0].id is not kwargs['id']:
-        #     return "error"
-
-        user = User.query.filter_by(id=kwargs['id']).first()
+        user = app.db.session.query(User).filter_by(id=kwargs['id']).first()
+        del kwargs['id']
+         
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
 
-        # app.db.session.add(user)
         app.db.session.commit()
 
         result = get_user_account(email=email)
