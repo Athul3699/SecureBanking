@@ -317,8 +317,6 @@ def update_user_account_email_args(email, **kwargs):
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
 
-        local_object = app.db.session.merge(user)
-        app.db.session.add(local_object)
         app.db.session.commit()
 
         result = get_user_account(email=email)
@@ -347,7 +345,6 @@ def update_user_account_email_args_request(email, **kwargs):
         # if profiles_qs[0].id is not kwargs['id']:
         #     return "error"
 
-        import pdb; pdb.set_trace()
         user = User.query.filter_by(id=kwargs['id']).first()
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
