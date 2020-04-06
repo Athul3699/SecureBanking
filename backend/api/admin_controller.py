@@ -1,6 +1,6 @@
-from flask import jsonify, g, Blueprint, request
+from flask import jsonify, g, Blueprint, request, make_response
 from backend import app
-from ..services.common import update_customer_bank_account_tier2, get_user_bank_account, post_feedback, get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts, get_sign_in_history
+from ..services.common import update_user_account_email_args_request, update_customer_bank_account_tier2, get_user_bank_account, post_feedback, get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts, get_sign_in_history
 from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
@@ -118,8 +118,15 @@ def manage_user_request():
     email = args['email']
     edit_status = args['edit_status']
 
-    response = update_user_account_email_args(email=email, edit_mode=False, edit_status=edit_status)
-    return jsonify({"status": "success", "data": response})
+    if edit_status == 2:
+        response = update_user_account_email_args_request(email=email, edit_mode=False, edit_status=2, first_name=args['first_name'], last_name=args['last_name'], contact=args['contact'], address1=args['address1'], password=args['password'], id=args['id'])
+    else:
+        response = update_user_account_email_args(email=email, edit_mode=False, edit_status=3)
+    
+    if response == "error":
+        return make_response(jsonify({"status": "failure", "data": "user does not exist"})), 500
+    else:
+        return jsonify({"status": "success", "data": response})
 
 
 @admin_api.route("/GetAllUsers", methods=['GET'])

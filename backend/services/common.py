@@ -4,6 +4,7 @@ from backend.services.security_util import encrypt
 from backend.services.constants import *
 from sqlalchemy import or_
 import math, random
+import hashlib
 
 
 def get_incorrect_logins(**kwargs):
@@ -307,7 +308,6 @@ def update_user_account(id, **kwargs):
         result = "error"
     return result
 
-
 def update_user_account_email_args(email, **kwargs):
     result = "error"
     try:
@@ -317,6 +317,42 @@ def update_user_account_email_args(email, **kwargs):
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
 
+        local_object = app.db.session.merge(user)
+        app.db.session.add(local_object)
+        app.db.session.commit()
+
+        result = get_user_account(email=email)
+    except:
+        result = "error"
+    return result
+
+def update_user_account_email_args_request(email, **kwargs):
+    result = "error"
+    try:
+        keys = kwargs.keys()
+        password_hash = hashlib.md5(str(kwargs['password']).encode('utf-8')).hexdigest()
+
+        # profiles_qs = User.query.filter(app.db.or_(User.contact==kwargs['contact'], User.email==email))
+        
+        # app.db.session.commit()
+        kwargs['password'] = password_hash
+
+        # count = 0
+        # for record in profiles_qs:
+        #     count = count+1
+
+        # if count == 0 or count > 1:
+        #     return "error"
+
+        # if profiles_qs[0].id is not kwargs['id']:
+        #     return "error"
+
+        import pdb; pdb.set_trace()
+        user = User.query.filter_by(id=kwargs['id']).first()
+        for key in keys:
+            exec("user.{0} = kwargs['{0}']".format(key))
+
+        # app.db.session.add(user)
         app.db.session.commit()
 
         result = get_user_account(email=email)
@@ -335,7 +371,6 @@ def update_user_account_email_service(email):
     except:
         result = "error"
     return result
-
 
 
 def add_user_account(**kwargs):

@@ -92,8 +92,10 @@ class ManageAccountsAdmin extends Component {
     }
 
     onButtonClick = (type, data) => {
+      let body = JSON.parse(data.edit_data)
       if (type == 'accept') {
-        postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, { email: JSON.parse(data.edit_data).email, edit_status: 2 })
+        body['edit_status'] = 2
+        postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, body)
           .then((data) => {
             this.refreshAccountsState() // refresh!
           })
@@ -102,7 +104,8 @@ class ManageAccountsAdmin extends Component {
             console.log(err)
           })
       } else if (type == 'deny') {
-        postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, { email: JSON.parse(data.edit_data).email, edit_status: 3 })
+        body['edit_status'] = 3
+        postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, body)
           .then((data) => {
             this.refreshAccountsState() // refresh!
           })

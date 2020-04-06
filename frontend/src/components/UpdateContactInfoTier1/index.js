@@ -44,7 +44,6 @@ class UpdateContactInfoTier1 extends Component {
       email: '',
       role_id: 3,
       password: '',
-      date_of_birth: '',
       ssn: '',
       address1: '',
       contact: '',
@@ -60,9 +59,9 @@ class UpdateContactInfoTier1 extends Component {
         last_name: data['last_name'],
         email: data['email'],
         date_of_birth: data['date_of_birth'],
-        ssn: data['ssn'],
         address1: data['address1'],
         contact: data['contact'],
+        id: data['id']
       })
     })
   }
@@ -159,7 +158,13 @@ class UpdateContactInfoTier1 extends Component {
     if (this.validate()) {
       let data = this.state
       delete data['confirm_password']
-      postRequestWithoutToken(`${API_URL}/api/v1/common/CreateUser`, this.state)
+
+      const { id, first_name, last_name, email, contact, address1, password } = this.state
+
+      let body = {
+        id, first_name, last_name, email, contact, address1, password
+      }
+      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, { "id": data.id, "edit_data": body })
         .then(() => {
           alert("Request for Contact Info updation sent for approval successfully.");
           this.props.history.push(`/`)
@@ -248,6 +253,7 @@ class UpdateContactInfoTier1 extends Component {
         <br />
         Enter Password: <br />
         <Input
+          type="password"
           onChange={this.handlePassword}
           value={this.state.password}
         />
@@ -257,6 +263,7 @@ class UpdateContactInfoTier1 extends Component {
 
         Confirm Password: <br />
         <Input
+          type="password"
           onChange={this.handleConfirmPassword}
           value={this.state.confirm_password}
         />

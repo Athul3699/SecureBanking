@@ -216,6 +216,7 @@ class UpdateContactInfo extends Component {
 
         Password: <br />
         <Input
+          type="password"
           onChange={this.handlePassword}
           value={this.state.password}
         />
@@ -225,6 +226,7 @@ class UpdateContactInfo extends Component {
 
         Confirm Password: <br />
         <Input
+          type="password"
           onChange={this.handleConfirmPassword}
           value={this.state.confirm_password}
         />

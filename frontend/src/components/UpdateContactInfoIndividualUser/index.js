@@ -47,10 +47,8 @@ class UpdateContactInfoIndividualUser extends Component {
       role_id: 1,
       password: '',
       date_of_birth: '',
-      ssn: '',
       address1: '',
       contact: '',
-      confirm_password: '',
     }
   }
 
@@ -150,7 +148,12 @@ class UpdateContactInfoIndividualUser extends Component {
     if (this.validate()) {
       let data = this.state
       delete data['confirm_password']
-      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
+      const { id, first_name, last_name, email, contact, address1, password } = this.state
+
+      let body = {
+        id, first_name, last_name, email, contact, address1, password
+      }
+      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, { "id": data.id, "edit_data": body })
         .then(() => {
           // route to appropriate page
           alert("Request for Contact Info updation sent for approval successfully.");

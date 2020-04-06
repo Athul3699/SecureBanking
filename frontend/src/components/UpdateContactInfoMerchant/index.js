@@ -161,8 +161,13 @@ if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == fal
     if (this.validate()) {
       let data = this.state
       delete data['confirm_password']
-      let id = data['id'] 
-      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
+      const { id, first_name, last_name, email, contact, address1, password } = this.state
+
+      let body = {
+        id, first_name, last_name, email, contact, address1, password
+      }
+      
+      postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, { "id": data.id, "edit_data": body })
         .then(() => {
           alert("Request for Contact Info updation sent for approval successfully.");
           this.props.history.push(`/`)

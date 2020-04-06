@@ -129,7 +129,7 @@ import { Button } from 'antd';
         return UpdateContactInfoTier1;
       }
       if(this.state.roleId===4) {
-        return UpdateContactInfoTier1;
+        return UpdateContactInfoTier2;
       }
       if(this.state.roleId===5) {
         return ManageAccountsAdmin;
