@@ -70,7 +70,7 @@ def login_user(**data):
             session_t = get_session(email=user.email)
 
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(mintues=20, seconds=0),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=20, seconds=0),
                 'email': user.email,
                 'sequence_number': session_t['seq_number']+1
             }
