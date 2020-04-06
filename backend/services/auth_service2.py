@@ -68,6 +68,9 @@ def login_user(**data):
 
         if user:
             incor_login = get_incorrect_logins(user_email=user.email)
+            if incor_login is None:
+                message = add_incorrect_logins(user_email=user.email, incorrect_count=0, expires_at=datetime.datetime.utcnow() + datetime.timedelta(seconds=3000))
+            incor_login = get_incorrect_logins(user_email=user.email)
             incor_login = incor_login[0]
             if user.password == password_hash:
                 if datetime.datetime.now()<=incor_login['expires_at'] and incor_login['incorrect_count']>=4:
