@@ -72,7 +72,7 @@ class ManageAccountsTier1 extends Component {
   // we refresh this if the user deletes an account or whatever...
   refreshAccountsState = () => {
     // get accounts
-    getRequestWithoutToken(`${API_URL}/api/v1/admin/GetAllUsersBankAccounts`)
+    getRequest(`${API_URL}/api/v1/admin/GetAllUsersBankAccounts`)
       .then(data => {
         // take the current accounts, and take only the data we need
         let accounts = this.state.accounts.map(account => {

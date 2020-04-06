@@ -26,6 +26,7 @@ class ManageAccountsTier2 extends Component {
     super(props);
     this.state = {
       accounts: [],
+      accounts2: [],
       t1Visible: false,
       t2Visible: false,
       createVisible: false,
@@ -89,10 +90,6 @@ class ManageAccountsTier2 extends Component {
             })
           });
         }
-        this.setState({
-          isLoading: false,
-          isAuthorizedManageAccountsTier2: true
-        });
       })
       .catch(err => {
         console.log(err);
@@ -101,6 +98,26 @@ class ManageAccountsTier2 extends Component {
           isAuthorizedManageAccountsTier2: false
         });
       });
+
+      getRequest(`${API_URL}/api/v1/admin/GetAllActiveUserRequests`)
+        .then((data) => {
+            this.setState({
+              accounts2: data["data"].map((account, i) => {
+                return {
+                  first_name: account.first_name,
+                  last_name: account.last_name,
+                  email: account.email,
+                  edit_data: JSON.stringify(account.edit_data),
+                }
+              })
+            })
+            this.setState({ isLoading: false, isAuthorized: true })
+        })
+        .catch((err) => {
+          this.setState({ error: true })
+          console.error(err)
+        })
+
   };
 
   goToLogin = () => {
@@ -121,6 +138,32 @@ class ManageAccountsTier2 extends Component {
       this.setState({ createVisible: true });
     }
   };
+
+  onButtonClick2 = (type, data) => {
+    let body = JSON.parse(data.edit_data)
+    if (type == 'accept') {
+      body['edit_status'] = 2
+      postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, body)
+        .then((data) => {
+          this.refreshAccountState() // refresh!
+        })
+        .catch((err) => {
+          this.setState({ error: true })
+          console.log(err)
+        })
+    } else if (type == 'deny') {
+      body['edit_status'] = 3
+      postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, body)
+        .then((data) => {
+          this.refreshAccountState() // refresh!
+        })
+        .catch((err) => {
+          this.setState({ error: true })
+          console.log(err)
+        })
+    }
+
+  }
 
   handleOk = (type, data) => {
     if (type == "t1") {
@@ -186,6 +229,34 @@ class ManageAccountsTier2 extends Component {
       }
     ];
 
+    const columns2 = [
+      {
+        title: 'First name',
+        dataIndex: 'first_name',
+        key: 'first_name',
+      },
+      {
+        title: 'Last Name',
+        dataIndex: 'last_name',
+        key: 'last_name',
+      },
+      {
+        title: 'Edit Data',
+        dataIndex: 'edit_data',
+        key: 'edit_data',
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        render: (text, data) => (
+          <span>
+            <a style={{ marginRight: 16 }} onClick={() => this.onButtonClick2('accept', data)}> Accept </a>
+            <a onClick={() => this.onButtonClick2('deny', data)}> Deny </a>
+          </span>
+        )
+      },
+    ];
+
     if (this.state.isLoading == true) {
       // if it is loading, show loading screen
       return <div> Loading... </div>;
@@ -211,6 +282,11 @@ class ManageAccountsTier2 extends Component {
               <br />
               <br />
               <Table dataSource={this.state.accounts} columns={columns}></Table>
+
+              User Account Requests:
+              <br />
+              <br />
+              <Table dataSource={this.state.accounts2} columns={columns2} />
 
               <Modal
                 title="Edit Customer Bank Account details"

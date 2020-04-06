@@ -328,9 +328,6 @@ def update_user_account_email_args_request(email, **kwargs):
     result = "error"
     try:
         keys = kwargs.keys()
-        password_hash = hashlib.md5(str(kwargs['password']).encode('utf-8')).hexdigest()
-        
-        kwargs['password'] = password_hash
 
         user = app.db.session.query(User).filter_by(id=kwargs['id']).first()
         del kwargs['id']
@@ -406,7 +403,6 @@ def update_employee_account(id, **kwargs):
 
         edit_data = {}
         if (kwargs['edit_status'] == 2):
-            # import pdb; pdb.set_trace()
             edit_data = dict.copy(user.edit_data)
             user.edit_data = {}
             for key in edit_data.keys():
