@@ -29,7 +29,7 @@ def register_user(**data):
            
            
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=20, seconds=0),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1200),
                 'email': data['email'],
                 'seq_number':1
             }
@@ -60,7 +60,7 @@ def register_user(**data):
 
 def login_user(**data):
     try:
-           
+
         user = User.query.filter_by(email=data['email']).first()
 
         password_hash = hashlib.md5(str(data['password']).encode('utf-8')).hexdigest()
@@ -70,9 +70,9 @@ def login_user(**data):
             session_t = get_session(email=user.email)
 
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(mintues=20, seconds=0),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=1200),
                 'email': user.email,
-                'sequence_number': session_t['seq_number']+1
+                'seq_number': session_t['seq_number']+1
             }
 
             auth_token = jwt.encode(
