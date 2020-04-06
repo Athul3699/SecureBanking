@@ -122,7 +122,7 @@ class CreateUserAccount extends Component {
       alert("Form is Incomplete !!");
       return false;
     }
-    var regName = /^[a-zA-Z]+$/;
+    var regName = /^[a-zA-Z\s]*$/;
     if (!regName.test(this.state.first_name)||this.state.first_name.length < 2) {
       alert("Fist name entered is invalid ");
       return false;
