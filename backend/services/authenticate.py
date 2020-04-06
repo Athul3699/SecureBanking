@@ -1,9 +1,10 @@
 from flask import Blueprint, request, jsonify, make_response
 from flask import Flask, Response
 from functools import wraps
+from backend.services.common import *
 from backend.model.manage import User
 from backend import app
-
+import jwt
 """ login_user call in that, we replace the active jwt token if credentials are valid """
 
 """
@@ -62,9 +63,9 @@ def authenticate(f):
                 payload = jwt.decode(auth_token, "justatest", algorithm='HS256')
                 decoded_email = payload['email']
                 decoded_seq_number = payload['seq_number']
-                session_t = get_session(email=user.email)
-                if decoded_seq_number==session_t.seq_number:
-                    message = add_session(decoded_email,decoded_seq_number+1)
+                session_t = get_session(email=decoded_email)
+                if decoded_seq_number==session_t['seq_number']:
+                    # message = add_session(email=decoded_email,seq_number=decoded_seq_number+1)
                     return f(*args, **kwargs)
                 else:
                     message = "You are already logged in..Please log in again"
