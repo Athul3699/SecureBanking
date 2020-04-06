@@ -79,7 +79,7 @@ class HelpSupport extends Component {
       <br />
         <br />
 
-        Email:
+        Email you want to be contacted to:
         <Input
           onChange={this.onEmailChange}
           value={this.state.email}

@@ -156,7 +156,7 @@ class ManageAccountsTier2 extends Component {
                     <Button
                       onClick={() => this.onButtonClick('create')}
                     >
-                      Create Account
+                      Create Customer Bank Account
                     </Button>
     
                     <br />
@@ -170,13 +170,13 @@ class ManageAccountsTier2 extends Component {
                       onOk={() => this.handleOk('t1')}
                       onCancel={() => this.handleCancel('t1')}
                     >
-                     <EditCustomerAccountTier2 // this should be a separate component for tier 1
+                     <EditCustomerAccountTier2
                         account={this.state.selectedAccount}
                         handleCancel={() => this.handleCancel('t1')}
                      /> 
                     </Modal>
     
-                    <Modal // this should be a separate component for just creating an employee account
+                    <Modal
                       title="Create Customer Bank Account"
                       visible={this.state.createVisible}
                       onOk={() => this.handleOk('create')}
