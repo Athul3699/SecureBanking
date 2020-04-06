@@ -16,8 +16,8 @@ transaction_api = Blueprint('transaction_api', __name__)
 
 
 #Tier 1
-@authenticate
 @transaction_api.route("/NonCriticalTransactions", methods=['GET'])
+@authenticate
 def get_noncritical_transactions():
     app.logger.info("[api-GET-All-NonCriticalTransactions]")
     role_expected = [3,4,5]
@@ -36,8 +36,8 @@ def get_noncritical_transactions():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/ApproveMoneyTransferNonCritical", methods=['POST'])
+@authenticate
 def approve_money_transfer_noncritical():
     app.logger.info("[api-ApproveMoneyTransferNonCritical]")
     args = request.json
@@ -76,8 +76,8 @@ def approve_money_transfer_noncritical():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/DeclineMoneyTransferNonCritical", methods=['POST'])
+@authenticate
 def decline_money_transfer_noncritical():
     app.logger.info("[api-DeclineMoneyTransferNonCritical]")
     args = request.json
@@ -102,8 +102,8 @@ def decline_money_transfer_noncritical():
 
 
 #Tier 2
-@authenticate
 @transaction_api.route("/CriticalTransactions", methods=['GET'])
+@authenticate
 def get_critical_transactions():
     app.logger.info("[api-GET-All-CriticalTransactions]")
     role_expected = [4,5]
@@ -122,8 +122,8 @@ def get_critical_transactions():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/ApproveMoneyTransferCritical", methods=['POST'])
+@authenticate
 def approve_money_transfer_critical():
     app.logger.info("[api-ApproveMoneyTransferCritical]")
     args = request.json
@@ -159,8 +159,8 @@ def approve_money_transfer_critical():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/DeclineMoneyTransferCritical", methods=['POST'])
+@authenticate
 def decline_money_transfer_critical():
     app.logger.info("[api-DeclineMoneyTransferCritical]")
     args = request.json
@@ -184,8 +184,8 @@ def decline_money_transfer_critical():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 # Admin
-@authenticate
 @transaction_api.route("/AdminTransactions", methods=['GET'])
+@authenticate
 def get_admin_transactions():
     app.logger.info("[api-GET-All-AdminTransactions]")
     role_expected = [5]
@@ -204,8 +204,8 @@ def get_admin_transactions():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/AdminApproveMoneyTransfer", methods=['POST'])
+@authenticate
 def admin_approve_money_transfer():
     app.logger.info("[api-AdminApproveMoneyTransfer]")
     args = request.json
@@ -244,8 +244,8 @@ def admin_approve_money_transfer():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/AdminDeclineMoneyTransfer", methods=['POST'])
+@authenticate
 def admin_decline_money_transfer():
     app.logger.info("[api-AdminDeclineMoneyTransfer]")
     args = request.json
@@ -269,8 +269,8 @@ def admin_decline_money_transfer():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/DownloadStatements", methods=['POST'])
+@authenticate
 def downloadStatements():
     app.logger.info("[api-POST-DownloadStatements]")
     args = request.json
@@ -316,8 +316,8 @@ def downloadStatements():
 #     transactions = get_transactions(id=request.view_args['transaction_id'])
 #     return jsonify(response=transactions)
 
-@authenticate
 @transaction_api.route("/AllTransactions", methods=['GET'])
+@authenticate
 def all_transactions():
     app.logger.info("[api-GET-All-Transactions]")
     transactions = get_transactions()
@@ -349,8 +349,8 @@ def all_transactions():
 #     return jsonify(response=message)
 
 #customer
-@authenticate
 @transaction_api.route("/CustomerTransactions", methods=['GET'])
+@authenticate
 def customer_transactions():
     app.logger.info("[api-GET-All-CustomerTransactions]")
     # args = request.json
@@ -421,8 +421,8 @@ def customer_transactions():
 #             transactions.extend(transactions_to)
 #         return jsonify({ "status": "success", "data": transactions})
 
-@authenticate
 @transaction_api.route("/CustomerApproveMoneyTransfer", methods=['POST'])
+@authenticate
 def customer_approve_money_transfer():
     app.logger.info("[api-CustomerApproveMoneyTransfer]")
     args = request.json
@@ -446,8 +446,8 @@ def customer_approve_money_transfer():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/CustomerDeclineMoneyTransferCritical", methods=['POST'])
+@authenticate
 def customer_decline_money_transfer_critical():
     app.logger.info("[api-CustomerDeclineMoneyTransferCritical]")
     args = request.json
@@ -472,8 +472,8 @@ def customer_decline_money_transfer_critical():
 
 
 
-@authenticate
 @transaction_api.route("/InitiateMoneyTransfer", methods=['POST'])
+@authenticate
 def initiate_money_transfer():
     app.logger.info("[api-InitiateMoneyTransfer]")
     args = request.json
@@ -538,8 +538,9 @@ def initiate_money_transfer():
 
 
 #merchant
-@authenticate
+
 @transaction_api.route("/MerchantTransactions", methods=['GET'])
+@authenticate
 def merchant_transactions():
     app.logger.info("[api-GET-All-MerchantTransactions]")
 
@@ -563,8 +564,8 @@ def merchant_transactions():
         return jsonify({ "status": "success", "data": { "transactions_from": transactions_from, "transactions_to": transactions_to }})
 
 
-@authenticate
 @transaction_api.route("/MerchantApproveMoneyTransfer", methods=['POST'])
+@authenticate
 def merchant_approve_money_transfer():
     app.logger.info("[api-MerchantApproveMoneyTransfer]")
     args = request.json
@@ -588,8 +589,8 @@ def merchant_approve_money_transfer():
         return jsonify({ "status": "failure", "errorMessage": "User does not have acces"})
 
 
-@authenticate
 @transaction_api.route("/MerchantDeclineMoneyTransferCritical", methods=['POST'])
+@authenticate
 def merchant_decline_money_transfer_critical():
     app.logger.info("[api-MerchantDeclineMoneyTransferCritical]")
     args = request.json

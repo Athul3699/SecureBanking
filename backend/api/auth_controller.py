@@ -98,8 +98,9 @@ def login_user_api():
         return make_response(jsonify({ "status": status, "data": data})), 500
 
 
-@authenticate
+
 @auth_api.route("/LogoutUser", methods=['POST'])
+@authenticate
 def logout_user_api():
     app.logger.info("[Log out]")
     if 'token' in request.headers:
@@ -114,8 +115,9 @@ def logout_user_api():
         return jsonify({ "status": "failure", "errorMessage": "token does not exist"})
 
 
-@authenticate
+
 @auth_api.route("/GetRole", methods=['GET'])
+@authenticate
 def get_role():
     if 'token' in request.headers:
         email = decode_email(request.headers['token'])
