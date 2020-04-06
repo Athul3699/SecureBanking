@@ -57,10 +57,10 @@ class ManageAccountsIndividualUser extends Component {
     // we refresh this if the user deletes an account or whatever...
     refreshAccountsState = () => {
 
-      postRequest(`${API_URL}/api/v1/admin/GetUserActiveRequest`)
+      getRequest(`${API_URL}/api/v1/admin/GetUserActiveRequest`)
             .then((data) => {
                 this.setState({
-                  accounts: data["data"].map((account, i) => {
+                  accounts: data["data"] ? data["data"].map((account, i) => {
                     return {
                       first_name: account.first_name,
                       last_name: account.last_name,
@@ -68,7 +68,7 @@ class ManageAccountsIndividualUser extends Component {
                       edit_data: JSON.stringify(account.edit_data),
                       status: status_map[account.edit_status]
                     }
-                  })
+                  }) : []
                 })
                 this.setState({ isLoading: false, isAuthorized: true })
             })
