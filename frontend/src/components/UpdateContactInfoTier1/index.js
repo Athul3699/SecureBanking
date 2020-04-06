@@ -161,7 +161,8 @@ class UpdateContactInfoTier1 extends Component {
       delete data['confirm_password']
       postRequestWithoutToken(`${API_URL}/api/v1/common/CreateUser`, this.state)
         .then(() => {
-          // route to appropriate page
+          alert("Request for Contact Info updation sent for approval successfully.");
+          this.props.history.push(`/`)
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.

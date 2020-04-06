@@ -124,24 +124,29 @@ class CreateUserAccount extends Component {
     }
     var regName = /^[a-zA-Z\s]*$/;
     if (!regName.test(this.state.first_name)||this.state.first_name.length < 2) {
+      this.setState({first_name:""});
       alert("Fist name entered is invalid ");
       return false;
     }
     if (!regName.test(this.state.last_name)||this.state.last_name.length < 2) {
+      this.setState({last_name:""});
       alert("Last name entered is invalid ");
       return false;
     }
     if (this.state.ssn.length !== 9 ||parseFloat(this.state.ssn).toString() !== this.state.ssn) {
+      this.setState({ssn:""});
       alert("The SSN should be a 9 digit number");
       return false;
     }
 
 
     if (this.state.contact.length !== 10||parseFloat(this.state.contact).toString() !== this.state.contact) {
+      this.setState({contact:""});
       alert("The contact number should be 10 digits number");
         return false;
       }
     if (this.state.password.length < 7) {
+      this.setState({password:""});
       alert("The password should contain minimum 7 characters");
       return false;
     }
@@ -149,11 +154,14 @@ class CreateUserAccount extends Component {
     var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     if (re.test(String(this.state.email).toLowerCase()) == false) {
+      this.setState({email:""});
       alert("The email entered is not valid!!")
       return false
     }
 
     if (this.state.password != this.state.confirm_password) {
+      this.setState({password:""});
+      this.setState({confirm_password:""});
       alert("Passwords are not matching");
       return false;
     }
@@ -162,6 +170,7 @@ class CreateUserAccount extends Component {
   };
 
   onButtonClick = () => {
+    //console.log(this.state)
     if (this.validate()) {  
       let data = this.state;
       let confirm_password = data['confirm_password']

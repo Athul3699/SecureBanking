@@ -69,7 +69,7 @@ class ScheduleAppointment extends Component {
 
 
     //this.setState({ date:parseInt(dateArray[2]), month:parseInt(dateArray[1]), year:parseInt(dateArray[0])});
-    //this.updateSlots(dateString);
+    this.updateSlots(dateString);
   }
 
   updateSlots(dateString){

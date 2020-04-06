@@ -164,8 +164,8 @@ if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == fal
       let id = data['id'] 
       postRequest(`${API_URL}/api/v1/user/InitiateModifyUser`, {"id": data.id, "edit_data": this.state })
         .then(() => {
-          // route to appropriate page
-          this.props.history.push('/')
+          alert("Request for Contact Info updation sent for approval successfully.");
+          this.props.history.push(`/`)
         })
         .catch(() => {
           // display error message. not needed for now, we can assume api is stable.
