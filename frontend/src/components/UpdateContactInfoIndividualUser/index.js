@@ -123,10 +123,19 @@ class UpdateContactInfoIndividualUser extends Component {
   }
 
   validate = () => { 
-  if (this.state.contact){if (this.state.contact.length < 10) {
-    alert("The contact number should be 10 digits");
-    return false;
-  }}
+    var regName = /^[a-zA-Z\s]*$/;
+    if (this.state.first_name){ if (!regName.test(this.state.first_name)||this.state.first_name.length < 2) {
+      alert("First name entered is invalid ");
+      return false;
+    }}
+    if (this.state.last_name){if (!regName.test(this.state.last_name)||this.state.last_name.length < 2) {
+      alert("Last name entered is invalid ");
+      return false;
+    }}
+  if (this.state.contact){if (this.state.contact.length !== 10||parseFloat(this.state.contact).toString() !== this.state.contact) {
+    alert("The contact number should be 10 digits number");
+      return false;
+    }}
   var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
   if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
@@ -204,16 +213,13 @@ class UpdateContactInfoIndividualUser extends Component {
           onChange={this.handleDobChange}
           // value={this.state.date_of_birth}
         />
-
         <br />
         <br /> 
-
                 {/* SSN: <br />
         <Input
           onChange={this.handleSsnChange}
           value={this.state.ssn}
         />
-
         <br />
         <br /> */}
 
@@ -231,16 +237,13 @@ class UpdateContactInfoIndividualUser extends Component {
           onChange={this.handlePassword}
           value={this.state.password}
         />
-
         <br />
         <br />
-
         Confirm Password: <br />
         <Input
           onChange={this.handleConfirmPassword}
           value={this.state.confirm_password}
         />
-
         <br />
         <br /> */}
 

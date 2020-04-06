@@ -68,11 +68,11 @@ class Login extends Component {
           <h2 className="Prompt-header">Log in <i class="material-icons"></i></h2>
           <p className="Prompt-textinput">
             <label for="userID">&nbsp;&nbsp;&nbsp;Email&nbsp;&nbsp;</label>
-            <input type="text" id="userID" name="userID" onChange={this.onEmailChange}/>
+            <input type="text" id="userID" name="userID" value={this.state.email} onChange={this.onEmailChange}/>
           </p>
           <p className="Prompt-textinput">
             <label for="password">Password&nbsp;&nbsp;</label>
-            <input type="password" id="password" name="password" onChange={this.onPasswordChange}/>
+            <input type="password" id="password" name="password" value={this.state.password} onChange={this.onPasswordChange}/>
           </p>
             
 
