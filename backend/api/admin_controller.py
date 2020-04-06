@@ -235,8 +235,19 @@ def post_feedback_api():
 
     return post_feedback(user_email=data['email'], message=data['message'])
 
+
 @authenticate
 @admin_api.route('/GetSignInHistory', methods=['GET'])
 def getSignInHistory():
-    signins = get_sign_in_history()
+    token = request.headers['token']
+    email = decode_email(token)
+    user = get_user_account(email=email)
+
+    if user == None:
+        return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
+    
+    if user['role_id']==5:
+        signins = get_sign_in_history()
+    else:
+        signins = get_sign_in_history(email=email)
     return jsonify({"status": "success", "data": signins})

@@ -133,6 +133,12 @@ class Feedback(db.Model):
     user_email = db.Column(db.String, nullable=False)
 
 
+class IncorrectLogins(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String, unique=True, nullable=False)
+    expires_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=False)
+    incorrect_count = db.Column(db.Integer, nullable=False)
+
 if __name__ == '__main__':
     manager.run()
 

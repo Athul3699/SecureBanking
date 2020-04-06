@@ -59,7 +59,7 @@ Technical Account Access End
 
 @auth_api.route("/RegisterUser", methods=['POST'])
 def register_user_api():
-    body = request.json
+    body = request.get_json(force=True)
     
     status, data = auth_service2.register_user(**body)
 
@@ -73,17 +73,16 @@ def register_user_api():
 
 @auth_api.route("/LoginUser", methods=['POST'])
 def login_user_api():
-    body = request.json
+    body = request.get_json(force=True)
 
     status, data = auth_service2.login_user(**body)
-
-    token = data
-    email = decode_email(token)
-
-    user = get_user_account(email=email)
-    user_id = user["id"]
     
     if status == "success":
+        token = data
+        email = decode_email(token)
+
+        user = get_user_account(email=email)
+        user_id = user["id"]
         message = add_sign_in(email=email)
         return make_response(jsonify({ "status": status, "data": data })), 200
     elif status == "failure" and data == "user does not exist":
