@@ -68,7 +68,7 @@ def login_user(**data):
 
         if user:
             incor_login = get_incorrect_logins(user_email=user.email)
-            if incor_login is None:
+            if incor_login is None or len(incor_login)==0:
                 message = add_incorrect_logins(user_email=user.email, incorrect_count=0, expires_at=datetime.datetime.utcnow() + datetime.timedelta(seconds=3000))
             incor_login = get_incorrect_logins(user_email=user.email)
             incor_login = incor_login[0]
