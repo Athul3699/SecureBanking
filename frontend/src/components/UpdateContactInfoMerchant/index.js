@@ -134,7 +134,7 @@ class UpdateContactInfoMerchant extends Component {
     return false;
   }
   
-  var regName = /^[a-zA-Z]+$/;
+  var regName = /^[a-zA-Z\s]*$/;
   if (this.state.first_name){ if (!regName.test(this.state.first_name)||this.state.first_name.length < 2) {
     alert("First name entered is invalid ");
     return false;
