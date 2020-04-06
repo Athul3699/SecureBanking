@@ -13,9 +13,6 @@ def initiate_modify_user():
     app.logger.info("[api-initiate-modify-user]")
     args = request.json
     id = args['id']
-    # # token 
-    # id = 5 # args['id'] # TODO: extract user_id for every end point
-
 
     response = update_user_account(id=id, edit_mode=True, edit_data=args['edit_data'], edit_status=SUBMITTED)
     return jsonify(response)

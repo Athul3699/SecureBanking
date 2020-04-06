@@ -105,7 +105,7 @@ def create_bank_account():
     balance = (float)(args['balance'])
     routing_number = '1234567' 
 
-    result = add_customer_bank_account(number=number, type=account_type, balance=balance, user_id=user_id, routing_number=routing_number)
+    result = add_customer_bank_account(number=number, type=account_type, balance=balance, user_id=user_id, routing_number=routing_number, is_active=True)
     if result=='success':
         return jsonify({ "status": "success"})
     else:

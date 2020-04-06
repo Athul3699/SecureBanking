@@ -205,7 +205,7 @@ class ManageAccountsTier2 extends Component {
           return (
             <div className="create-form-container">
               <Button onClick={() => this.onButtonClick("create")}>
-                Create Account
+                Create Customer Bank Account
               </Button>
 
               <br />
