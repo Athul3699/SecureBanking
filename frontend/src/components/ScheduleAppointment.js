@@ -39,7 +39,8 @@ class ScheduleAppointment extends Component {
       appointments:[],
       disableSlots:[false,false,false,false,false],
       toggleSelect: true,
-      accountId: null
+      accountId: null,
+      isAuthorizedSchedule: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -50,14 +51,18 @@ class ScheduleAppointment extends Component {
   }
 
   componentDidMount() {
-    
+    if (window.localStorage.getItem('API_TOKEN')) {
     getRequest(`${API_URL}/api/v1/appointment/FilledSlots`)
     .then((data) => {
       console.log(data);
-      this.setState({appointments:data});
-      
+      this.setState({appointments:data, isAuthorizedSchedule:true});
     })
     .catch((error) => console.log(error))
+  }
+    else {
+      console.log("Invalid Token")
+      this.setState({ isAuthorizedSchedule: false })
+    }
   }
   onChange(value, dateString) {
     console.log('Selected Time: ', value);
@@ -120,7 +125,12 @@ class ScheduleAppointment extends Component {
     this.setState({slot:value})
   }
 
+  goToLogin = () => {
+    this.props.history.push('')
+  }
+
   render() {
+    if(this.state.isAuthorizedSchedule){
     const onClick = ({ key }) => {
       console.log(key);
     };
@@ -167,6 +177,14 @@ class ScheduleAppointment extends Component {
         <Button type="primary" onClick={this.onButtonClick}>Schedule</Button>
       </div>
     );
+  } else {
+    return (
+      <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+        You are not authorized... Please log in again.           
+        <Button onClick={() => this.goToLogin()}> Go back to login </Button>
+      </div>
+    ) 
+  }
   }
 }
 
