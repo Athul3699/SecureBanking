@@ -10,6 +10,7 @@ from backend.services.common import *
 """
 Technical Account Access Start
 """
+# not using this URL
 @auth_api.route("/admin/user/getuser", methods=['POST'])
 def admin_getuser_api():
 
@@ -19,6 +20,7 @@ def admin_getuser_api():
     response = get_user_account(email=email)
     return jsonify({"status": "success", "data": response})
 
+# not using this URL
 @auth_api.route("/admin/user/registeruser", methods=['POST'])
 def admin_registeruser_api():
 
@@ -33,6 +35,7 @@ def admin_registeruser_api():
         return make_response(jsonify({ "status": status, "data": data})), 500
 
 
+# not using this URL
 @auth_api.route("/admin/user/getallusers", methods=['POST'])
 def admin_getallusers_api():
 
@@ -43,6 +46,8 @@ def admin_getallusers_api():
     else:
         return make_response(jsonify({ "status": "error", "data": data})), 500
 
+
+# not using this URL
 @auth_api.route("/admin/user/updateuser", methods=['POST'])
 def admin_updateuser_api():
     data = request.json
@@ -50,6 +55,8 @@ def admin_updateuser_api():
     response = update_user_account_email_args(email=email, **data)
     return jsonify({"status": "success", "data": response})
 
+
+# not using this URL
 @auth_api.route('/admin/GetFeedback', methods=['POST'])
 def get_all_feedback_api():
     return get_all_feedback()

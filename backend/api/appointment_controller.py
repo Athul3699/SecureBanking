@@ -3,6 +3,7 @@ from backend import app
 from ..services.appointment_service import schedule_appointment, get_appointments
 from ..services.security_util import decode_email
 from ..services.common import get_user_account
+from ..services.authenticate import authenticate
 
 appointment_api = Blueprint('appointment_api', __name__)
 
@@ -10,6 +11,7 @@ appointment_api = Blueprint('appointment_api', __name__)
 request = id, edit_status={2,3}, edit_data
 response = User(id=id)
 """
+@authenticate
 @appointment_api.route("/Schedule", methods=['POST'])
 def schedule_appointment_api():
     app.logger.info("[api-schedule-appointment]")
@@ -25,6 +27,8 @@ def schedule_appointment_api():
     response = schedule_appointment(**args)
     return jsonify(response=response)
 
+
+@authenticate
 @appointment_api.route("/FilledSlots", methods=['GET'])
 def get_appoinments_api():
     app.logger.info("[api-get-appointments]")
