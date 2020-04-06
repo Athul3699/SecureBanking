@@ -20,8 +20,9 @@ DELETE:
     response = User
 """
 
-@authenticate
+
 @bank_account_api.route("/BankAccount", methods=['GET', 'POST', 'PUT', 'DELETE'])
+@authenticate
 def employee_account_actions():
     app.logger.info("[api-bank-account-actions]")
     args = request.json
@@ -46,8 +47,8 @@ def employee_account_actions():
     return jsonify(response=response)
     
 
-@authenticate
 @bank_account_api.route("/GetCustomerAccounts", methods=['GET'])
+@authenticate
 def get_all_customer_bank_accounts():
     app.logger.info("[GetCustomerAccounts]")
     token = request.headers['token']
@@ -65,8 +66,8 @@ def get_all_customer_bank_accounts():
     return jsonify({ "status": "success", "data": accounts})
 
 
-@authenticate
 @bank_account_api.route("/GetActiveCustomerAccounts", methods=['GET'])
+@authenticate
 def get_all_active_customer_accounts():
     app.logger.info("[GetCustomerAccounts]")
     token = request.headers['token']
@@ -84,8 +85,8 @@ def get_all_active_customer_accounts():
     return jsonify({ "status": "success", "data": accounts})
 
 
-@authenticate
 @bank_account_api.route("/CreateBankAccount", methods=['POST'])
+@authenticate
 def create_bank_account():
     app.logger.info("[CreateBankAccount]")
     args = request.json

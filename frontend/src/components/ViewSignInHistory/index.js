@@ -24,23 +24,14 @@ class ViewSignInHistory extends Component {
     }
 
     refreshSignInHistoryState = () => {
-      getRequest(`${API_URL}/api/v1/auth/GetRole`) 
-      .then((data) => { 
-        const roleId = data["roleId"]
-        if (roleId == 5) {
-          getRequest(`${API_URL}/api/v1/admin/GetSignInHistory`)
-          .then((data) => {
-            this.setState({ signinhistory: data["data"]})
+        getRequest(`${API_URL}/api/v1/admin/GetSignInHistory`)
+        .then((data) => {
+          this.setState({ signinhistory: data["data"]})
+        })
+          .catch((err) => {
+            this.setState({ error: true })
+            console.log(err)
           })
-            .catch((err) => {
-              this.setState({ error: true })
-              console.log(err)
-            })
-            
-        } else {
-          this.setState({ isLoading: false, isAuthorized: false })
-        }
-      })
       .catch((err) => { 
         this.setState({ error: true })
       })

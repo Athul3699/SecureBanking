@@ -24,8 +24,8 @@ PUT
     request = any attributes of user
     response = User (modified)
 """
-@authenticate
 @admin_api.route("/EmployeeAccount", methods=['GET', 'POST', 'PUT', 'DELETE'])
+@authenticate
 def employee_account_actions():
     app.logger.info("[api-employee-account-actions]")
 
@@ -44,8 +44,8 @@ def employee_account_actions():
         
     return jsonify({"status": "success", "data": response})
 
-@authenticate
 @admin_api.route("/DeleteUser", methods=['POST'])
+@authenticate
 def delete_user_admin_related():
     app.logger.info("[api-delete-account-actions]")
     args = request.json
@@ -56,8 +56,8 @@ def delete_user_admin_related():
     return jsonify({ "status": "success", "data": response })
 
 
-@authenticate
 @admin_api.route("/CreateEmployeeAccount", methods=['POST'])
+@authenticate
 def create_employee_account():
     app.logger.info("[api-employee-account-actions]")
     args = request.json
@@ -66,8 +66,8 @@ def create_employee_account():
     return jsonify({ "status": "success", "data": response })
 
 
-@authenticate
 @admin_api.route("/EditEmployeeAccount", methods=['POST'])
+@authenticate
 def edit_employee_account():
     app.logger.info("[api-employee-account-actions]")
     args = request.json
@@ -76,8 +76,8 @@ def edit_employee_account():
     return jsonify({ "status": "success", "data": response })
 
 
-@authenticate
 @admin_api.route("/DeleteEmployeeAccount", methods=['POST'])
+@authenticate
 def delete_employee_account():
     app.logger.info("[api-employee-account-actions]")
     args = request.json
@@ -90,8 +90,9 @@ def delete_employee_account():
 request = id, edit_status={2,3}, edit_data
 response = User(id=id)
 """
-@authenticate
+
 @admin_api.route("/ManageEmployeeRequest", methods=['POST'])
+@authenticate
 def manage_employee_request():
     app.logger.info("[api-manage-employee-request]")
 
@@ -106,8 +107,9 @@ def manage_employee_request():
 request = id, edit_status={2,3}, edit_data
 response = User(id=id)
 """
-@authenticate
+
 @admin_api.route("/ManageUserRequest", methods=['POST'])
+@authenticate
 def manage_user_request():
     app.logger.info("[api-manage-user-request]")
 
@@ -119,16 +121,18 @@ def manage_user_request():
     response = update_user_account_email_args(email=email, edit_mode=False, edit_status=edit_status)
     return jsonify({"status": "success", "data": response})
 
-@authenticate
+
 @admin_api.route("/GetAllUsers", methods=['GET'])
+@authenticate
 def get_all_users_api_admin():
     app.logger.info("[api-get-all-users]")
 
     response = get_all_users()
     return jsonify({"status": "success", "data": response})
 
-@authenticate
+
 @admin_api.route("/GetAllEmployees", methods=['GET'])
+@authenticate
 def get_all_employees_api():
     app.logger.info("[api-get-all-employees]")
 
@@ -137,8 +141,9 @@ def get_all_employees_api():
 
 """ Manage Accounts Tier 2 Start """
 
-@authenticate
+
 @admin_api.route("/tier2/GetAllCustomerBankAccounts", methods=['GET'])
+@authenticate
 def get_all_customer_bank_accounts_tier2():
     app.logger.info("[api-get-all-customer-bank-accounts")
 
@@ -146,8 +151,9 @@ def get_all_customer_bank_accounts_tier2():
 
     return jsonify({ "status": "success", "data": response })
 
-@authenticate
+
 @admin_api.route("/tier2/EditCustomerBankAccount", methods=['POST'])
+@authenticate
 def edit_customer_account_tier2():
     app.logger.info("[api-edit-customer-bank-accounts")
     args = request.json
@@ -155,8 +161,9 @@ def edit_customer_account_tier2():
 
     return jsonify({ "status": "success", "data": response })
 
-@authenticate
+
 @admin_api.route("/tier2/CreateCustomerBankAccount", methods=['POST'])
+@authenticate
 def create_customer_account_tier2():
     app.logger.info("[CreateCustomerBankAccount]")
     args = request.json
@@ -179,8 +186,9 @@ def create_customer_account_tier2():
     else:
         return jsonify({ "status": "failure", "errorMessage": "error creating bank account"})
 
-@authenticate
+
 @admin_api.route("/tier2/GetCustomerBankAccount", methods=['POST'])
+@authenticate
 def get_customer_account_tier2():
     app.logger.info("[api-get-customer-bank-accounts")
     args = request.json
@@ -190,8 +198,8 @@ def get_customer_account_tier2():
     return jsonify({ "status": "success", "data": response })
 
 
-@authenticate
 @admin_api.route("/tier2/DeleteCustomerBankAccount", methods=['POST'])
+@authenticate
 def delete_customer_account_tier2():
     app.logger.info("[api-delete-customer-bank-accounts")
     args = request.json
@@ -203,8 +211,9 @@ def delete_customer_account_tier2():
 
 """ Manage Accounts Tier2 End """
 
-@authenticate
+
 @admin_api.route("/GetAllUsersBankAccounts", methods=['GET'])
+@authenticate
 def get_all_users_api():
     app.logger.info("[api-get-users-bank-accounts]")
 
@@ -212,16 +221,18 @@ def get_all_users_api():
     return jsonify({"status": "success", "data": response})
 
 
-@authenticate
+
 @admin_api.route("/GetAllActiveUserRequests", methods=['GET'])
+@authenticate
 def get_all_active_user_requests_api():
     app.logger.info("[api-get-active-requests]")
 
     response = get_all_active_user_requests()
     return jsonify({"status": "success", "data": response})
 
-@authenticate
+
 @admin_api.route("/GetAllActiveEmployeeRequests", methods=['GET'])
+@authenticate
 def get_all_active_employee_requests_api():
     app.logger.info("[api-get-active-requests]")
 
@@ -229,8 +240,9 @@ def get_all_active_employee_requests_api():
     return jsonify({"status": "success", "data": response})
 
 
-@authenticate
+
 @admin_api.route("/GetUserActiveRequest", methods=['GET'])
+@authenticate
 def get_active_request_user_api():
     app.logger.info("[api-get-active-requests]")
 
@@ -240,22 +252,25 @@ def get_active_request_user_api():
     return jsonify({"status": "success", "data": response})
 
 
-@authenticate
+
 @admin_api.route('/DownloadMaintenanceLog', methods=['GET'])
+@authenticate
 def downloadFile():
     path = "logs/logger.log"
     return send_file(path, as_attachment=True)
 
-@authenticate
+
 @admin_api.route('/PostFeedback', methods=['POST'])
+@authenticate
 def post_feedback_api():
     data = request.json
 
     return post_feedback(user_email=data['email'], message=data['message'])
 
 
-@authenticate
+
 @admin_api.route('/GetSignInHistory', methods=['GET'])
+@authenticate
 def getSignInHistory():
     token = request.headers['token']
     email = decode_email(token)

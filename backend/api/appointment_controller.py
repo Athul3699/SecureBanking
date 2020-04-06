@@ -11,8 +11,9 @@ appointment_api = Blueprint('appointment_api', __name__)
 request = id, edit_status={2,3}, edit_data
 response = User(id=id)
 """
-@authenticate
+
 @appointment_api.route("/Schedule", methods=['POST'])
+@authenticate
 def schedule_appointment_api():
     app.logger.info("[api-schedule-appointment]")
     args = request.json
@@ -28,8 +29,9 @@ def schedule_appointment_api():
     return jsonify(response=response)
 
 
-@authenticate
+
 @appointment_api.route("/FilledSlots", methods=['GET'])
+@authenticate
 def get_appoinments_api():
     app.logger.info("[api-get-appointments]")
 

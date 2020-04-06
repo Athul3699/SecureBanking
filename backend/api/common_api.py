@@ -8,15 +8,17 @@ from backend.services.authenticate import authenticate
 
 common_api = Blueprint('common_api', __name__)
 
-@authenticate
+
 @common_api.route("/CustomerAccounts/<user_id>", methods=['GET'])
+@authenticate
 def customer_accounts(user_id):
     app.logger.info("[api-CustomerAccounts]")
     accounts = get_customer_bank_accounts(user_id=request.view_args['user_id'])
     return jsonify(response=accounts)
 
-@authenticate
+
 @common_api.route("/UpdateUser", methods=['POST'])
+@authenticate
 def update_user_account_api_profile():
     app.logger.info("[api-Profile]")
     data = request.json
@@ -24,8 +26,8 @@ def update_user_account_api_profile():
     profile = update_user_account_email_service(email=data['email'])
     return jsonify(response=profile)
 
-@authenticate
 @common_api.route("/GetUser", methods=['POST'])
+@authenticate
 def get_user_account_endpoint():
     app.logger.info("[api-get-user]")
     args = request.json

@@ -7,8 +7,8 @@ from ..services.authenticate import authenticate
 
 user_api = Blueprint('user_api', __name__)
 
-@authenticate
 @user_api.route("/InitiateModifyUser", methods=['POST'])
+@authenticate
 def initiate_modify_user():
     app.logger.info("[api-initiate-modify-user]")
     args = request.json
@@ -17,8 +17,8 @@ def initiate_modify_user():
     response = update_user_account(id=id, edit_mode=True, edit_data=args['edit_data'], edit_status=SUBMITTED)
     return jsonify(response)
 
-@authenticate
 @user_api.route("/GetUser", methods=['GET'])
+@authenticate
 def get_user():
     app.logger.info("[api-get-user]")
     args = request.json

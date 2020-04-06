@@ -1,174 +1,192 @@
-import React, { Component } from 'react'
-import 'antd/dist/antd.css'
-import './style.css'
+import React, { Component } from "react";
+import "antd/dist/antd.css";
+import "./style.css";
+
+import { Button, Table } from "antd";
 
 import {
-    Button,
-    Table,
-  } from 'antd';
-
-import { postRequest, getRequest, deleteRequest, deleteRequestWithoutToken, getRequestWithoutToken, putRequestWithoutToken } from '../../util/api';
-import { API_URL } from '../../constants/references';
-import { roleMap } from '../../constants/api'
+  postRequest,
+  getRequest,
+  deleteRequest,
+  deleteRequestWithoutToken,
+  getRequestWithoutToken,
+  putRequestWithoutToken
+} from "../../util/api";
+import { API_URL } from "../../constants/references";
+import { roleMap } from "../../constants/api";
 
 class ManageAccountsTier1 extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-          accounts: [
-          ],      
+  constructor(props) {
+    super(props);
+    this.state = {
+      accounts: [
+        {
+          number: "123456789",
+          type: "1",
+          routing_number: "123456789",
+          balance: 12345
         }
-    }
+      ],
+      isAuthorizedManageAccountsTier1: false,
+      isLoading: false
+    };
+  }
 
-    componentDidMount() {
-      this.refreshAccountsState()
-    }
-
-    // accounts state is what is shown.
-    // we refresh this if the user deletes an account or whatever...
-    refreshAccountsState = () => {
+  componentDidMount() {
+    if (window.localStorage.getItem("API_TOKEN")) {
       getRequest(`${API_URL}/api/v1/auth/GetRole`) // make the get request (Athul - you need to make this work whenever Harshit pushes the code)
-      .then((data) => { // if it is successful
-        const roleId = data["roleId"]
-        if (roleId == 3) {
-          getRequest(`${API_URL}/api/v1/admin/GetAllUsersBankAccounts`)
-          .then((data) => {
-            // take the current accounts, and take only the data we need
-            this.setState({ accounts: data["data"].map((account) => {
-              return {
-                number: account.number,
-                type: account.type,
-                routing_number: account.routing_number,
-                balance: account.balance
-              }
-            })})
-          })
-            .catch((err) => {
-              this.setState({ error: true })
-              console.log(err)
-            })
-            
+        .then(data => {
+          // if it is successful
+          if (data.status === "success") {
+            this.setState({ isAuthorizedManageAccountsTier1: true });
+          } else {
+            console.log("token invalid");
+            this.setState({ isAuthorizedManageAccountsTier1: false });
+          }
 
-
-          getRequest(`${API_URL}/api/v1/admin/GetAllActiveUserRequests`)
-            .then((data) => {
-                this.setState({
-                  accounts2: data["data"].map((account, i) => {
-                    return {
-                      first_name: account.first_name,
-                      last_name: account.last_name,
-                      email: account.email,
-                      edit_data: JSON.stringify(account.edit_data),
-                    }
-                  })
-                })
-                this.setState({ isLoading: false, isAuthorized: true })
-            })
-            .catch((err) => {
-              this.setState({ error: true })
-              console.error(err)
-            })
-        } else {
-          this.setState({ isLoading: false, isAuthorized: false })
-        }
-      })
-      .catch((err) => { // if it fails
-        this.setState({ error: true })
-      })
+          const roleId = data["roleId"];
+          if (roleId === 3 && data.status === "success") {
+            this.setState({
+              isLoading: false,
+              isAuthorizedManageAccountsTier1: true
+            });
+            this.refreshAccountsState();
+          } else {
+            this.setState({
+              isLoading: false,
+              isAuthorizedManageAccountsTier1: false
+            });
+          }
+        })
+        .catch(err => {
+          // if it fails
+          this.setState({
+            error: true,
+            isAuthorizedManageAccountsTier1: false
+          });
+        });
     }
+  }
 
+  // accounts state is what is shown.
+  // we refresh this if the user deletes an account or whatever...
+  refreshAccountsState = () => {
+    // get accounts
+    getRequestWithoutToken(`${API_URL}/api/v1/admin/GetAllUsersBankAccounts`)
+      .then(data => {
+        // take the current accounts, and take only the data we need
+        let accounts = this.state.accounts.map(account => {
+          return {
+            number: account.number,
+            type: account.type,
+            routing_number: account.routing_number,
+            balance: account.balance
+          };
+        });
 
-    onButtonClick = (type, data) => {
-      if (type == 'accept') {
-        postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, { email: JSON.parse(data.edit_data).email, edit_status: 2 })
-          .then((data) => {
-            this.refreshAccountsState() // refresh!
-          })
-          .catch((err) => {
-            this.setState({ error: true })
-            console.log(err)
-          })
-      } else if (type == 'deny') {
-        postRequest(`${API_URL}/api/v1/admin/ManageUserRequest`, { email: JSON.parse(data.edit_data).email, edit_status: 3 })
-          .then((data) => {
-            this.refreshAccountsState() // refresh!
-          })
-          .catch((err) => {
-            this.setState({ error: true })
-            console.log(err)
-          })
+        this.setState({ accounts });
+      })
+      .catch(err => {
+        console.error(err);
+        this.setState({
+          error: true,
+          isAuthorizedManageAccountsTier1: false
+        });
+      });
+  };
+
+  goToLogin = () => {
+    this.props.history.push("");
+  };
+
+  onButtonClick = (type, data) => {
+    if (type == "edit") {
+      // TODO: route to update bank account info of
+    } else if (type == "delete") {
+      putRequestWithoutToken(
+        `${API_URL}/api/v1/bank_account/BankAccount`
+      ).then();
+      this.refreshAccountsState();
+    } else if (type == "create") {
+      // TODO: route to create employee account page according to role
+      // Create EmployeeAccount form
+    }
+  };
+
+  render() {
+    // define columns
+    const columns = [
+      {
+        title: "Account Number",
+        dataIndex: "number",
+        key: "number"
+      },
+      {
+        title: "Account Type",
+        dataIndex: "type",
+        key: "type"
+      },
+      {
+        title: "Routing Number",
+        dataIndex: "routing_number",
+        key: "routing_number"
+      },
+      {
+        title: "Balance",
+        dataIndex: "balance",
+        key: "balance"
+      },
+      {
+        title: "Actions",
+        key: "actions",
+        render: (text, data) => (
+          <span>
+            <a
+              style={{ marginRight: 16 }}
+              onClick={() => this.onButtonClick("edit", data)}
+            >
+              {" "}
+              Edit{" "}
+            </a>
+            <a onClick={() => this.onButtonClick("delete", data)}> Delete </a>
+          </span>
+        )
       }
+    ];
 
-    }
-
-    render() {
-      // define columns
-        const columns = [
-          {
-            title: 'Account Number',
-            dataIndex: 'number',
-            key: 'number',
-          },
-          {
-            title: 'Account Type',
-            dataIndex: 'type',
-            key: 'type',
-          },
-          {
-            title: 'Routing Number',
-            dataIndex: 'routing_number',
-            key: 'routing_number',
-          },
-          {
-            title: 'Balance',
-            dataIndex: 'balance',
-            key: 'balance',
-          },
-        ]
-
-        const columns2 = [
-          {
-            title: 'First name',
-            dataIndex: 'first_name',
-            key: 'first_name',
-          },
-          {
-            title: 'Last Name',
-            dataIndex: 'last_name',
-            key: 'last_name',
-          },
-          {
-            title: 'Edit Data',
-            dataIndex: 'edit_data',
-            key: 'edit_data',
-          },
-          {
-            title: 'Actions',
-            key: 'actions',
-            render: (text, data) => (
-              <span>
-                <a style={{ marginRight: 16 }} onClick={() => this.onButtonClick('accept', data)}> Accept </a>
-                <a onClick={() => this.onButtonClick('deny', data)}> Deny </a>
-              </span>
-            )
-          },
-        ]
+    if (this.state.isLoading == true) {
+      // if it is loading, show loading screen
+      return <div> Loading... </div>;
+    } else {
+      if (this.state.error == true) {
+        // if it is loaded, and the initial api call has an error, show error screen
         return (
-
-            <div className="create-form-container"> 
-
-                Customer and Merchant Bank Accounts:
-                <br />
-                <br />
-                <Table dataSource={this.state.accounts} columns={columns} />
-
-                Customer and Merchant Requests:
-                <br />
-                <br />
-                <Table dataSource={this.state.accounts2} columns={columns2} />
-            </div>
+          <div>
+            {" "}
+            Something went wrong here... Please reload the page or logout and
+            login again to access the feature.{" "}
+          </div>
         );
+      } else {
+        if (this.state.isAuthorizedManageAccountsTier1 == true) {
+          return (
+            <div className="create-form-container">
+              <Button onClick={() => this.onButtonClick("create")}>
+                Create Account
+              </Button>
+
+              <br />
+              <br />
+              <Table dataSource={this.state.accounts} columns={columns} />
+            </div>
+          );
+        } else {
+          // if it is loaded, and the initial api call did not give an error, and response of the api call says they are not authorized
+          return <div> Sorry. You are not authorized to view this page. </div>;
+        }
+      }
     }
+  }
 }
 
-export default ManageAccountsTier1
+export default ManageAccountsTier1;
