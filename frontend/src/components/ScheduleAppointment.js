@@ -69,7 +69,7 @@ class ScheduleAppointment extends Component {
 
 
     //this.setState({ date:parseInt(dateArray[2]), month:parseInt(dateArray[1]), year:parseInt(dateArray[0])});
-    this.updateSlots(dateString);
+    //this.updateSlots(dateString);
   }
 
   updateSlots(dateString){
@@ -92,12 +92,9 @@ class ScheduleAppointment extends Component {
     this.setState({ reason:value });
   };
   validate(){
-    if(this.state.date===0){
-      alert("Select the date");
-      return false;
-    }
+    
     if(this.state.reason===""){
-      alert("Select the reason");
+      alert("Please provide the reason for appointment");
       return false;
     }
 
@@ -163,6 +160,7 @@ class ScheduleAppointment extends Component {
         <TextArea 
           onChange={this.onTextChange}
           rows={4} 
+          autoSize={{ minRows: 6, maxRows: 6 }}
           />
         
         <Button type="primary" onClick={this.onButtonClick}>Schedule</Button>
