@@ -317,8 +317,6 @@ def update_user_account_email_args(email, **kwargs):
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
 
-        local_object = app.db.session.merge(user)
-        app.db.session.add(local_object)
         app.db.session.commit()
 
         result = get_user_account(email=email)
@@ -330,29 +328,13 @@ def update_user_account_email_args_request(email, **kwargs):
     result = "error"
     try:
         keys = kwargs.keys()
-        password_hash = hashlib.md5(str(kwargs['password']).encode('utf-8')).hexdigest()
 
-        # profiles_qs = User.query.filter(app.db.or_(User.contact==kwargs['contact'], User.email==email))
-        
-        # app.db.session.commit()
-        kwargs['password'] = password_hash
-
-        # count = 0
-        # for record in profiles_qs:
-        #     count = count+1
-
-        # if count == 0 or count > 1:
-        #     return "error"
-
-        # if profiles_qs[0].id is not kwargs['id']:
-        #     return "error"
-
-        import pdb; pdb.set_trace()
-        user = User.query.filter_by(id=kwargs['id']).first()
+        user = app.db.session.query(User).filter_by(id=kwargs['id']).first()
+        del kwargs['id']
+         
         for key in keys:
             exec("user.{0} = kwargs['{0}']".format(key))
 
-        # app.db.session.add(user)
         app.db.session.commit()
 
         result = get_user_account(email=email)
@@ -421,7 +403,6 @@ def update_employee_account(id, **kwargs):
 
         edit_data = {}
         if (kwargs['edit_status'] == 2):
-            # import pdb; pdb.set_trace()
             edit_data = dict.copy(user.edit_data)
             user.edit_data = {}
             for key in edit_data.keys():

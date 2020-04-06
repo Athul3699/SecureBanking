@@ -139,16 +139,22 @@ class UpdateContactInfoIndividualUser extends Component {
       alert("Last name entered is invalid ");
       return false;
     }}
-  if (this.state.contact){if (this.state.contact.length !== 10||parseFloat(this.state.contact).toString() !== this.state.contact) {
-    alert("The contact number should be 10 digits number");
-      return false;
-    }}
-  var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    if (this.state.contact){if (this.state.contact.length !== 10||parseFloat(this.state.contact).toString() !== this.state.contact) {
+      alert("The contact number should be 10 digits number");
+        return false;
+      }}
+    var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-  if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
-      alert("The email entered is not valid!!")
-      return false
-    }}
+    if (this.state.email){if (re.test(String(this.state.email).toLowerCase()) == false) {
+        alert("The email entered is not valid!!")
+        return false
+      }}
+
+    if (this.state.password.length < 7 || this.state.confirm_password.length < 7 || this.state.password !== this.state.confirm_password) {
+      alert("password should be more than 7 characters and must match the confirm password...  ")
+      return false;
+    }
+
     return true;
   }
 
@@ -173,6 +179,7 @@ class UpdateContactInfoIndividualUser extends Component {
         })
     } else {
       // display error message
+      alert("fields not valid...  ")
     }
   }
 
@@ -249,8 +256,9 @@ class UpdateContactInfoIndividualUser extends Component {
         <br />
         <br />
 
-        {/* Password: <br />
+        Password: <br />
         <Input
+          type="password"
           onChange={this.handlePassword}
           value={this.state.password}
         />
@@ -258,15 +266,16 @@ class UpdateContactInfoIndividualUser extends Component {
         <br />
         Confirm Password: <br />
         <Input
+          type="password"
           onChange={this.handleConfirmPassword}
           value={this.state.confirm_password}
         />
         <br />
-        <br /> */}
+        <br />
 
         <Button
           type="primary"
-          onClick={this.onButtonClick}
+          onClick={() => this.onButtonClick()}
         >
           Request for Update Of Information
         </Button>

@@ -255,7 +255,8 @@ def get_active_request_user_api():
 
     token = request.headers['token']
 
-    response = get_user_account(email=decode_email(token), edit_mode=True)
+    response = get_user_account(email=decode_email(token))
+
     return jsonify({"status": "success", "data": response})
 
 
