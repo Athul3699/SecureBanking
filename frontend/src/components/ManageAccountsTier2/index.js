@@ -15,7 +15,7 @@ import { roleMap } from '../../constants/api'
 import UpdateContactInfo from '../UpdateContactInfo';
 import CreateEmployeeAccount from '../CreateEmployeeAccountAdminPage';
 import EditEmployeeAccountAdminPage from '../EditEmployeeAccountAdminPage'
-import CreateBankAccountTier2 from '../CreateBankAccountTier2';
+import CreateBankAccountTier2 from  '../CreateBankAccountTier2'
 import EditCustomerAccountTier2 from '../EditCustomerAccountTier2'
 
 const { Column } = Table
@@ -120,7 +120,7 @@ class ManageAccountsTier2 extends Component {
             title: 'Type',
             dataIndex: 'type',
             key: 'type',
-          },
+          },    
           {
             title: 'Routing Number',
             dataIndex: 'routing_number',
@@ -182,7 +182,9 @@ class ManageAccountsTier2 extends Component {
                       onOk={() => this.handleOk('create')}
                       onCancel={() => this.handleCancel('create')}
                     >
-                      <CreateBankAccountTier2 />
+                      <CreateBankAccountTier2
+                        handleCancel={() => this.handleCancel('create')}
+                      />
                     </Modal>
                 </div>
               );

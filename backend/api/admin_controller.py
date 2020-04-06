@@ -1,6 +1,6 @@
 from flask import jsonify, g, Blueprint, request
 from backend import app
-from ..services.common import post_feedback, get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts, get_sign_in_history
+from ..services.common import update_customer_bank_account_tier2, get_user_bank_account, post_feedback, get_all_active_employee_requests, get_all_active_user_requests, get_admin_every_user, get_all_users, generate_account_number, add_customer_bank_account, update_customer_bank_account, get_customer_bank_accounts, get_user_account, update_user_account_email_args, update_user_account, add_user_account, update_employee_account, get_all_employees, get_all_user_bank_accounts, get_sign_in_history
 from ..services.constants import *
 import datetime
 from ..services.authenticate import authenticate
@@ -135,6 +135,8 @@ def get_all_employees_api():
     response = get_all_employees()
     return jsonify({"status": "success", "data": response})
 
+""" Manage Accounts Tier 2 Start """
+
 @authenticate
 @admin_api.route("/tier2/GetAllCustomerBankAccounts", methods=['GET'])
 def get_all_customer_bank_accounts_tier2():
@@ -149,8 +151,7 @@ def get_all_customer_bank_accounts_tier2():
 def edit_customer_account_tier2():
     app.logger.info("[api-edit-customer-bank-accounts")
     args = request.json
-
-    response = update_customer_bank_account(account_number=args['number'], **args)
+    response = update_customer_bank_account_tier2(**args)
 
     return jsonify({ "status": "success", "data": response })
 
@@ -159,11 +160,9 @@ def edit_customer_account_tier2():
 def create_customer_account_tier2():
     app.logger.info("[CreateCustomerBankAccount]")
     args = request.json
-    token = request.headers['token']
 
-    email = decode_email(token)
+    email = args['email']
     user = get_user_account(email=email)
-
 
     if user == None:
         return jsonify({ "status": "failure", "errorMessage": "user does not exist"})
@@ -181,14 +180,28 @@ def create_customer_account_tier2():
         return jsonify({ "status": "failure", "errorMessage": "error creating bank account"})
 
 @authenticate
+@admin_api.route("/tier2/GetCustomerBankAccount", methods=['POST'])
+def get_customer_account_tier2():
+    app.logger.info("[api-get-customer-bank-accounts")
+    args = request.json
+
+    response = get_user_bank_account(number=args['number'])
+
+    return jsonify({ "status": "success", "data": response })
+
+
+@authenticate
 @admin_api.route("/tier2/DeleteCustomerBankAccount", methods=['POST'])
 def delete_customer_account_tier2():
     app.logger.info("[api-delete-customer-bank-accounts")
     args = request.json
 
-    response = update_customer_bank_account(account_number=args['number'], is_active=False)
+    response = update_customer_bank_account_tier2(number=args['number'], is_active=False)
 
     return jsonify({ "status": "success", "data": response })
+
+
+""" Manage Accounts Tier2 End """
 
 @authenticate
 @admin_api.route("/GetAllUsersBankAccounts", methods=['GET'])

@@ -24,7 +24,6 @@ def generate_otp_api():
         return jsonify({ "status": "success", "data": "OTP Sent to verify..." })
 
 
-@authenticate
 @otp_api.route("/GenerateOTPResetPassword", methods=['POST'])
 def generate_otp_reset_password_api():
 
@@ -57,7 +56,6 @@ def verify_otp_api():
         return make_response(jsonify({"status": "failure", "message": "OTP cannot be verified. Try Again."})), 500
 
 
-@authenticate
 @otp_api.route("/VerifyOTPResetPassword", methods=['POST'])
 def verify_otp_reset_password_api():
 
@@ -73,7 +71,6 @@ def verify_otp_reset_password_api():
         return make_response(jsonify({"status": "failure", "message": "OTP cannot be verified. Try Again."})), 500
 
 
-@authenticate
 @otp_api.route("/ResetPassword", methods=['POST'])
 def reset_password_via_otp_api():
 

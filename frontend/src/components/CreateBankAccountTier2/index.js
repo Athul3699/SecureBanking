@@ -12,22 +12,31 @@ import {
 import { postRequest,getRequest } from '../../util/api';
 import { API_URL } from '../../constants/references';
 
-import { withRouter } from "react-router-dom"
-
 class CreateBankAccountTier2 extends Component {
     constructor(props) {
         super(props)
         this.state = {
             type: 'checking',
-            balance: 10,        
+            balance: 10,
         }
     }
 
     onButtonClick = () => {
-      // route to appropriate page
-      postRequest(`${API_URL}/api/v1/admin/tier2/CreateCustomerBankAccount`, this.state)
-      .then((res) => this.props.handleCancel('create'))
-      .catch((err) => console.log(err))
+
+      if (this.validate()){
+        postRequest(`${API_URL}/api/v1/admin/tier2/CreateCustomerBankAccount`, this.state)
+        .then((data) => {
+          if (data["status"] === "failure" ) {
+            alert('Your request failed! Check if the user with that email exists in the system.')
+          } else {
+            alert('Successful!')
+            this.props.handleCancel('create')
+          }
+        })
+        .catch((err) => console.log(err))
+      } else {
+        // do nothing... alert is rendered in the validate() function
+      }
     }
 
     componentDidMount() {
@@ -38,14 +47,41 @@ class CreateBankAccountTier2 extends Component {
       this.setState({ type: e.target.value })
     }
 
+    handleEmail = (e) => {
+      this.setState({ email: e.target.value })
+    }
+
     handleAmountChange = (e) => {
       this.setState({ balance: e })
+    }
+
+
+
+    validate = () => {
+      var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+      if (re.test(String(this.state.email).toLowerCase()) == false) {
+        alert("The email entered is not valid!! Please CLEAR it and try again.")
+        this.setState({ email: ''})
+        return false
+      }
+
+      return true;
     }
 
     render() {
         return (
 
             <div className="create-form-container">
+
+                User Email: <br />
+                <Input
+                  value={this.state.email}
+                  onChange={this.handleEmail}
+                />
+
+                <br /><br />
+
                 Account Type:<br />
                 <Radio.Group onChange={this.handleAccountTypeChange} value={this.state.type}>
                    <Radio value={"checking"}>Checking</Radio>
@@ -69,7 +105,7 @@ class CreateBankAccountTier2 extends Component {
 
                 <Button
                   type="primary"
-                  onClick={this.onButtonClick}
+                  onClick={() => this.onButtonClick()}
                 >
                   Submit Request
                 </Button>
@@ -79,4 +115,4 @@ class CreateBankAccountTier2 extends Component {
     }
 }
 
-export default withRouter(CreateBankAccountTier2)
+export default CreateBankAccountTier2
