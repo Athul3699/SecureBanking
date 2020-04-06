@@ -25,7 +25,8 @@ class Login extends Component {
     var re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     if (re.test(String(this.state.email).toLowerCase()) == false) {
-      alert("The email entered is not valid!!")
+      alert("The email entered is not valid!! Please CLEAR it and try again. ")
+      this.setState({ email: ''})
       return false
     }
 
@@ -41,7 +42,7 @@ class Login extends Component {
         this.props.history.push('/landingPage')
       })
       .catch((error) => { 
-        alert('Invalid input... Clear email and password and try again... ')
+        alert('Invalid input... IMPORTANT: CLEAR email and password and try again... ')
         this.setState({ email: '', password: '' })
       })
     } else {
