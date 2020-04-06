@@ -18,7 +18,7 @@ transaction_api = Blueprint('transaction_api', __name__)
 #Tier 1
 @transaction_api.route("/NonCriticalTransactions", methods=['GET'])
 @authenticate
-def get_noncritical_transactions():
+def get_noncritical_transacti5ons():
     app.logger.info("[api-GET-All-NonCriticalTransactions]")
     role_expected = [3,4,5]
 
@@ -561,7 +561,7 @@ def merchant_transactions():
             transactions_to = get_transactions(to_account=bank_account['number'])
             transactions_from_return.extend(transactions_from)
             transactions_to_return.extend(transactions_to)
-        return jsonify({ "status": "success", "data": { "transactions_from": transactions_from, "transactions_to": transactions_to }})
+        return jsonify({ "status": "success", "data": { "transactions_from": transactions_from_return, "transactions_to": transactions_to_return }})
 
 
 @transaction_api.route("/MerchantApproveMoneyTransfer", methods=['POST'])
