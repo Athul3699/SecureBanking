@@ -42,7 +42,7 @@ def generate_otp(email):
     user = app.db.session.query(User).filter_by(email=email).first()
 
     if user == None:
-        return None, "failure"
+        return "failure"
 
     otp = get_key()
     user.active_otp = otp

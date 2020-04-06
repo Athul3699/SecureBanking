@@ -98,12 +98,19 @@ class ForgotUserPassword extends Component {
       let data = this.state;
       if (type == 'generate') {
         postRequestWithoutToken(`${API_URL}/api/v1/otp/GenerateOTPResetPassword`, {"email": this.state.email})
-        .then(() => {
-          // route to appropriate page
-          this.setState({ isOtpGenerated: true })
+        .then((data) => {
+          console.log(data)
+          if (data["status"] === "success")
+            this.setState({ isOtpGenerated: true })
+          else {
+            this.setState({ isOtpGenerated: false })
+            alert('Failed. You might have entered an invalid email.')
+          }
         })
-        .catch(() => {
-          // display error message. not needed for now, we can assume api is stable.
+        .catch((data) => {
+          console.log('reached here...')
+          this.setState({ isOtpGenerated: false })
+          alert('Failed. You might have entered an invalid email.')
         });
       } else if (type == 'verify') {
         postRequestWithoutToken(`${API_URL}/api/v1/otp/VerifyOTPResetPassword`, {"email": this.state.email, "otp": this.state.otp})
