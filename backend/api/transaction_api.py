@@ -57,7 +57,7 @@ def approve_money_transfer_noncritical():
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
            
         src_account = get_customer_bank_accounts(number=transaction.from_account)
-        source_balance = src_account[0]['balance']
+        source_balance = float(src_account[0]['balance'])
         if transaction.type=='credit':
             update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+transaction.amount)
         else:
@@ -65,7 +65,7 @@ def approve_money_transfer_noncritical():
         
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
-            destination_balance = dest_account[0]['balance']
+            destination_balance = float(dest_account[0]['balance'])
             update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
 
         message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
@@ -143,13 +143,13 @@ def approve_money_transfer_critical():
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
 
         src_account = get_customer_bank_accounts(number=transaction.from_account)
-        source_balance = src_account[0]['balance']
+        source_balance = float(src_account[0]['balance'])
 
         update_customer_bank_account(account_number=transaction.from_account, balance=source_balance-transaction.amount)
         
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
-            destination_balance = dest_account[0]['balance']
+            destination_balance = float(dest_account[0]['balance'])
             update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
 
         message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
@@ -225,7 +225,7 @@ def admin_approve_money_transfer():
             return jsonify({ "status": "failure", "errorMessage": "transaction does not exist"})
             
         src_account = get_customer_bank_accounts(number=transaction.from_account)
-        source_balance = src_account[0]['balance']
+        source_balance = float(src_account[0]['balance'])
 
         if transaction.type=='credit':
             update_customer_bank_account(account_number=transaction.from_account, balance=source_balance+transaction.amount)
@@ -234,7 +234,7 @@ def admin_approve_money_transfer():
             
         if transaction.to_account != '':
             dest_account = get_customer_bank_accounts(number=transaction.to_account)
-            destination_balance = dest_account[0]['balance']
+            destination_balance = float(dest_account[0]['balance'])
             update_customer_bank_account(account_number=transaction.to_account, balance=destination_balance+transaction.amount)
 
         message = update_transaction(id=transaction_id, message="Transaction approved by Tier 1 employee", status='approved')
@@ -501,7 +501,7 @@ def initiate_money_transfer():
     
     if trasaction_params["type"]=="fund_transfer":
         if args["payee_type"]=='account':
-            accounts = get_customer_bank_accounts(user_id=user_id,number=args['to_account'], is_active=True)
+            accounts = get_customer_bank_accounts(number=args['to_account'], is_active=True)
             if len(accounts)==0:
                 return jsonify({ "status": "failure", "errorMessage": "Destination Bank account is not found"})
         else:
