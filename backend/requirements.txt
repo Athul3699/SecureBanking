@@ -1,6 +1,6 @@
 Flask==1.1.1
 Flask-Cors==3.0.8
-pipenv==2018.11.26
+pipenv==2022.1.8
 Werkzeug==0.16.0
 psycopg2==2.8.4
 Flask-SQLAlchemy===2.4.1
